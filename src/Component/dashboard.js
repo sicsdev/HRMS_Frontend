@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -10,25 +10,33 @@ import List from '@mui/material/List';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-
+import axios from "axios";
+import { useNavigate, Link } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Collapse from '@mui/material/Collapse';
+
 import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
+
 import { styled } from '@mui/material/styles';
 import { IconButtonProps } from '@mui/material/IconButton';
 import MapsUgcIcon from '@mui/icons-material/MapsUgc';
+
 import { DownOutlined } from '@ant-design/icons';
-import  { MenuProps } from 'antd';
+import { MenuProps } from 'antd';
 import { Dropdown, Space } from 'antd';
+
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
+
 const drawerWidth = 340;
 
 
@@ -49,8 +57,13 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 
 function Dashboard(props) {
+    const navigate = useNavigate();
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [data, setData] = useState({
+        email: "",
+        password: ""
+    })
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -63,12 +76,40 @@ function Dashboard(props) {
             •
         </Box>
     );
-
-
+    const container = window !== undefined ? () => window().document.body : undefined;
     const [expanded, setExpanded] = React.useState(false);
-
+    const [profileval, setProfileVal] = React.useState('');
+    const [login, setLogin] = React.useState('');
     const handleExpandClick = () => {
         setExpanded(!expanded);
+    };
+
+
+    useEffect(() => {
+
+
+        let authtokens = localStorage.getItem("authtoken");
+        let token = {
+            headers: {
+                token: authtokens,
+            },
+        };
+
+        axios.get(`http://localhost:8000/profile`, token)
+            .then((res) => {
+
+                setProfileVal(res.data)
+                setLogin(true)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
+    const logout = () => {
+        localStorage.removeItem('authtoken');
+        setLogin(false);
+        navigate('/login')
     };
 
 
@@ -76,54 +117,53 @@ function Dashboard(props) {
         <div>
             <Toolbar />
             <List>
-                <img src="logo.png" ></img>
+                <img src="logo.png"></img>
                 <Divider className='nav_divider' />
                 <div className='avatar'>
-                    <Avatar className='avatar_img' alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                    <Avatar className='avatar_img' alt="Remy Sharp" src={profileval.image} />
+                    {/* <img src = {profileval.image}></img> */}
                 </div>
                 <div className='profile_name'>
-                    <h5 className='mt-4 '>Demo</h5>
+                    <h5 className='mt-4 '>{profileval.username}</h5>
                     <h5 className='mt-1'>#SICS40958</h5>
                 </div>
                 <div className='profile_details'>
                     <div className='row setting'>
                         <div className='col-sm-6'>
-                            <h6>sdhfds</h6>
-                            <h6>sdhfds</h6>
-                            <h6>sdhfds</h6>
+                            <h6>Designation</h6>
+                            <h6 className='mt-4'>Reporting Manager</h6>
+                            <h6 className='mt-4'>Leave Quota</h6>
 
                         </div>
                         <div className='col-sm-6'>
-                            <h6>aiue</h6>
-                            <h6>aiue</h6>
-                            <h6>aiue</h6>
+                            <h6>Designer</h6>
+                            <h6 className='mt-4'>userr</h6>
+                            <h6 className='mt-4'>6</h6>
                         </div>
                     </div>
                 </div>
-                <div className='logout_button'>
-                    <button className='btn btn-primary'>Logout</button>
+                <div className='logout_button mt-4'>
+                    <button className='btn btn-primary' onClick={logout}>Logout</button>
+
                 </div>
             </List>
         </div >
     );
-
-
     const items: MenuProps['items'] = [
         {
-          label: <h6>Edit </h6>,
-          key: '0',
+            label: <h6>Edit </h6>,
+            key: '0',
         },
         {
-          label:  <h6>Delete </h6>,
-          key: '1',
+            label: <h6>Delete </h6>,
+            key: '1',
         },
         {
-         
-        },
-      
-      ];
 
-    const container = window !== undefined ? () => window().document.body : undefined;
+        },
+
+    ];
+
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -148,10 +188,35 @@ function Dashboard(props) {
                     >
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        Responsive drawer
+                        {/* Responsive drawer */}
                     </Typography>
 
+                    <img src="apply_Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp; <img src="Vector.svg" ></img>
+
+                    <div className="avatar_dropdown">
+                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                        <div className="employe_info">
+                            <p>{profileval.username}</p>
+                            <p>employee</p>
+                        </div>
+                        <Box sx={{ minWidth: 120 }}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label"></InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+
+                                >
+                                    <MenuItem value={10}>Setting</MenuItem>
+
+                                    <MenuItem value={20} onClick={logout}>Logout</MenuItem>
+
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </div>
                 </Toolbar>
+
 
             </AppBar>
 
@@ -208,9 +273,9 @@ function Dashboard(props) {
                     </div>
                 </div>
 
-            
 
-                <Card sx={{ maxWidth: 1100 ,marginTop:10 }}>
+
+                <Card sx={{ maxWidth: 1100, marginTop: 10 }}>
                     <CardHeader
                         avatar={
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -218,19 +283,19 @@ function Dashboard(props) {
                             </Avatar>
                         }
                         action={
-                                <Dropdown menu={{ items }} trigger={['click']}>
-                                    <a onClick={(e) => e.preventDefault()}>
-                                    
-                                        <MoreVertIcon />
-                                  
-                                    </a>
-                                </Dropdown>
-                          
-                        }className="post_style"
+                            <Dropdown menu={{ items }} trigger={['click']}>
+                                <a onClick={(e) => e.preventDefault()}>
+
+                                    <MoreVertIcon />
+
+                                </a>
+                            </Dropdown>
+
+                        } className="post_style"
                         title="Shrimp and Chorizo Paella"
                         subheader="September 14, 2016"
                     />
-                      
+
                     <CardContent>
                         <Typography variant="body2" color="text.secondary">
                             This impressive paella is a perfect party dish and a fun meal to cook
@@ -243,7 +308,7 @@ function Dashboard(props) {
                             <FavoriteIcon />
                         </IconButton>
                         <IconButton aria-label="share">
-                                <MapsUgcIcon/>
+                            <MapsUgcIcon />
                         </IconButton>
 
                     </CardActions>
@@ -253,7 +318,7 @@ function Dashboard(props) {
 
 
 
-                <Card sx={{ maxWidth: 1100 ,marginTop:7 }}>
+                <Card sx={{ maxWidth: 1100, marginTop: 7 }}>
                     <CardHeader
                         avatar={
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -263,16 +328,16 @@ function Dashboard(props) {
                         action={
                             <Dropdown menu={{ items }} trigger={['click']}>
                                 <a onClick={(e) => e.preventDefault()}>
-                                
+
                                     <MoreVertIcon />
-                              
+
                                 </a>
                             </Dropdown>
-                        }className="post_style"
+                        } className="post_style"
                         title="Shrimp and Chorizo Paella"
                         subheader="September 14, 2016"
                     />
-                      
+
                     <CardContent>
                         <Typography variant="body2" color="text.secondary">
                             This impressive paella is a perfect party dish and a fun meal to cook
@@ -285,7 +350,7 @@ function Dashboard(props) {
                             <FavoriteIcon />
                         </IconButton>
                         <IconButton aria-label="share">
-                                <MapsUgcIcon/>
+                            <MapsUgcIcon />
                         </IconButton>
 
                     </CardActions>
@@ -361,7 +426,7 @@ function Dashboard(props) {
             {/* Sidebar end */}
 
 
-        </Box>
+        </Box >
     );
 }
 

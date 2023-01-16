@@ -61,22 +61,27 @@
   border-color: #fff !important;
   opacity: 1;
 }
+
 .profile_name {
   color: white;
 }
-.profile_details{
+
+.profile_details {
   margin-top: 15%;
   color: white;
 }
+
 .avatar .avatar_img {
   margin: auto;
   width: 110px;
   height: 100px;
 }
+
 .row.setting {
   width: 100%;
   margin: 0;
 }
+
 .event_divider {
   color: #fff;
   width: 80%;
@@ -85,44 +90,124 @@
   margin-bottom: 2rem !important;
   border-color: grey !important;
   opacity: 1;
- 
+
 }
-.sidebar.sidebar.MuiBox-root.css-dnvulu {
+
+.sidebar.sidebar.MuiBox-root {
   text-align: left;
+  margin-top: 28px;
+  font-weight: 600;
 }
+
 /* .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.MuiCard-root.card_events.css-1geropv-MuiPaper-root-MuiCard-root {
   width: 275px;
 } */
-.card_events{
+.card_events {
   width: 275px;
 }
-.newpost_btn{
-  width:140px;
+
+.newpost_btn {
+  width: 140px;
 }
-.announcement{
+
+.announcement {
   text-align: left;
 }
-.post_style{
+
+.post_style {
   text-align: left;
 }
-.iconstyle{
+
+.iconstyle {
   text-align: left;
 }
+
 .col-3.avatar_image {
   text-align: right;
 }
+
 .col-3.avatar_image .MuiAvatar-root.MuiAvatar-circular {
   margin-left: auto;
   text-align: right;
 }
-.col-6 p, .col-3 p{
+
+.col-6 p,
+.col-3 p {
   margin-bottom: 0;
 }
+
 button.ant-btn.css-dev-only-do-not-override-sk7ap8.ant-btn-default.mt-3.addbutton {
   margin-top: 0 !important;
   margin: 0 3px;
 
 }
-.col-6 , .col-3 {
+
+.col-6,
+.col-3 {
   padding: 23px;
+}
+
+.MuiToolbar-root.MuiToolbar-gutters.MuiToolbar-regular.main_header {
+  justify-content: start;
+  padding: 14px 0px;
+  margin-left: 58rem;
+
+}
+
+header.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation4.MuiAppBar-root.MuiAppBar-colorPrimary.MuiAppBar-positionFixed.mui-fixed {
+  background: #000;
+}
+
+main.MuiBox-root {
+  margin-top: 2rem;
+}
+
+main.MuiBox-root .row {
+  margin-right: 2rem;
+}
+
+.col-sm-10.announcement p {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.avatar_dropdown {
+  display: flex;
+}
+
+.employe_info p {
+  margin: 0;
+  text-align: left;
+}
+
+.MuiFormControl-root.MuiFormControl-fullWidth {
+  display: inline;
+}
+
+fieldset.MuiOutlinedInput-notchedOutline {
+  border: none;
+}
+
+.avatar_dropdown .MuiBox-root {
+  min-width: unset;
+}
+
+.avatar_dropdown svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiSelect-icon.MuiSelect-iconOutlined {
+  display: none;
+}
+
+.avatar_dropdown #demo-simple-select {
+  background-image: url('../public/down.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30px;
+}
+
+.avatar_dropdown {
+  display: flex;
+  border-left: 2px solid #fff;
+  padding-left: 22px;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
 }

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 const Login = () => {
 
-  
+  const navigate = useNavigate();
     const [data, setData] = useState({
         email: "",
         password: ""
@@ -32,6 +32,7 @@ const Login = () => {
           console.log(res.data);
           setData(res.data)
           localStorage.setItem("authtoken", res.data.authtoken);
+          navigate('/dashboard')
          
         })
         .catch((err) => {

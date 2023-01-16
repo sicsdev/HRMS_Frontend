@@ -6,21 +6,104 @@ const Setting = () => {
 
 
     const [open, setOpen] = useState(false);
-    const [report_open, setReport_open] = useState(false);
+    const [openemail, setOpenemail] = useState(false);
+    const [openphone, setOpenphone] = useState(false);
+    const [openname, setOpenname] = useState(false);
+    const [openpassword, setOpenpassword] = useState(false);
+    const [opendob, setOpendob] = useState(false);
+   
     const [profile, setProfile] = useState('');
-    const handleOk = () => {
-     
+
+    const [usernameval, setUsernameVal] = useState('')
+    const [emailval, setEmailVal] = useState('')
+    const [passwordval, setPasswordVal] = useState('')
+    const [phoneval, setPhoneVal] = useState('')
+    const [dobval, setDobVal] = useState('')
+    const [imageval, setImageVal] = useState('')
+
+
+    const handlesubmit = async (e) => {
+      e.preventDefault();
+    };
+
+    const handleUsername = async(e) => {
+      setUsernameVal(e.target.value)
+    }
+    const handleEmail = async(e) => {
+      setEmailVal(e.target.value)
     }
 
-    const reporthandleOk = () => {
-     
+    const handlePassword = async(e) => {
+      setPasswordVal(e.target.value)
     }
-  
-    const leavehandleOk = () => {
-     
+
+    const handlePhone = async(e) => {
+      setPhoneVal(e.target.value)
     }
+
+    const handleDob = async(e) => {
+      setDobVal(e.target.value)
+    }
+
+
+
+    const handleOk = () => {
+      // const image  = imageval;
+
+
+   
+
+      // let authtokens = localStorage.getItem("authtoken");
+      // let token = {
+      //   headers: {
+      //     token: authtokens,
+      //   },
+      // };
+
+      // axios.put(`http://localhost:8000/imageupload`, {image:image}, token)
+      // .then((res) => {
+      
+      //   setImageVal(res.data)
+      //   setOpen(false)
+      //   console.log(res.data)
+      // })  
+      // .catch((err) => {
+      //   console.log(err);   
+      // }); 
+
+      const image = imageval;
+
+
+      console.log(image)
+      const formData = new FormData();
   
-  
+      formData.append("image", imageval);
+
+      let authtokens = localStorage.getItem('authtoken');
+
+      let axoisimage = {
+        headers: {
+            'token': authtokens,
+           
+        }
+      };
+     
+      axios.post(`http://localhost:8000/imageupload`, formData, axoisimage)
+      .then((res) => {
+       
+         console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      setTimeout(() => {
+      
+        setOpen(false);
+      });
+     
+ 
+    }
+
       const handleCancel = () => {
         setOpen(false);
       };
@@ -29,24 +112,168 @@ const Setting = () => {
         setOpen(true);
       };
 
-      const reporthandleCancel = () => {
-        setReport_open(false);
-      };
 
-      const reportshowModal = () => {
-        setReport_open(true);
-      };
+      const emailHandleOk = () => {
+           const email  = emailval;
+
+            let authtokens = localStorage.getItem("authtoken");
+            let token = {
+              headers: {
+                token: authtokens,
+              },
+            };
+
+            axios.put(`http://localhost:8000/editemail`, {email:email}, token)
+            .then((res) => {
+           
+             setEmailVal(res.data)
+              setOpenemail(false)
+            })  
+            .catch((err) => {
+              console.log(err);   
+            }); 
+            setEmailVal('')
+      }
+  
+        const emailHandleCancel = () => {
+          setOpenemail(false);
+        };
+  
+        const emailShowModal = () => {
+          setOpenemail(true);
+        };
 
 
+        const phoneHandleOk = () => {
+            const phonenumber  = phoneval;
 
-      const leavehandleCancel = () => {
-        setReport_open(false);
-      };
+            let authtokens = localStorage.getItem("authtoken");
+            let token = {
+              headers: {
+                token: authtokens,
+              },
+            };
 
-      const leaveshowModal = () => {
-        setReport_open(true);
-      };
+            axios.put(`http://localhost:8000/editphone`, {phonenumber:phonenumber}, token)
+            .then((res) => {
+          
+              setPhoneVal(res.data)
+              setOpenphone(false)
+            })  
+            .catch((err) => {
+              console.log(err);   
+            }); 
+            setPhoneVal('')
+     
+        }
+    
+          const phoneHandleCancel = () => {
+            setOpenphone(false);
+          };
+    
+          const phoneShowModal = () => {
+            setOpenphone(true);
+          };
+  
+          const nameHandleOk = () => {
+     
 
+            const username  = usernameval;
+
+            console.log(username, "fdh")
+            let authtokens = localStorage.getItem("authtoken");
+            let token = {
+              headers: {
+                token: authtokens,
+              },
+            };
+
+            axios.put(`http://localhost:8000/editusername`, {username:username}, token)
+            .then((res) => {
+             console.log(username)
+              setUsernameVal(res.data)
+              setOpenname(false)
+            })  
+            .catch((err) => {
+              console.log(err);   
+            }); 
+            setUsernameVal('')
+            
+          }
+      
+            const nameHandleCancel = () => {
+              setOpenname(false);
+            };
+      
+            const nameShowModal = () => {
+              setOpenname(true);
+            };
+    
+            const passwordHandleOk = () => {
+
+
+              const password  = passwordval;
+
+              let authtokens = localStorage.getItem("authtoken");
+              let token = {
+                headers: {
+                  token: authtokens,
+                },
+              };
+  
+              axios.put(`http://localhost:8000/editpassword`, {password:password}, token)
+              .then((res) => {
+              
+                setPasswordVal(res.data)
+                setOpenpassword(false)
+              })  
+              .catch((err) => {
+                console.log(err);   
+              }); 
+              setPasswordVal('')
+     
+            }
+        
+              const passwordHandleCancel = () => {
+                setOpenpassword(false);
+              };
+        
+              const passwordShowModal = () => {
+                setOpenpassword(true);
+              };
+
+              const dobHandleOk = () => {
+                  const dob  = dobval;
+
+                  let authtokens = localStorage.getItem("authtoken");
+                  let token = {
+                    headers: {
+                      token: authtokens,
+                    },
+                  };
+      
+                  axios.put(`http://localhost:8000/editdob`, {dob:dob}, token)
+                  .then((res) => {
+                  
+                    setDobVal(res.data)
+                    setOpendob(false)
+                  })  
+                  .catch((err) => {
+                    console.log(err);   
+                  }); 
+                  setDobVal('')
+       
+              }
+          
+                const dobHandleCancel = () => {
+                  setOpendob(false);
+                };
+          
+                const dobShowModal = () => {
+                  setOpendob(true);
+                };
+      
+    
     
      
       useEffect(() => {
@@ -67,8 +294,9 @@ const Setting = () => {
         .catch((err) => {
           console.log(err);   
         }); 
+      }, []);
         
-      },[])
+      // },[nameHandleOk,emailHandleOk, phoneHandleOk, dobHandleOk, passwordHandleOk])
     
     
     
@@ -76,7 +304,7 @@ const Setting = () => {
         <>
         
         <div className='container mt-4'>
-         
+         <form onSubmit={handlesubmit}>
            <div className="col-sm-6">
            <h5>Profile</h5>
             <div className='row pt-2'>
@@ -84,7 +312,7 @@ const Setting = () => {
                     <p>Image</p>
               </div>
               <div className='col-3 avatar_image'>
-                     <Avatar src=""  /> 
+                     <Avatar src={profile.image}   height={150} width={150} /> 
              
                      
               </div>
@@ -98,26 +326,29 @@ const Setting = () => {
                 </Button>
                   <Modal
                     open={open}
-                    title="Title"
+                    title="Image"
                     onOk={handleOk}
                     onCancel={handleCancel}
                     footer={[
                       
-                      <Button key="submit" type="primary"  >
+                      <Button key="submit" type="primary"  onClick={handleOk}>
                         Submit
                       </Button>,
                    
                     ]}
                   >
-                    <input type="file" name="image"/>
+                    <input type="file" name="image" onChange={(e) =>
+                            setImageVal(e.target.files[0])}/>
                    
                   </Modal>
                      
               </div>
             </div>
+
+
             <div className='row'>
               <div className='col-6'>
-                    <p>Name</p>
+                    <p>Username</p>
               </div>
               <div className='col-3 avatar_image'>
                      <p>{profile.username}</p>
@@ -125,31 +356,32 @@ const Setting = () => {
               </div>
               <div className='col-3'>
                 {/* <p className='editstyle'>*/}
-               <Button type="default" onClick={showModal} className="mt-3 addbutton">
-                  Add
+               <Button type="default" onClick={nameShowModal} className="mt-3 addbutton">
+                  Edit
                 </Button>
-                <Button type="default"  className="mt-3 addbutton">
-                  Delete
-                </Button>
+              
                   <Modal
-                    open={open}
-                    title="Name"
-                    onOk={handleOk}
-                    onCancel={handleCancel}
+                    open={openname}
+                    title="Username"
+                    onOk={nameHandleOk}
+                    onCancel={nameHandleCancel}
                     footer={[
                       
-                      <Button key="submit" type="primary"  >
+                      <Button key="submit" type="primary" onClick={nameHandleOk}  >
                         Submit
                       </Button>,
-                   
+                    
                     ]}
                   >
-                    <input type="text" name="username"/>
+                    <input type="text" name="username" 
+                onChange={(e) => handleUsername(e)}/>
                    
                   </Modal>
                      
               </div>
             </div>
+
+
             <div className='row'>
               <div className='col-6'>
                     <p>Email</p>
@@ -160,29 +392,31 @@ const Setting = () => {
               </div>
               <div className='col-3'>
                 {/* <p className='editstyle'>*/}
-               <Button type="default" onClick={showModal} className="mt-3 addbutton">
-                  Add
+               <Button type="default" onClick={emailShowModal} className="mt-3 addbutton">
+                  Edit
                 </Button>
-                <Button type="default"  className="mt-3 addbutton">
-                  Delete
-                </Button>
+              
                   <Modal
-                    open={open}
-                    title="Title"
-                    onOk={handleOk}
-                    onCancel={handleCancel}
+                    open={openemail}
+                    title="Email"
+                    onOk={emailHandleOk}
+                    onCancel={emailHandleCancel}
                     footer={[
                       
-                      <Button key="submit" type="primary"  >
+                      <Button key="submit" type="primary"  onClick={emailHandleOk}>
                         Submit
                       </Button>,
                    
                     ]}
                   >
+                    <input type="text" name="email"  onChange={(e) => handleEmail(e)}/>
+                   
                   </Modal>
                      
               </div>
             </div>
+
+
             <div className='row'>
               <div className='col-6'>
                     <p>Phone</p>
@@ -193,133 +427,104 @@ const Setting = () => {
               </div>
               <div className='col-3'>
                 {/* <p className='editstyle'>*/}
-               <Button type="default" onClick={showModal} className="mt-3 addbutton">
-                  Add
+               <Button type="default" onClick={phoneShowModal} className="mt-3 addbutton">
+                  Edit
                 </Button>
-                <Button type="default"  className="mt-3 addbutton">
-                  Delete
-                </Button>
+              
                   <Modal
-                    open={open}
+                    open={openphone}
                     title="Phone Number"
-                    onOk={handleOk}
-                    onCancel={handleCancel}
+                    onOk={phoneHandleOk}
+                    onCancel={phoneHandleCancel}
                     footer={[
                       
-                      <Button key="submit" type="primary"  >
+                      <Button key="submit" type="primary"  onClick={phoneHandleOk}>
                         Submit
                       </Button>,
                    
                     ]}
                   >
-                    <input type="text" name="phonenumber" className="form-control"></input>
-
+                    <input type="text" name="phonenumber" onChange={(e) => handlePhone(e)} />
+                   
                   </Modal>
                      
               </div>
             </div>
+
+
+            <div className='row'>
+              <div className='col-6'>
+                    <p>Date Of Birth</p>
+              </div>
+              <div className='col-3 avatar_image'>
+                     <p>{profile.dob}</p>
+                     
+              </div>
+              <div className='col-3'>
+                {/* <p className='editstyle'>*/}
+               <Button type="default" onClick={dobShowModal} className="mt-3 addbutton">
+                  Edit
+                </Button>
+              
+                  <Modal
+                    open={opendob}
+                    title="Date Of Birth"
+                    onOk={dobHandleOk}
+                    onCancel={dobHandleCancel}
+                    footer={[
+                      
+                      <Button key="submit" type="primary" onClick={dobHandleOk}>
+                        Submit
+                      </Button>,
+                   
+                    ]}
+                  >
+                    <input type="date" name="dob" onChange={(e) => handleDob(e)}/>
+                   
+                  </Modal>
+                     
+              </div>
+            </div>
+
+
+
+
             <div className='row'>
               <div className='col-6'>
                     <p>Password</p>
               </div>
-              <div className='col-3 avatar_image'> 
+              <div className='col-3 avatar_image'>
+                    
+                     
               </div>
               <div className='col-3'>
                 {/* <p className='editstyle'>*/}
-               <Button type="default" onClick={showModal} className="mt-3 addbutton">
+               <Button type="default" onClick={passwordShowModal} className="mt-3 addbutton">
                   Change Password
                 </Button>
-              
+             
                   <Modal
-                    open={open}
+                    open={openpassword}
                     title="New Password"
-                    onOk={handleOk}
-                    onCancel={handleCancel}
+                    onOk={passwordHandleOk}
+                    onCancel={passwordHandleCancel}
                     footer={[
                       
-                      <Button key="submit" type="primary"  >
+                      <Button key="submit" type="primary" onClick={passwordHandleOk} >
                         Submit
                       </Button>,
                    
                     ]}
                   >
-                    <input type="text" name="phonenumber" className="form-control"></input>
-
+                    <input type="text" name="password"    onChange={(e) => handlePassword(e)}/>
+                   
                   </Modal>
                      
               </div>
             </div>
-            <div className='row'>
-              <div className='col-6'>
-                    <p>Reporting Manager</p>
-              </div>
-              <div className='col-3 avatar_image'>
-                     <p>{profile.reporting_manager}</p>
-                     
-              </div>
-              <div className='col-3'>
-                {/* <p className='editstyle'>*/}
-               <Button type="default" onClick={reportshowModal} className="mt-3 addbutton">
-                  Add
-                </Button>
-                <Button type="default"  className="mt-3 addbutton">
-                  Delete
-                </Button>
-                  <Modal
-                    open={report_open}
-                    title="Reporting Manager"
-                    onOk={reporthandleOk}
-                    onCancel={reporthandleCancel}
-                    footer={[
-                      
-                      <Button key="submit" type="primary"  >
-                        Submit
-                      </Button>,
-                   
-                    ]}
-                  >
-                   
-                   <input type="text" name="leave_quota" className="form-control"></input>
-                  </Modal>
-                     
-              </div>
-            </div> 
-            <div className='row'>
-              <div className='col-6'>
-                    <p>Leaves Quota</p>
-              </div>
-              <div className='col-3 avatar_image'>
-                     <p>{profile.leave_quota}</p>
-                     
-              </div>
-              <div className='col-3'>
-                {/* <p className='editstyle'>*/}
-               <Button type="default" onClick={leaveshowModal} className="mt-3 addbutton">
-                  Add
-                </Button>
-                <Button type="default"  className="mt-3 addbutton">
-                  Delete
-                </Button>
-                  <Modal
-                    open={report_open}
-                    title="Leave Quota"
-                    onOk={leavehandleOk}
-                    onCancel={leavehandleCancel}
-                    footer={[
-                      
-                      <Button key="submit" type="primary"  >
-                        Submit
-                      </Button>,
-                   
-                    ]}
-                  >
-                   
-                   <input type="text" name="leave_quota" className="form-control"></input>
-                  </Modal>
-                     
-              </div>
-            </div> 
+            
             </div>
+            </form>
          </div>
         </>
     )
