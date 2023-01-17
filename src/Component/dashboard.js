@@ -18,15 +18,13 @@ import CardContent from '@mui/material/CardContent';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-
+import { Button, Modal } from 'antd';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
 import CardHeader from '@mui/material/CardHeader';
-
 import { styled } from '@mui/material/styles';
 import { IconButtonProps } from '@mui/material/IconButton';
 import MapsUgcIcon from '@mui/icons-material/MapsUgc';
-
+import * as moment from 'moment';
 import { DownOutlined } from '@ant-design/icons';
 import { MenuProps } from 'antd';
 import { Dropdown, Space } from 'antd';
@@ -60,10 +58,7 @@ function Dashboard(props) {
     const navigate = useNavigate();
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [data, setData] = useState({
-        email: "",
-        password: ""
-    })
+   
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -80,10 +75,65 @@ function Dashboard(props) {
     const [expanded, setExpanded] = React.useState(false);
     const [profileval, setProfileVal] = React.useState('');
     const [login, setLogin] = React.useState('');
+
+    const [openname, setOpenname] = useState(false);
+    const [addpost, setAddPost] = useState('')
+    const [addtitle, setAddTitle] = useState('')
+    const [id, setId] = useState('')
+    const [imageval, setImageVal] = useState('')
+
+    const [allpost, setAllPost] = useState([]);
+   
+
+    const handlePost = async(e) => {
+        setAddPost(e.target.value)
+      }
+      
+      const handleTitlePost = async(e) => {
+        setAddTitle(e.target.value)
+      }
+
+    const nameHandleCancel = () => {
+        setOpenname(false);
+      };
+
+      const nameShowModal = () => {
+        setOpenname(true);
+      };
+
+      const nameHandleOk = () => {
+
+
+        const description  = addpost;
+        const title = addtitle
+        const image = imageval;
+
+        const formData = new FormData();
+        formData.append("title", addtitle);
+        formData.append("description", addpost);
+        formData.append("image", imageval);
+  
+       
+        axios.post(`http://localhost:8000/add_post`, formData)
+        .then((res) => {
+
+           setAddPost(res.data)
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+          setAddPost('');
+          setAddTitle('')
+          setImageVal('');
+          setOpenname(false);
+       
+      }
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
+
+    
 
     useEffect(() => {
 
@@ -106,11 +156,49 @@ function Dashboard(props) {
             });
 
     }, [])
+
+
+    const record = (id) => {
+        console.log(id, "dahkasd")
+        setId(id)
+    }
+
+    const handleDelete = () => {
+        axios.delete(`http://localhost:8000/delete_post/${id}`)
+        .then((res) => {
+            console.log(res.data)
+            
+          
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }
+ 
+    
+    useEffect(() => {
+
+        axios.get(`http://localhost:8000/all_post`)
+        .then((res) => {
+            console.log(res.data)
+            setAllPost(res.data)
+          
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
+    }, [])
     const logout = () => {
         localStorage.removeItem('authtoken');
         setLogin(false);
         navigate('/login')
     };
+
+ 
+   
+
+   
 
 
     const drawer = (
@@ -155,7 +243,7 @@ function Dashboard(props) {
             key: '0',
         },
         {
-            label: <h6>Delete </h6>,
+            label: <h6 onClick={handleDelete}>Delete </h6>,
             key: '1',
         },
         {
@@ -194,7 +282,7 @@ function Dashboard(props) {
                     <img src="apply_Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp; <img src="Vector.svg" ></img>
 
                     <div className="avatar_dropdown">
-                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                        <Avatar alt="Remy Sharp" src={profileval.image} />
                         <div className="employe_info">
                             <p>{profileval.username}</p>
                             <p>employee</p>
@@ -268,14 +356,41 @@ function Dashboard(props) {
                     </div>
                     <div className='col-sm-2'>
                         <Typography>
-                            <button className='btn btn-primary newpost_btn'>New Post</button>
+                            <button className='btn btn-primary newpost_btn' onClick={nameShowModal}>New Post</button>
+
+
+                                <Modal
+                                    open={openname}
+                                    title="Add Post"
+                                    onOk={nameHandleOk}
+                                    onCancel={nameHandleCancel}
+                                    footer={[
+                                    
+                                    <Button key="submit" type="primary" onClick={nameHandleOk}  >
+                                        Submit
+                                    </Button>,
+                                    
+                                    ]}
+                                >
+                                     <label> Add Ttile</label>
+                                    <input type="text" className="form-control" name="title" value={addtitle} onChange={(e) => handleTitlePost(e)}
+                                        />
+                                    <label> Add Description</label>
+                                    <textarea className="form-control" name="description"  onChange={(e) => handlePost(e)} 
+                               ></textarea>
+                               <label> Add Image</label>
+                                <input type="file" name="image" className="form-control"  onChange={(e) =>
+                                setImageVal(e.target.files[0])}/>
+                                </Modal>
                         </Typography>
                     </div>
                 </div>
+            {
 
-
-
-                <Card sx={{ maxWidth: 1100, marginTop: 10 }}>
+                allpost.map((element,index) => {
+                    return (
+                
+                <Card key={index} sx={{ maxWidth: 1100, marginTop: 10 }}>
                     <CardHeader
                         avatar={
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -283,24 +398,27 @@ function Dashboard(props) {
                             </Avatar>
                         }
                         action={
-                            <Dropdown menu={{ items }} trigger={['click']}>
+                            <Dropdown menu={{ items }} trigger={['click']}  onClick={(e)=>{record(element.id)}}>
                                 <a onClick={(e) => e.preventDefault()}>
-
-                                    <MoreVertIcon />
+                                
+                                    <MoreVertIcon  />
 
                                 </a>
                             </Dropdown>
 
                         } className="post_style"
-                        title="Shrimp and Chorizo Paella"
-                        subheader="September 14, 2016"
+                        title={element.title}
+                        subheader={moment(element.post_date).format('DD/MM/YYYY')}
                     />
 
                     <CardContent>
                         <Typography variant="body2" color="text.secondary">
-                            This impressive paella is a perfect party dish and a fun meal to cook
-                            together with your guests. Add 1 cup of frozen peas along with the mussels,
-                            if you like.
+                          {element.description}
+                        </Typography>
+                    </CardContent>
+                    <CardContent>
+                        <Typography variant="body2" color="text.secondary">
+                          <img src={element.image}/>
                         </Typography>
                     </CardContent>
                     <CardActions disableSpacing >
@@ -314,11 +432,14 @@ function Dashboard(props) {
                     </CardActions>
 
                 </Card>
+                    )
+                })
+                }
 
 
 
 
-                <Card sx={{ maxWidth: 1100, marginTop: 7 }}>
+                {/* <Card sx={{ maxWidth: 1100, marginTop: 7 }}>
                     <CardHeader
                         avatar={
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -355,7 +476,7 @@ function Dashboard(props) {
 
                     </CardActions>
 
-                </Card>
+                </Card> */}
             </Box>
 
             {/* Sidebar */}

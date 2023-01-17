@@ -48,28 +48,6 @@ const Setting = () => {
 
 
     const handleOk = () => {
-      // const image  = imageval;
-
-
-   
-
-      // let authtokens = localStorage.getItem("authtoken");
-      // let token = {
-      //   headers: {
-      //     token: authtokens,
-      //   },
-      // };
-
-      // axios.put(`http://localhost:8000/imageupload`, {image:image}, token)
-      // .then((res) => {
-      
-      //   setImageVal(res.data)
-      //   setOpen(false)
-      //   console.log(res.data)
-      // })  
-      // .catch((err) => {
-      //   console.log(err);   
-      // }); 
 
       const image = imageval;
 
@@ -294,9 +272,9 @@ const Setting = () => {
         .catch((err) => {
           console.log(err);   
         }); 
-      }, []);
+   
         
-      // },[nameHandleOk,emailHandleOk, phoneHandleOk, dobHandleOk, passwordHandleOk])
+       },[])
     
     
     
