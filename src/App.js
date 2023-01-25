@@ -5,6 +5,11 @@ import Login from "./Component/login";
 import Signup from './Component/signUp';
 import Dashboard from './Component/dashboard';
 import Setting from './Component/setting';
+import Userdashboard from './Component/UserDashboard';
+import ApplyLeave from './pages/UserDashboard/applyLeave';
+import Leaves from './pages/UserDashboard/leaves';
+import AddUser from './pages/UserDashboard/adduser';
+import Profile from './pages/UserDashboard/profile';
 function App() {
 
   return (
@@ -19,9 +24,12 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard/>}/>
                 <Route path="/dashboard" element={<Dashboard/>}/>
                 <Route path="/setting" element={<Setting/>}/>
-                {/* <Route path="/navbar" element={<Navbar/>}/>
-                <Route path="/sidebar" element={<Sidebar/>}/>
-                 */}
+                <Route path="/userdashboard" element={<Userdashboard/>}/>
+                <Route path="/leaves" element={<Leaves/>}/>
+                <Route path="/applyleave" element={<ApplyLeave/>}/>
+                <Route path="/adduser" element={<AddUser/>}/>
+                <Route path="/profile" element={<Profile/>}/>
+                 
               </Routes>
              
 

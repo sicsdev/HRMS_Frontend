@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import Avatar from '@mui/material/Avatar';
 import { Button, Modal } from 'antd';
 import axios from "axios";
+import Header from "../utils/header";
 const Setting = () => {
 
 
@@ -280,7 +281,7 @@ const Setting = () => {
     
     return (
         <>
-        
+        <Header/>
         <div className='container mt-4'>
          <form onSubmit={handlesubmit}>
            <div className="col-sm-6">

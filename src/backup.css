@@ -1,9 +1,7 @@
 .App {
   text-align: center;
 }
-.MuiDrawer-paper {
-  width: 18% !important;
-}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -152,7 +150,7 @@ button.ant-btn.css-dev-only-do-not-override-sk7ap8.ant-btn-default.mt-3.addbutto
 .MuiToolbar-root.MuiToolbar-gutters.MuiToolbar-regular.main_header {
   justify-content: start;
   padding: 14px 0px;
-  margin-left: 39rem;
+  margin-left: 58rem;
 
 }
 
@@ -214,82 +212,36 @@ fieldset.MuiOutlinedInput-notchedOutline {
   align-items: center;
 }
 
-.MuiToolbar-root.MuiToolbar-gutters.MuiToolbar-regular {
-  margin-left: auto;
-}
-
-.apply_leave_dropdown .ant-select-selector {
-  width: 381px;
-  margin-left: 23.7rem;
-}
-
-.from_date {
-  margin-top: 20px;
-}
-
-.from_date .ant-form-item-control-input-content {
-  display: flex;
-  gap: 20px;
-}
-
-.from_date .ant-form-item-control-input-content .ant-picker {
-  width: 85%;
-}
-
-.to_date .ant-form-item-control-input-content {
-  display: flex;
-  gap: 20px;
-}
-
-.to_date .ant-picker {
-  width: 85%;
-}
-
-.static_width {
-  /* width: calc(100% - 240px) !important; */
-  max-width: 82% !important;
-  margin-right: 0 !important;
-}
-
-.leave_quota {
+.leave_quota{
   text-align: left;
 }
-
 .col-sm-6.Balance {
   margin-top: 5%;
   text-align: left;
 }
-
-.leave_request {
+.leave_request{
   margin-top: 15%;
 }
-
 .col-sm-3.earned_leave {
-
+ 
   border-left: 2px solid yellow;
 }
-
 .col-sm-3.sick_leave {
-
+ 
   border-left: 2px solid pink;
 }
-
 .col-sm-3.casual_leave {
-
+ 
   border-left: 2px solid blue;
 }
-
 .calender {
-  margin-left: 15%;
-  margin-top: 10%;
-}
 
+    margin-top: 10%;
+}
 .row.mt-4.rise {
-  width: 327px;
+    width: 327px;
 }
-.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.form-control.leave_type {
-  height: 46px;
-}
-.status{
-  color:red;
+.static_width {
+  width: calc(100% - 240px) !important;
+  margin-right: 0 !important;
 }

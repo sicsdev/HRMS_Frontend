@@ -77,6 +77,7 @@ function Dashboard(props) {
     const [login, setLogin] = React.useState('');
 
     const [openname, setOpenname] = useState(false);
+    const [openedit, setOpenEdit] = useState(false);
     const [addpost, setAddPost] = useState('')
     const [addtitle, setAddTitle] = useState('')
     const [id, setId] = useState('')
@@ -97,8 +98,20 @@ function Dashboard(props) {
         setOpenname(false);
       };
 
+
+
+    const editHandleCancel = () => {
+        setOpenEdit(false);
+      };
+
+
       const nameShowModal = () => {
         setOpenname(true);
+      };
+
+
+      const editShow = () => {
+        setOpenEdit(true);
       };
 
       const nameHandleOk = () => {
@@ -118,6 +131,7 @@ function Dashboard(props) {
         .then((res) => {
 
            setAddPost(res.data)
+           
           })
           .catch((err) => {
             console.log(err);
@@ -133,7 +147,9 @@ function Dashboard(props) {
     };
 
 
-    
+    const editHandleOk = () => {
+
+    }
 
     useEffect(() => {
 
@@ -150,6 +166,7 @@ function Dashboard(props) {
 
                 setProfileVal(res.data)
                 setLogin(true)
+              
             })
             .catch((err) => {
                 console.log(err);
@@ -167,8 +184,8 @@ function Dashboard(props) {
         axios.delete(`http://localhost:8000/delete_post/${id}`)
         .then((res) => {
             console.log(res.data)
-            
-          
+          const filter_data = allpost.filter((x)=>x._id != id)
+          setAllPost(filter_data)
         })
         .catch((err) => {
             console.log(err);
@@ -182,7 +199,7 @@ function Dashboard(props) {
         .then((res) => {
             console.log(res.data)
             setAllPost(res.data)
-          
+        
         })
         .catch((err) => {
             console.log(err);
@@ -209,7 +226,7 @@ function Dashboard(props) {
                 <Divider className='nav_divider' />
                 <div className='avatar'>
                     <Avatar className='avatar_img' alt="Remy Sharp" src={profileval.image} />
-                    {/* <img src = {profileval.image}></img> */}
+                
                 </div>
                 <div className='profile_name'>
                     <h5 className='mt-4 '>{profileval.username}</h5>
@@ -239,7 +256,7 @@ function Dashboard(props) {
     );
     const items: MenuProps['items'] = [
         {
-            label: <h6>Edit </h6>,
+            label: <h6 onClick={editShow}>Edit </h6>,
             key: '0',
         },
         {
@@ -381,6 +398,30 @@ function Dashboard(props) {
                                <label> Add Image</label>
                                 <input type="file" name="image" className="form-control"  onChange={(e) =>
                                 setImageVal(e.target.files[0])}/>
+                                </Modal>
+
+
+                                <Modal
+                                    open={openedit}
+                                    title="Add Post"
+                                    onOk={editHandleOk}
+                                    onCancel={editHandleCancel}
+                                    footer={[
+                                    
+                                    <Button key="submit" type="primary" onClick={editHandleOk}  >
+                                        Submit
+                                    </Button>,
+                                    
+                                    ]}
+                                >
+                                     <label> Edit Ttile</label>
+                                    <input type="text" className="form-control" name="title"  
+                                        />
+                                    <label> Edit Description</label>
+                                    <textarea className="form-control" name="description" 
+                               ></textarea>
+                               <label> Edit Image</label>
+                                <input type="file" name="image" className="form-control" />
                                 </Modal>
                         </Typography>
                     </div>
