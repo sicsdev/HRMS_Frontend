@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.containersignup {
+  max-width: 500px;
+  margin: auto;
+  margin-top: 5rem;
+}

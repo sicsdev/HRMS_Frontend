@@ -32,7 +32,270 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.sidebar {
+  position: fixed;
+  top: 94px;
+  right: 0;
+}
+
+.main_header {
+  background: #000;
+}
+
+.left_nav .MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft {
+  background: #000;
+}
+
+.nav_divider {
+  color: #fff;
+  width: 80%;
+  margin: auto !important;
+  margin-top: 2.3rem !important;
+  margin-bottom: 2rem !important;
+  border-color: #fff !important;
+  opacity: 1;
+}
+
+.profile_name {
+  color: white;
+}
+
+.profile_details {
+  margin-top: 15%;
+  color: white;
+}
+
+.avatar .avatar_img {
+  margin: auto;
+  width: 110px;
+  height: 100px;
+}
+
+.row.setting {
+  width: 100%;
+  margin: 0;
+}
+
+.event_divider {
+  color: #fff;
+  width: 80%;
+  margin: auto !important;
+  margin-top: 2.3rem !important;
+  margin-bottom: 2rem !important;
+  border-color: grey !important;
+  opacity: 1;
+
+}
+
+.sidebar.sidebar.MuiBox-root {
+  text-align: left;
+  margin-top: 28px;
+  font-weight: 600;
+}
+
+/* .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.MuiCard-root.card_events.css-1geropv-MuiPaper-root-MuiCard-root {
+  width: 275px;
+} */
+.card_events {
+  width: 275px;
+}
+
+.newpost_btn {
+  width: 140px;
+}
+
+.announcement {
+  text-align: left;
+}
+
+.post_style {
+  text-align: left;
+}
+
+.iconstyle {
+  text-align: left;
+}
+
+.col-3.avatar_image {
+  text-align: right;
+}
+
+.col-3.avatar_image .MuiAvatar-root.MuiAvatar-circular {
+  margin-left: auto;
+  text-align: right;
+}
+
+.col-6 p,
+.col-3 p {
+  margin-bottom: 0;
+}
+
+button.ant-btn.css-dev-only-do-not-override-sk7ap8.ant-btn-default.mt-3.addbutton {
+  margin-top: 0 !important;
+  margin: 0 3px;
+
+}
+
+.col-6,
+.col-3 {
+  padding: 23px;
+}
+
+.MuiToolbar-root.MuiToolbar-gutters.MuiToolbar-regular.main_header {
+  justify-content: start;
+  padding: 14px 0px;
+  margin-left: 39rem;
+
+}
+
+header.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation4.MuiAppBar-root.MuiAppBar-colorPrimary.MuiAppBar-positionFixed.mui-fixed {
+  background: #000;
+}
+
+main.MuiBox-root {
+  margin-top: 2rem;
+}
+
+main.MuiBox-root .row {
+  margin-right: 2rem;
+}
+
+.col-sm-10.announcement p {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.avatar_dropdown {
+  display: flex;
+}
+
+.employe_info p {
+  margin: 0;
+  text-align: left;
+}
+
+.MuiFormControl-root.MuiFormControl-fullWidth {
+  display: inline;
+}
+
+fieldset.MuiOutlinedInput-notchedOutline {
+  border: none;
+}
+
+.avatar_dropdown .MuiBox-root {
+  min-width: unset;
+}
+
+.avatar_dropdown svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiSelect-icon.MuiSelect-iconOutlined {
+  display: none;
+}
+
+.avatar_dropdown #demo-simple-select {
+  background-image: url('../public/down.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30px;
+}
+
+.avatar_dropdown {
+  display: flex;
+  border-left: 2px solid #fff;
+  padding-left: 22px;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+.MuiToolbar-root.MuiToolbar-gutters.MuiToolbar-regular {
+  margin-left: auto;
+}
+
+.apply_leave_dropdown .ant-select-selector {
+  width: 381px;
+  margin-left: 23.7rem;
+}
+
+.from_date {
+  margin-top: 20px;
+}
+
+.from_date .ant-form-item-control-input-content {
+  display: flex;
+  gap: 20px;
+}
+
+.from_date .ant-form-item-control-input-content .ant-picker {
+  width: 85%;
+}
+
+.to_date .ant-form-item-control-input-content {
+  display: flex;
+  gap: 20px;
+}
+
+.to_date .ant-picker {
+  width: 85%;
+}
+
+.static_width {
+  width: calc(100% - 240px) !important;
+  margin-right: 0 !important;
+}
+
+.calender_width {
+  width: calc(100% - 240px) !important;
+  margin-left: auto;
+}
+
+.leave_quota {
+  text-align: left;
+}
+
+.col-sm-6.Balance {
+  margin-top: 5%;
+  text-align: left;
+}
+
+.leave_request {
+  margin-top: 15%;
+}
+
+.col-sm-3.earned_leave {
+
+  border-left: 2px solid yellow;
+}
+
+.col-sm-3.sick_leave {
+
+  border-left: 2px solid pink;
+}
+
+.col-sm-3.casual_leave {
+
+  border-left: 2px solid blue;
+}
+
+.calender {
+  margin-left: 15%;
+  margin-top: 10%;
+}
+
+.row.mt-4.rise {
+  width: 327px;
+}
+
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.MuiCard-root {
+  background: #FFFFFF;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  width: 294px;
+}
+
+.MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.form-control.leave_type {
+  height: 46px;
 }
