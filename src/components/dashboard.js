@@ -27,6 +27,8 @@ import MapsUgcIcon from '@mui/icons-material/MapsUgc';
 import * as moment from 'moment';
 import { DownOutlined } from '@ant-design/icons';
 import { MenuProps } from 'antd';
+import MenuIcon from '@mui/icons-material/Menu';
+
 import { Dropdown, Space } from 'antd';
 
 import InputLabel from '@mui/material/InputLabel';
@@ -214,12 +216,9 @@ function Dashboard(props) {
 
 
 
-
-
-
-
     const drawer = (
         <div>
+
             <Toolbar />
             <List>
                 <img src="logo.png"></img>
@@ -234,13 +233,13 @@ function Dashboard(props) {
                 </div>
                 <div className='profile_details'>
                     <div className='row setting'>
-                        <div className='col-sm-6'>
+                        <div className='col-sm-6 col-6'>
                             <h6>Designation</h6>
                             <h6 className='mt-4'>Reporting Manager</h6>
                             <h6 className='mt-4'>Leave Quota</h6>
 
                         </div>
-                        <div className='col-sm-6'>
+                        <div className='col-sm-6 col-4'>
                             <h6>Designer</h6>
                             <h6 className='mt-4'>userr</h6>
                             <h6 className='mt-4'>6</h6>
@@ -271,7 +270,7 @@ function Dashboard(props) {
 
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex' }} className="dashboard_page">
             <CssBaseline />
             <AppBar
                 position="fixed"
@@ -291,6 +290,7 @@ function Dashboard(props) {
                         onClick={handleDrawerToggle}
                         sx={{ mr: 2, display: { sm: 'none' } }}
                     >
+                        <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
                         {/* Responsive drawer */}
@@ -365,7 +365,7 @@ function Dashboard(props) {
                 sx={{ p: 3, width: { sm: `calc(100% - ${drawerWidth * 2}px)` } }}
             >
                 <Toolbar />
-                <div className='row'>
+                <div className='row announcement_main'>
                     <div className='col-sm-10 announcement'>
                         <Typography>
                             Announcements
@@ -431,7 +431,7 @@ function Dashboard(props) {
                     allpost.map((element, index) => {
                         return (
 
-                            <Card key={index} sx={{ maxWidth: 1100, marginTop: 10 }}>
+                            <Card key={index} sx={{ maxWidth: 1100, marginTop: 10 }} className="post">
                                 <CardHeader
                                     avatar={
                                         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">

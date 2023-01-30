@@ -10,7 +10,7 @@ import ApplyLeave from './pages/UserDashboard/applyLeave';
 import Profile from './pages/UserDashboard/profile';
 import Leaves from './pages/UserDashboard/leaves';
 import AddUser from './pages/UserDashboard/adduser';
-import LeaveStatus from './pages/UserDashboard/leaveStatus';
+import LeaveRequest from './pages/UserDashboard/leaveRequest';
 function App() {
   return (
     <div className="App">
@@ -28,7 +28,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/leaves" element={<Leaves />} />
               <Route path="/adduser" element={<AddUser />} />
-              <Route path="/leavestatus" element={<LeaveStatus />} />
+              <Route path="/leaverequest" element={<LeaveRequest />} />
             </Routes>
           </div>
 

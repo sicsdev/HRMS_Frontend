@@ -130,80 +130,80 @@ function ApplyLeave() {
             <div>
                 <Header />
             </div>
+            <div className="applyleave_page">
+                <h3 className="applyleave">Applying For Leave </h3>
 
-            <h3 className="applyleave">Applying For Leave </h3>
-
-            <form onSubmit={handleSubmit} >
-                <div className="col-sm-4 mx-auto ">
-                    <div className="form-group" align="left">
-                        <label>Type Of Leave</label>
+                <form onSubmit={handleSubmit} >
+                    <div className="col-sm-4 mx-auto ">
+                        <div className="form-group" align="left">
+                            <label>Type Of Leave</label>
 
 
-                        <Select
-                            Heigh
-                            labelId="demo-multiple-checkbox-label" //append the values with key, value pair
-                            id="demo-multiple-checkbox"
-                            multiple
-                            name="leaveId"
-                            value={personName}
-                            onChange={handleChange}
-                            input={<OutlinedInput label="Type Of Leave" />}
-                            renderValue={(selected) => selected.join(', ')}
-                            MenuProps={MenuProps}
-                            className="form-control leave_type"
-                        >
-                            {leavevalue.map((element, index) => (
+                            <Select
+                                Heigh
+                                labelId="demo-multiple-checkbox-label" //append the values with key, value pair
+                                id="demo-multiple-checkbox"
+                                multiple
+                                name="leaveId"
+                                value={personName}
+                                onChange={handleChange}
+                                input={<OutlinedInput label="Type Of Leave" />}
+                                renderValue={(selected) => selected.join(', ')}
+                                MenuProps={MenuProps}
+                                className="form-control leave_type"
+                            >
+                                {leavevalue.map((element, index) => (
 
-                                <MenuItem key={index} value={element.name}>
-                                    <Checkbox checked={personName.indexOf(element.name) > -1} />
-                                    <ListItemText primary={element.name} />
-                                </MenuItem>
-                            ))}
-                        </Select>
+                                    <MenuItem key={index} value={element.name}>
+                                        <Checkbox checked={personName.indexOf(element.name) > -1} />
+                                        <ListItemText primary={element.name} />
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </div>
+                        <div className="form-group" align="left">
+                            <label>Day</label>
+                            <input
+                                type="date"
+                                className="form-control formtext date"
+
+                                placeholder="Date Of Birth"
+                                name="date"
+                                onChange={values}
+                                value={submitval.date}
+
+                            />
+                        </div>
+
+                        <div className="form-group" align="left">
+                            <label>Select Day</label>
+                            <select name="type_of_day" onChange={values} className="form-control" value={submitval.type_of_day}>
+                                <option selected>Select Day</option>
+
+                                <option value="full day" >Full Day</option>
+
+                                <option value="half day" >Half Day</option>
+
+                            </select>
+                        </div>
+
+                        <div className="form-group " align="left">
+                            <label>Reason</label>
+                            <textarea className="form-control" name="reason" onChange={values} value={submitval.reason}></textarea>
+                        </div>
+
+                        <div className="submit-btn mt-2" align="right">
+                            <input
+                                type="submit"
+                                name="submit"
+                                className="btn btn-danger"
+                                value="Apply Leave"
+                                onClick={add}
+                            />
+                        </div>
                     </div>
-                    <div className="form-group" align="left">
-                        <label>Day</label>
-                        <input
-                            type="date"
-                            className="form-control formtext date"
-
-                            placeholder="Date Of Birth"
-                            name="date"
-                            onChange={values}
-                            value={submitval.date}
-
-                        />
-                    </div>
-
-                    <div className="form-group" align="left">
-                        <label>Select Day</label>
-                        <select name="type_of_day" onChange={values} className="form-control" value={submitval.type_of_day}>
-                            <option selected>Select Day</option>
-
-                            <option value="full day" >Full Day</option>
-
-                            <option value="half day" >Half Day</option>
-
-                        </select>
-                    </div>
-
-                    <div className="form-group " align="left">
-                        <label>Reason</label>
-                        <textarea className="form-control" name="reason" onChange={values} value={submitval.reason}></textarea>
-                    </div>
-
-                    <div className="submit-btn mt-2" align="right">
-                        <input
-                            type="submit"
-                            name="submit"
-                            className="btn btn-danger"
-                            value="Apply Leave"
-                            onClick={add}
-                        />
-                    </div>
-                </div>
-            </form>
-
+                </form>
+            </div>
         </>
     );
 

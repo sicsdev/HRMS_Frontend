@@ -42,9 +42,11 @@ function Header(props) {
     const drawer = (
         <div>
             <Toolbar />
-            <img src="logo.png"></img>
-            <List>
-                {[<Link to="/setting">Profile Setting</Link>,
+            <img src="logo.png" className='center'></img>
+            <List >
+                {[
+                    // <Link to="/setting">Profile Setting</Link>,
+                    'Profile',
                     'Team',
                     'Leave Quata',
                     'Apply Leave'].map((text, index) => (
@@ -60,7 +62,7 @@ function Header(props) {
             </List>
 
 
-        </div>
+        </div >
     );
 
     const container = window !== undefined ? () => window().document.body : undefined;
@@ -75,7 +77,8 @@ function Header(props) {
                     ml: { sm: `${drawerWidth}px` },
                 }}
             >
-                <Toolbar>
+                <Toolbar
+                    className='main_header1'>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
