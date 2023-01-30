@@ -38,8 +38,6 @@ function LeaveRequest() {
                                 </tr>
                             </tbody>
 
-
-
                         </table>
 
                         {/* <div className='col-sm-3 sick_leave'>
