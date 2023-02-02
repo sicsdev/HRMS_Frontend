@@ -6,11 +6,6 @@ function dashboardPage() {
 
       <Dashboard />
     </div>
-
-
-
-
-
   )
 }
 export default dashboardPage;

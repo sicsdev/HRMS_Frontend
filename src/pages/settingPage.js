@@ -11,8 +11,6 @@ function settingPage() {
 
     </>
 
-
-
   );
 }
 export default settingPage;  

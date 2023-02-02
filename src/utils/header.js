@@ -23,12 +23,13 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useNavigate } from 'react-router-dom';
+import Dashboard from '../components/dashboard';
 
 const drawerWidth = 240;
 
-function Header(props) {
+function Header({ window, component }) {
     const navigate = useNavigate();
-    const { window } = props;
+    // const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
@@ -43,13 +44,15 @@ function Header(props) {
         <div>
             <Toolbar />
             <img src="logo.png" className='center'></img>
+            <Divider className='nav_divider text-center' />
             <List >
+
                 {[
-                    // <Link to="/setting">Profile Setting</Link>,
-                    'Profile',
-                    'Team',
-                    'Leave Quata',
-                    'Apply Leave'].map((text, index) => (
+                    <Link to="/profile">Profile </Link>,
+
+                    <Link to="/team">Team </Link>,
+                    <Link to="/leaves">Leave Quota</Link>, ,
+                    <Link to="/applyleave">Apply Leave </Link>,].map((text, index) => (
                         <ListItem key={text} disablePadding>
                             <ListItemButton>
                                 <ListItemIcon>
@@ -106,7 +109,7 @@ function Header(props) {
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select">
                                     <MenuItem value={10}>
-                                        <Link to="/setting">Setting</Link></MenuItem>
+                                        <Link to="/profile">Profile</Link></MenuItem>
 
                                     <MenuItem value={20} onClick={logout}>Logout</MenuItem>
 
@@ -117,6 +120,8 @@ function Header(props) {
                 </Toolbar>
             </AppBar>
             <Box
+                className='allNav'
+
                 component="nav"
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
                 aria-label="mailbox folders"
@@ -127,6 +132,8 @@ function Header(props) {
                     variant="temporary"
                     open={mobileOpen}
                     onClose={handleDrawerToggle}
+                    className='allNav'
+
                     ModalProps={{
                         keepMounted: true, // Better open performance on mobile.
                     }}
@@ -138,6 +145,8 @@ function Header(props) {
                     {drawer}
                 </Drawer>
                 <Drawer
+                    className='allNav'
+
                     variant="permanent"
                     sx={{
                         display: { xs: 'none', sm: 'block' },
@@ -153,7 +162,9 @@ function Header(props) {
                 component="main"
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
-                <Toolbar />
+                {/* {<props.component />} */}
+                {/* {component} */}
+                {/* <Toolbar /> */}
 
             </Box>
         </Box>

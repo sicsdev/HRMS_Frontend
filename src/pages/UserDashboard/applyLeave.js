@@ -4,11 +4,16 @@ import axios from "axios";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-
+import { Calendar, theme } from 'antd';
+import { CalendarMode } from 'antd/es/calendar/generateCalendar'
 import ListItemText from '@mui/material/ListItemText';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const ITEM_HEIGHT = 48;
@@ -26,27 +31,26 @@ const MenuProps = {
 
 
 function ApplyLeave() {
+    const { token } = theme.useToken();
+    const onPanelChange = (value: Dayjs, mode: CalendarMode) => {
+        console.log(value.format('YYYY-MM-DD'), mode);
+    };
 
-
-    const [personName, setPersonName] = React.useState([]);
-
+    const wrapperStyle = {
+        width: 300,
+        border: `1px solid ${token.colorBorderSecondary}`,
+        borderRadius: token.borderRadiusLG,
+    };
 
 
     const [leavevalue, setLeaveValue] = useState([]);
 
     const [submitval, setSubmitVal] = useState({
-        leaves: "",
+        leave: "",
         reason: "",
-        date: "",
-        type_of_day: ""
+        from_date: "",
+        to_date: ""
     });
-
-
-    const handleChange = (e) => {
-        const { target: { value } } = e;
-        setPersonName(value);
-
-    }
 
 
 
@@ -81,9 +85,13 @@ function ApplyLeave() {
     const add = () => {
 
 
-        const { type_of_day, reason, date } = submitval;
+        const { reason, from_date, to_date, leave } = submitval;
 
-        const leaves = personName;
+        if (!reason || !from_date || !leave || !to_date) {
+            toast.error("All fields are required")
+            return
+        }
+
 
         let authtokens = localStorage.getItem("authtoken");
         let token = {
@@ -91,25 +99,10 @@ function ApplyLeave() {
                 token: authtokens,
             },
         };
-        let leaveData = []
-        for (let x of leavevalue) {
-            let index = leaves.indexOf(x.name)
-            if (index > -1) {
-                leaveData.push({
-                    id: x._id,
-                    name: x.name
-                })
-            }
-        }
-        console.log(leaveData, "add")
-
-
-
-        let data = { ...submitval, leaves: leaveData }
 
 
         axios
-            .post(`http://localhost:8000/apply_leave`, data, token)
+            .post(`http://localhost:8000/apply_leave`, submitval, token)
             .then((res) => {
                 console.log(res.data);
 
@@ -119,9 +112,7 @@ function ApplyLeave() {
                 console.log(err);
 
             });
-
-        setPersonName(['']);
-        setSubmitVal({ type_of_day: '', reason: '', date: '' })
+        setSubmitVal({ reason: '', date: '' })
     }
 
 
@@ -129,81 +120,135 @@ function ApplyLeave() {
         <>
             <div>
                 <Header />
-            </div>
-            <div className="applyleave_page">
-                <h3 className="applyleave">Applying For Leave </h3>
+                <ToastContainer></ToastContainer>
 
-                <form onSubmit={handleSubmit} >
-                    <div className="col-sm-4 mx-auto ">
-                        <div className="form-group" align="left">
-                            <label>Type Of Leave</label>
+                <Toolbar />
+                <div className="static_width layout apply-leaves-main-layout">
+                    <div className="container margin-top">
+                        <div className="row avail-leaves-card-row">
+                            <div className="col-md-4">
+                                <div className=" avail-leaves-card">
+                                    <div className="count"> 03</div>
+                                    <div className="heading">Earned Leaves Available</div>
+                                </div>
+                            </div>
+                            <div className="col-md-4">
+                                <div className=" avail-leaves-card">
+                                    <div className="count"> 03</div>
+                                    <div className="heading">Earned Leaves Available</div>
+                                </div>
+                            </div>
+                            <div className="col-md-4">
+                                <div className=" avail-leaves-card">
+                                    <div className="count"> 03</div>
+                                    <div className="heading">Earned Leaves Available</div>
+                                </div>
+                            </div>
 
-
-                            <Select
-                                Heigh
-                                labelId="demo-multiple-checkbox-label" //append the values with key, value pair
-                                id="demo-multiple-checkbox"
-                                multiple
-                                name="leaveId"
-                                value={personName}
-                                onChange={handleChange}
-                                input={<OutlinedInput label="Type Of Leave" />}
-                                renderValue={(selected) => selected.join(', ')}
-                                MenuProps={MenuProps}
-                                className="form-control leave_type"
-                            >
-                                {leavevalue.map((element, index) => (
-
-                                    <MenuItem key={index} value={element.name}>
-                                        <Checkbox checked={personName.indexOf(element.name) > -1} />
-                                        <ListItemText primary={element.name} />
-                                    </MenuItem>
-                                ))}
-                            </Select>
                         </div>
-                        <div className="form-group" align="left">
-                            <label>Day</label>
-                            <input
-                                type="date"
-                                className="form-control formtext date"
+                        <div className="row">
+                            <div className="col-sm-6" >
+                                <div className="formMargin-10px ">
+                                    <form onSubmit={handleSubmit} >
 
-                                placeholder="Date Of Birth"
-                                name="date"
-                                onChange={values}
-                                value={submitval.date}
+                                        <div className="form-group" align="left">
+                                            <label>Type Of Leave</label>
+                                            <select id="dino-select" className="form-control" name="leave" onChange={values} required>
+                                                <option>Select Leave</option>
+                                                <optgroup label="Half Day">
 
-                            />
-                        </div>
+                                                    {
+                                                        leavevalue.map((item) => {
 
-                        <div className="form-group" align="left">
-                            <label>Select Day</label>
-                            <select name="type_of_day" onChange={values} className="form-control" value={submitval.type_of_day}>
-                                <option selected>Select Day</option>
+                                                            if (item.category == 'half day') {
+                                                                return (
+                                                                    <option value={item._id}>{item.name}</option>
+                                                                )
+                                                            }
+                                                        })
+                                                    }
+                                                </optgroup>
 
-                                <option value="full day" >Full Day</option>
+                                                <optgroup label="Full Day">
 
-                                <option value="half day" >Half Day</option>
+                                                    {
+                                                        leavevalue.map((item) => {
+                                                            if (item.category == 'full day') {
+                                                                return (
+                                                                    <option value={item._id}>{item.name}</option>
+                                                                )
+                                                            }
+                                                        })
+                                                    }
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div className="form-group" align="left">
+                                            <label>From Date</label>
+                                            <input
+                                                type="date"
+                                                className="form-control formtext date"
 
-                            </select>
-                        </div>
+                                                placeholder="From Date"
+                                                name="from_date"
+                                                onChange={values}
+                                                value={submitval.from_date}
 
-                        <div className="form-group " align="left">
-                            <label>Reason</label>
-                            <textarea className="form-control" name="reason" onChange={values} value={submitval.reason}></textarea>
-                        </div>
+                                            />
+                                        </div>
+                                        <div className="form-group" align="left">
+                                            <label>To Date</label>
+                                            <input
+                                                type="date"
+                                                className="form-control formtext date"
 
-                        <div className="submit-btn mt-2" align="right">
-                            <input
-                                type="submit"
-                                name="submit"
-                                className="btn btn-danger"
-                                value="Apply Leave"
-                                onClick={add}
-                            />
-                        </div>
+                                                placeholder="To Date"
+                                                name="to_date"
+                                                onChange={values}
+                                                value={submitval.to_date}
+
+                                            />
+                                        </div>
+
+
+                                        <div className="form-group " align="left">
+                                            <label>Reason</label>
+                                            <textarea className="form-control" name="reason" onChange={values} value={submitval.reason}></textarea>
+                                        </div>
+
+                                        <div className="submit-btn mt-2" align="right">
+                                            <input
+                                                type="submit"
+                                                name="submit"
+                                                className="btn btn-danger"
+                                                value="Apply Leave"
+                                                onClick={add}
+                                            />
+                                        </div>
+
+
+                                    </form>
+                                </div>
+                            </div>
+                            <div className="col-sm-6 ">
+                                <div className="formMargin-10px float-right">
+                                    <div style={wrapperStyle} className="mt-4" >
+
+                                        <Calendar fullscreen={false} onPanelChange={onPanelChange} />
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                        </div >
                     </div>
-                </form>
+
+                </div>
+
             </div>
+
         </>
     );
 

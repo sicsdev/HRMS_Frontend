@@ -235,14 +235,14 @@ function Dashboard(props) {
                     <div className='row setting'>
                         <div className='col-sm-6 col-6'>
                             <h6>Designation</h6>
-                            <h6 className='mt-4'>Reporting Manager</h6>
-                            <h6 className='mt-4'>Leave Quota</h6>
+                            <h6>Reporting Manager</h6>
+                            <h6>Leave Quota</h6>
 
                         </div>
                         <div className='col-sm-6 col-4'>
                             <h6>Designer</h6>
-                            <h6 className='mt-4'>userr</h6>
-                            <h6 className='mt-4'>6</h6>
+                            <h6>userr</h6>
+                            <h6>6</h6>
                         </div>
                     </div>
                 </div>
@@ -312,7 +312,7 @@ function Dashboard(props) {
                                     id="demo-simple-select"
 
                                 >
-                                    <MenuItem value={10}>Setting</MenuItem>
+                                    <MenuItem value={10}>Profile</MenuItem>
 
                                     <MenuItem value={20} onClick={logout}>Logout</MenuItem>
 
@@ -490,16 +490,13 @@ function Dashboard(props) {
                         action={
                             <Dropdown menu={{ items }} trigger={['click']}>
                                 <a onClick={(e) => e.preventDefault()}>
-
                                     <MoreVertIcon />
-
                                 </a>
                             </Dropdown>
                         } className="post_style"
                         title="Shrimp and Chorizo Paella"
                         subheader="September 14, 2016"
                     />
-
                     <CardContent>
                         <Typography variant="body2" color="text.secondary">
                             This impressive paella is a perfect party dish and a fun meal to cook
@@ -514,9 +511,7 @@ function Dashboard(props) {
                         <IconButton aria-label="share">
                             <MapsUgcIcon />
                         </IconButton>
-
                     </CardActions>
-
                 </Card> */}
             </Box>
 

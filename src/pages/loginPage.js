@@ -1,16 +1,12 @@
 import React from "react";
 
 import Login from "../components/login";
-function loginPage(){
-    return(
-<div>
- 
-    <Login/>
-</div>
+function loginPage() {
+    return (
+        <div>
 
-
-
-
+            <Login />
+        </div>
 
     )
 }

@@ -26,7 +26,7 @@ const bull = (
 function Profile() {
 
     const [profile, setProfile] = useState('');
-    const [allleave, setAllLeave] = useState([]);
+
     const [diff, setDiff] = useState();
     const { token } = theme.useToken();
 
@@ -40,20 +40,6 @@ function Profile() {
         border: `1px solid ${token.colorBorderSecondary}`,
         borderRadius: token.borderRadiusLG,
     };
-
-
-    useEffect(() => {
-        axios.get(`http://localhost:8000/all_leave`)
-            .then((res) => {
-                console.log(res.data)
-                setAllLeave(res.data)
-
-
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [])
 
 
 
@@ -79,6 +65,18 @@ function Profile() {
             });
 
     }, [])
+    const calculatePaidOff = (sick_leave, casual_leave) => {
+
+        console.log(sick_leave, casual_leave, "flow1")
+        let s_count = 0
+        if (sick_leave < 0) {
+            s_count += sick_leave
+        }
+        if (casual_leave < 0) {
+            s_count += casual_leave
+        }
+        return Math.abs(s_count)
+    }
 
 
     const monthDiff = (date_of_joining) => {
@@ -103,124 +101,153 @@ function Profile() {
     return (
 
         <>
-
             <div>
                 <Header />
-            </div>
-            <div className="container static_width">
-                <div className="row ">
-                    <div className="col-sm-8">
-                        <div className="row">
-                            <div className="col-md-4">
-                                <Avatar size={130} icon={<UserOutlined />} />
-                                <p className="pt-4"><b>{profile.name}</b></p>
-                                <p> {profile.emp_id}</p>
-                                <button className="btn btn-primary">Edit Profile</button>
-                            </div>
-
-                            <div className="col-md-4 text-start">
-                                <label><b>Position</b></label>
-                                <p className="pt-3"> {profile.designation}</p>
-                                <label><b>Email</b></label>
-                                <p className="pt-3"> {profile.email}</p>
-                                <label><b>Phone Number</b></label>
-                                <p className="pt-3"> </p>
-                            </div>
-                            <div className="col-md-4 text-start">
-                                <label><b>Tenure</b></label>
 
 
-                                <p className="pt-3">    {monthDiff(profile.date_of_joining)}</p>
-                                <label><b>Birthday</b></label>
-                                <p className="pt-3"> {profile.dob}</p>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div className="col-sm-4">
-                        <div style={wrapperStyle} className="mt-4" >
-
-                            <Calendar fullscreen={false} onPanelChange={onPanelChange} />
-
-                        </div>
-
-
-
-
-                    </div>
+                <div className="static_width layout">
                     <div className="row ">
-                        <label className="text-start mt-3"><b>My Projects</b></label>
-                        <div className="col-sm-3 mt-4">
-                            <Card sx={{ minWidth: 50 }}>
-                                <CardContent>
-                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                        Word of the Day
-                                    </Typography>
-                                    <Typography variant="h5" component="div">
-                                        be{bull}nev{bull}o{bull}lent
-                                    </Typography>
-                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                        adjective
-                                    </Typography>
-                                    <Typography variant="body2">
-                                        well meaning and kindly.
-                                        <br />
-                                        {'"a benevolent smile"'}
-                                    </Typography>
-                                </CardContent>
-                                <CardActions>
-                                    <Button size="small">Learn More</Button>
-                                </CardActions>
-                            </Card>
+                        <div className="col-sm-8">
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <Avatar size={130} icon={<UserOutlined />} />
+                                    <p className="pt-4"><b>{profile.name}</b></p>
+                                    <p> {profile.emp_id}</p>
+                                    <a href="/setting">
+                                        <button className="btn btn-primary">Edit Profile   </button>
+                                    </a>
+
+                                </div>
+
+                                <div className="col-md-4 text-start">
+                                    <label><b>Position</b></label>
+                                    <p className="pt-3"> {profile.designation}</p>
+                                    <label><b>Email</b></label>
+                                    <p className="pt-3"> {profile.email}</p>
+                                    <label><b>Phone Number</b></label>
+                                    <p className="pt-3"> {profile.phonenumber}</p>
+
+                                </div>
+                                <div className="col-md-4 text-start">
+                                    <label><b>Tenure</b></label>
+                                    <p className="pt-3">    {monthDiff(profile.date_of_joining)}</p>
+                                    <label><b>Birthday</b></label>
+                                    <p className="pt-3"> {profile.dob}</p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div className="col-sm-4">
+                            <div style={wrapperStyle} className="mt-4" >
+
+                                <Calendar fullscreen={false} onPanelChange={onPanelChange} />
+
+                            </div>
+
+
 
 
                         </div>
-                        <div className="col-sm-5 mt-4">
-                            <Card sx={{ minWidth: 50 }}>
-                                <CardContent>
-                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                        Word of the Day
-                                    </Typography>
-                                    <Typography variant="h5" component="div">
-                                        be{bull}nev{bull}o{bull}lent
-                                    </Typography>
-                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                        adjective
-                                    </Typography>
-                                    <Typography variant="body2">
-                                        well meaning and kindly.
-                                        <br />
-                                        {'"a benevolent smile"'}
-                                    </Typography>
-                                </CardContent>
-                                <CardActions>
-                                    <Button size="small">Learn More</Button>
-                                </CardActions>
-                            </Card>
+                        <div className="row ">
+                            <label className="text-start mt-3"><b>My Projects</b></label>
+                            <div className="col-sm-3 mt-4">
+                                <Card sx={{ minWidth: 50 }}>
+                                    <CardContent>
+                                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                            Word of the Day
+                                        </Typography>
+                                        <Typography variant="h5" component="div">
+                                            be{bull}nev{bull}o{bull}lent
+                                        </Typography>
+                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                            adjective
+                                        </Typography>
+                                        <Typography variant="body2">
+                                            well meaning and kindly.
+                                            <br />
+                                            {'"a benevolent smile"'}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions>
+                                        <Button size="small">Learn More</Button>
+                                    </CardActions>
+                                </Card>
 
 
-                        </div>
-                        <div className="col-sm-3">
-                            <label className="text-start"><b>Leave Quota</b></label>
-                            {
-                                allleave.map((element, index) => {
-                                    return (
-                                        <>
-                                            <div className="row mt-3 p-2">
-                                                <div className="col-sm-6">
-                                                    {element.name}
-                                                </div>
-                                                <div className="col-sm-6">
-                                                    {element.leave_type}
-                                                </div>
+                            </div>
+                            <div className="col-sm-5 mt-4">
+                                <Card sx={{ minWidth: 50 }}>
+                                    <CardContent>
+                                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                            Word of the Day
+                                        </Typography>
+                                        <Typography variant="h5" component="div">
+                                            be{bull}nev{bull}o{bull}lent
+                                        </Typography>
+                                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                            adjective
+                                        </Typography>
+                                        <Typography variant="body2">
+                                            well meaning and kindly.
+                                            <br />
+                                            {'"a benevolent smile"'}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions>
+                                        <Button size="small">Learn More</Button>
+                                    </CardActions>
+                                </Card>
 
 
-                                            </div>
-                                        </>
-                                    )
-                                })
-                            }
+                            </div>
+                            <div className="col-sm-3">
+                                <label className="text-start"><b>Leave Quota</b></label>
 
+
+                                <>
+                                    <div className="row mt-3 p-2">
+                                        <div className="col-sm-6">
+                                            Casual Leave
+                                        </div>
+
+
+                                        <div className="col-sm-6">
+                                            {profile.leave?.casual_leave >= 0 ? profile.leave?.casual_leave : 0}
+                                        </div>
+
+
+                                    </div>
+                                    <div className="row mt-3 p-2">
+                                        <div className="col-sm-6">
+                                            Sick Leave
+                                        </div>
+
+
+                                        <div className="col-sm-6">
+                                            {profile.leave?.sick_leave >= 0 ? profile.leave?.sick_leave : 0}
+                                            {/* {profile.leave?.sick_leave} */}
+                                        </div>
+
+
+                                    </div>
+                                    <div className="row mt-3 p-2">
+                                        <div className="col-sm-6">
+                                            Paid Off
+                                        </div>
+
+
+                                        <div className="col-sm-6">
+                                            {calculatePaidOff(profile.leave?.sick_leave, profile.leave?.casual_leave)}
+                                        </div>
+
+
+                                    </div>
+                                </>
+
+
+
+
+                            </div>
                         </div>
                     </div>
                 </div>

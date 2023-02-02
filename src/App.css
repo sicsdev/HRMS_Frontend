@@ -177,10 +177,11 @@ button.ant-btn.css-dev-only-do-not-override-sk7ap8.ant-btn-default.mt-3.addbutto
 
 header.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation4.MuiAppBar-root.MuiAppBar-colorPrimary.MuiAppBar-positionFixed.mui-fixed {
   background: #000;
+  width: 100%;
 }
 
-main.MuiBox-root {
-  margin-top: 2rem;
+.row.announcement_main {
+  margin-top: 33px;
 }
 
 main.MuiBox-root .row {
@@ -237,6 +238,16 @@ fieldset.MuiOutlinedInput-notchedOutline {
   margin-left: auto;
 }
 
+.profile_details .row.setting h6 {
+  text-align: left;
+  margin-left: 20px;
+  height: 42px;
+}
+
+.formMargin-10px {
+  margin: 10px;
+}
+
 .apply_leave_dropdown .ant-select-selector {
   width: 381px;
   margin-left: 23.7rem;
@@ -266,10 +277,20 @@ fieldset.MuiOutlinedInput-notchedOutline {
 
 .static_width {
   /* width: calc(100% - 240px) !important; */
-  max-width: 65% !important;
-  margin-right: auto !important;
-
+  max-width: 80% !important;
+  margin-left: auto !important;
 }
+
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft {
+  width: 20%;
+  background-color: #000;
+}
+
+.static_width.layout {
+  padding-left: 25px;
+  margin-top: 100px;
+}
+
 
 .leave_quota {
   text-align: left;
@@ -288,6 +309,11 @@ fieldset.MuiOutlinedInput-notchedOutline {
 
 .leave_request {
   margin-top: 15%;
+}
+
+.leave.request1 {
+  margin-left: 5%;
+
 }
 
 .col-sm-3.earned_leave {
@@ -323,6 +349,41 @@ fieldset.MuiOutlinedInput-notchedOutline {
   color: red;
 }
 
+.avail-leaves-card {
+  display: flex;
+  gap: 2rem;
+  padding: 13px;
+  align-items: center;
+}
+
+.float-right {
+  float: right;
+}
+
+.avail-leaves-card-row {
+  background: #FFFFFF;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  margin-bottom: 2rem;
+}
+
+.apply-leaves-main-layout {
+  padding-right: 8%;
+}
+
+.avail-leaves-card .count {
+  font-size: 48px;
+  color: #E8BA18;
+  font-weight: 500px;
+  line-height: 72px;
+}
+
+.avail-leaves-card .heading {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
 @media screen and (max-width:767px) {
   .container.static_width.requestpage {
     overflow-x: scroll;
@@ -332,10 +393,6 @@ fieldset.MuiOutlinedInput-notchedOutline {
     margin-left: 0;
   }
 
-  .static_width {
-    max-width: 100% !important;
-    margin-right: auto !important;
-  }
 
   table.table thead th {
     font-size: 13px;
@@ -398,6 +455,21 @@ fieldset.MuiOutlinedInput-notchedOutline {
     text-align: left;
     opacity: 0.7;
   }
+
+  .dashboard_page main.MuiBox-root {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .row.announcement_main {
+    margin-top: 103px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .col-sm-10.announcement p {
+    font-size: 19px;
+  }
 }
 
 .main_header1 {
@@ -413,4 +485,16 @@ ul.MuiList-root.MuiList-padding li {
 
 .profile_details .col-sm-6.col-4 {
   padding: 23px;
+}
+
+.static_width.layout .row {
+  --bs-gutter-x: 0;
+}
+
+.container.margin-top {
+  margin-top: -7%;
+}
+
+p.MuiTypography-root.MuiTypography-body1.MuiTypography-paragraph {
+  margin-left: 24%;
 }
