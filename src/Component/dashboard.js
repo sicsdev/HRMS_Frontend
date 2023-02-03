@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -35,13 +36,15 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 
-const drawerWidth = 340;
+const drawerWidth = 240;
 
-
-interface ExpandMoreProps extends IconButtonProps {
-    expand: boolean;
+interface Props {
+    /**
+     * Injected by the documentation to work in an iframe.
+     * You won't need it on your project.
+     */
+    window?: () => Window;
 }
-
 const ExpandMore = styled((props: ExpandMoreProps) => {
     const { expand, ...other } = props;
     return <IconButton {...other} />;
@@ -53,16 +56,16 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     }),
 }));
 
-
-function Dashboard(props) {
-    const navigate = useNavigate();
+export default function LeaveStatus(props: Props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
-   
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
+
+    const navigate = useNavigate();
+
     const bull = (
         <Box
             component="span"
@@ -76,6 +79,7 @@ function Dashboard(props) {
     const [profileval, setProfileVal] = React.useState('');
     const [login, setLogin] = React.useState('');
 
+    const [isActive, setIsActive] = useState([]);
     const [openname, setOpenname] = useState(false);
     const [openedit, setOpenEdit] = useState(false);
     const [addpost, setAddPost] = useState('')
@@ -84,40 +88,41 @@ function Dashboard(props) {
     const [imageval, setImageVal] = useState('')
 
     const [allpost, setAllPost] = useState([]);
-   
+    const [likeval, setLikeVal] = useState([]);
 
-    const handlePost = async(e) => {
+
+    const handlePost = async (e) => {
         setAddPost(e.target.value)
-      }
-      
-      const handleTitlePost = async(e) => {
+    }
+
+    const handleTitlePost = async (e) => {
         setAddTitle(e.target.value)
-      }
+    }
 
     const nameHandleCancel = () => {
         setOpenname(false);
-      };
+    };
 
 
 
     const editHandleCancel = () => {
         setOpenEdit(false);
-      };
+    };
 
 
-      const nameShowModal = () => {
+    const nameShowModal = () => {
         setOpenname(true);
-      };
+    };
 
 
-      const editShow = () => {
+    const editShow = () => {
         setOpenEdit(true);
-      };
+    };
 
-      const nameHandleOk = () => {
+    const nameHandleOk = () => {
 
 
-        const description  = addpost;
+        const description = addpost;
         const title = addtitle
         const image = imageval;
 
@@ -125,23 +130,23 @@ function Dashboard(props) {
         formData.append("title", addtitle);
         formData.append("description", addpost);
         formData.append("image", imageval);
-  
-       
-        axios.post(`http://localhost:8000/add_post`, formData)
-        .then((res) => {
 
-           setAddPost(res.data)
-           
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-          setAddPost('');
-          setAddTitle('')
-          setImageVal('');
-          setOpenname(false);
-       
-      }
+
+        axios.post(`http://localhost:8000/add_post`, formData)
+            .then((res) => {
+
+                setAddPost(res.data)
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        setAddPost('');
+        setAddTitle('')
+        setImageVal('');
+        setOpenname(false);
+
+    }
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
@@ -166,7 +171,7 @@ function Dashboard(props) {
 
                 setProfileVal(res.data)
                 setLogin(true)
-              
+
             })
             .catch((err) => {
                 console.log(err);
@@ -182,28 +187,65 @@ function Dashboard(props) {
 
     const handleDelete = () => {
         axios.delete(`http://localhost:8000/delete_post/${id}`)
-        .then((res) => {
-            console.log(res.data)
-          const filter_data = allpost.filter((x)=>x._id != id)
-          setAllPost(filter_data)
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+            .then((res) => {
+                console.log(res.data)
+                const filter_data = allpost.filter((x) => x._id != id)
+                setAllPost(filter_data)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
- 
-    
-    useEffect(() => {
 
-        axios.get(`http://localhost:8000/all_post`)
-        .then((res) => {
-            console.log(res.data)
-            setAllPost(res.data)
-        
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+
+    const post_id = (e, element) => {
+        e.preventDefault();
+        console.log(element);
+
+        let authtokens = localStorage.getItem("authtoken");
+        let token = {
+            headers: {
+                token: authtokens
+            },
+        };
+
+        axios.post(`http://localhost:8000/like/${element}`, {}, token)
+            .then((res) => {
+                console.log(res.data)
+                setLikeVal(res.data)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }
+
+
+
+    useEffect(() => {
+        let authtokens = localStorage.getItem("authtoken");
+        let token = {
+            headers: {
+                token: authtokens,
+            },
+        };
+
+
+        axios.get(`http://localhost:8000/all_post`, token)
+            .then((res) => {
+               
+                console.log(res.data)
+              
+                // const filter_data = allpost.filter((x) => x._id != id)
+                // setAllPost(filter_data)
+             
+                setAllPost(res.data)
+                
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
 
     }, [])
     const logout = () => {
@@ -212,10 +254,12 @@ function Dashboard(props) {
         navigate('/login')
     };
 
- 
    
+  
 
-   
+
+
+
 
 
     const drawer = (
@@ -223,37 +267,39 @@ function Dashboard(props) {
             <Toolbar />
             <List>
                 <img src="logo.png"></img>
-                <Divider className='nav_divider' />
-                <div className='avatar'>
-                    <Avatar className='avatar_img' alt="Remy Sharp" src={profileval.image} />
-                
+                <Divider className='nav_divider mt-4' />
+                <div className='avatar mt-4'>
+                    <Avatar className='avatar_img mx-auto' alt="Remy Sharp" src="" />
+
                 </div>
                 <div className='profile_name'>
-                    <h5 className='mt-4 '>{profileval.username}</h5>
-                    <h5 className='mt-1'>#SICS40958</h5>
+                    <h5 className='mt-4 '>{profileval.name}</h5>
+                    <h5 className='mt-1'>{profileval.emp_id}</h5>
                 </div>
-                <div className='profile_details'>
+                <div className='profile_details mt-4'>
                     <div className='row setting'>
-                        <div className='col-sm-6'>
+                        <div className='col-6 mt-4'>
                             <h6>Designation</h6>
-                            <h6 className='mt-4'>Reporting Manager</h6>
-                            <h6 className='mt-4'>Leave Quota</h6>
+                            <h6 className='pt-4' >Reporting Manager</h6>
+                            <h6 className='pt-4' >Leave Quota</h6>
 
                         </div>
-                        <div className='col-sm-6'>
-                            <h6>Designer</h6>
-                            <h6 className='mt-4'>userr</h6>
-                            <h6 className='mt-4'>6</h6>
+                        <div className='col-6 mt-4'>
+                            <h6>{profileval.designation}</h6>
+                            <h6 className='pt-4'>Reporting Manager</h6>
+                            <h6 className='pt-4' >6</h6>
+
                         </div>
                     </div>
                 </div>
                 <div className='logout_button mt-4'>
-                    <button className='btn btn-primary' onClick={logout}>Logout</button>
+                    <button className='btn btn-primary' onClick={logout} >Logout</button>
 
                 </div>
             </List>
         </div >
     );
+
     const items: MenuProps['items'] = [
         {
             label: <h6 onClick={editShow}>Edit </h6>,
@@ -278,12 +324,9 @@ function Dashboard(props) {
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
-
                 }}
             >
-                <Toolbar
-                    className='main_header'
-                >
+                <Toolbar>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -291,47 +334,61 @@ function Dashboard(props) {
                         onClick={handleDrawerToggle}
                         sx={{ mr: 2, display: { sm: 'none' } }}
                     >
+
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        {/* Responsive drawer */}
-                    </Typography>
+                    <Typography variant="h6" noWrap component="div" className='header_menu'>
 
-                    <img src="apply_Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp; <img src="Vector.svg" ></img>
+                        <div className='row'>
+                            <div className='col-5 apply_logo'>
 
-                    <div className="avatar_dropdown">
-                        <Avatar alt="Remy Sharp" src={profileval.image} />
-                        <div className="employe_info">
-                            <p>{profileval.username}</p>
-                            <p>employee</p>
+
+                                <img src="apply Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp;
+                            </div>
+                            <div className='col-5'>
+                                <div className='row header_setting' >
+                                    <div className='col-4'>
+
+
+                                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 50, height: 50 }} />
+                                    </div>
+                                    <div className='col-8 mt-2'>
+
+                                        <p>employee</p>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div className='col-2 mt-2'>
+                                <Box sx={{ minWidth: 10 }}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label"></InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select">
+
+
+                                            <MenuItem value={10}>
+                                                <Link to="/setting">Setting</Link></MenuItem>
+
+                                            <MenuItem value={20} >Logout</MenuItem>
+
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            </div>
                         </div>
-                        <Box sx={{ minWidth: 120 }}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label"></InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
 
-                                >
-                                    <MenuItem value={10}>Setting</MenuItem>
-
-                                    <MenuItem value={20} onClick={logout}>Logout</MenuItem>
-
-                                </Select>
-                            </FormControl>
-                        </Box>
-                    </div>
+                    </Typography>
                 </Toolbar>
-
-
             </AppBar>
-
             <Box
-                component="nav"
+                component="nav" className="mail"
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
                 aria-label="mailbox folders"
             >
                 {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-                <Drawer
+                <Drawer className="ddd"
                     container={container}
                     variant="temporary"
                     open={mobileOpen}
@@ -343,261 +400,233 @@ function Dashboard(props) {
                         display: { xs: 'block', sm: 'none' },
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
                     }}
-                    className='left_nav'
                 >
                     {drawer}
                 </Drawer>
                 <Drawer
+
                     variant="permanent"
                     sx={{
                         display: { xs: 'none', sm: 'block' },
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
                     }}
                     open
-                    className='left_nav'
-
                 >
                     {drawer}
                 </Drawer>
             </Box>
-            <Box
+            <Box className='main_box'
                 component="main"
-                sx={{ p: 3, width: { sm: `calc(100% - ${drawerWidth * 2}px)` } }}
+                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(75% - ${drawerWidth}px)`, } }}
             >
                 <Toolbar />
-                <div className='row'>
-                    <div className='col-sm-10 announcement'>
-                        <Typography>
-                            Announcements
-                        </Typography>
-                    </div>
-                    <div className='col-sm-2'>
-                        <Typography>
-                            <button className='btn btn-primary newpost_btn' onClick={nameShowModal}>New Post</button>
-
-
-                                <Modal
-                                    open={openname}
-                                    title="Add Post"
-                                    onOk={nameHandleOk}
-                                    onCancel={nameHandleCancel}
-                                    footer={[
-                                    
-                                    <Button key="submit" type="primary" onClick={nameHandleOk}  >
-                                        Submit
-                                    </Button>,
-                                    
-                                    ]}
-                                >
-                                     <label> Add Ttile</label>
-                                    <input type="text" className="form-control" name="title" value={addtitle} onChange={(e) => handleTitlePost(e)}
-                                        />
-                                    <label> Add Description</label>
-                                    <textarea className="form-control" name="description"  onChange={(e) => handlePost(e)} 
-                               ></textarea>
-                               <label> Add Image</label>
-                                <input type="file" name="image" className="form-control"  onChange={(e) =>
-                                setImageVal(e.target.files[0])}/>
-                                </Modal>
-
-
-                                <Modal
-                                    open={openedit}
-                                    title="Add Post"
-                                    onOk={editHandleOk}
-                                    onCancel={editHandleCancel}
-                                    footer={[
-                                    
-                                    <Button key="submit" type="primary" onClick={editHandleOk}  >
-                                        Submit
-                                    </Button>,
-                                    
-                                    ]}
-                                >
-                                     <label> Edit Ttile</label>
-                                    <input type="text" className="form-control" name="title"  
-                                        />
-                                    <label> Edit Description</label>
-                                    <textarea className="form-control" name="description" 
-                               ></textarea>
-                               <label> Edit Image</label>
-                                <input type="file" name="image" className="form-control" />
-                                </Modal>
-                        </Typography>
-                    </div>
-                </div>
-            {
-
-                allpost.map((element,index) => {
-                    return (
-                
-                <Card key={index} sx={{ maxWidth: 1100, marginTop: 10 }}>
-                    <CardHeader
-                        avatar={
-                            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                R
-                            </Avatar>
-                        }
-                        action={
-                            <Dropdown menu={{ items }} trigger={['click']}  onClick={(e)=>{record(element.id)}}>
-                                <a onClick={(e) => e.preventDefault()}>
-                                
-                                    <MoreVertIcon  />
-
-                                </a>
-                            </Dropdown>
-
-                        } className="post_style"
-                        title={element.title}
-                        subheader={moment(element.post_date).format('DD/MM/YYYY')}
-                    />
-
-                    <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                          {element.description}
-                        </Typography>
-                    </CardContent>
-                    <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                          <img src={element.image}/>
-                        </Typography>
-                    </CardContent>
-                    <CardActions disableSpacing >
-                        <IconButton aria-label="add to favorites" >
-                            <FavoriteIcon />
-                        </IconButton>
-                        <IconButton aria-label="share">
-                            <MapsUgcIcon />
-                        </IconButton>
-
-                    </CardActions>
-
-                </Card>
-                    )
-                })
-                }
-
-
-
-
-                {/* <Card sx={{ maxWidth: 1100, marginTop: 7 }}>
-                    <CardHeader
-                        avatar={
-                            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                R
-                            </Avatar>
-                        }
-                        action={
-                            <Dropdown menu={{ items }} trigger={['click']}>
-                                <a onClick={(e) => e.preventDefault()}>
-
-                                    <MoreVertIcon />
-
-                                </a>
-                            </Dropdown>
-                        } className="post_style"
-                        title="Shrimp and Chorizo Paella"
-                        subheader="September 14, 2016"
-                    />
-
-                    <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                            This impressive paella is a perfect party dish and a fun meal to cook
-                            together with your guests. Add 1 cup of frozen peas along with the mussels,
-                            if you like.
-                        </Typography>
-                    </CardContent>
-                    <CardActions className='icon_style'>
-                        <IconButton aria-label="add to favorites">
-                            <FavoriteIcon />
-                        </IconButton>
-                        <IconButton aria-label="share">
-                            <MapsUgcIcon />
-                        </IconButton>
-
-                    </CardActions>
-
-                </Card> */}
-            </Box>
-
-            {/* Sidebar */}
-            <Box
-                component="sidebar"
-                sx={{ width: { sm: drawerWidth } }}
-                className="sidebar">
-                <h4>Events</h4>
-                <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                    <CardContent>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            Word of the Day
-                        </Typography>
-
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            adjective
-                            <Divider className='event_divider' />
-                        </Typography>
-
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            Word of the Day
-                        </Typography>
-
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            adjective
-
-                        </Typography>
-                        <CreditCardIcon /> Add Reminder
-                    </CardContent>
-                </Card>
-
-
-                <h4 className='mt-4'>Today</h4>
-                <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                    <CardContent>
-                        <div className='row'>
-                            <div className='col-sm-4'>
-                                <Avatar className='avatar_img' alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                <Typography paragraph>
+                    <Box
+                        component="mainpage"
+                        sx={{ p: 3, width: { sm: `calc(100% - ${drawerWidth * 2}px)` } }}
+                    >
+                        <Toolbar />
+                        <div className='row post_section'>
+                            <div className='col-sm-10'>
+                                <Typography>
+                                    <h4>Announcements</h4>
+                                </Typography>
                             </div>
-                            <div className='col-sm-8'>
-                                Word of the Day
-                                Word of the Day
+                            <div className='col-sm-2'>
+                                <Typography>
+                                    <button className='btn btn-primary' onClick={nameShowModal}>New Post</button>
+
+
+                                    <Modal className="mt-4"
+                                        open={openname}
+                                        title="Add Post"
+                                        onOk={nameHandleOk}
+                                        onCancel={nameHandleCancel}
+                                        footer={[
+
+                                            <Button key="submit" type="primary" onClick={nameHandleOk}  >
+                                                Submit
+                                            </Button>,
+
+                                        ]}
+                                    >
+                                        <label> Add Ttile</label>
+                                        <input type="text" className="form-control" name="title" value={addtitle} onChange={(e) => handleTitlePost(e)}
+                                        />
+                                        <label> Add Description</label>
+                                        <textarea className="form-control" name="description" onChange={(e) => handlePost(e)}
+                                        ></textarea>
+                                        <label> Add Image</label>
+                                        <input type="file" name="image" className="form-control" onChange={(e) =>
+                                            setImageVal(e.target.files[0])} />
+                                    </Modal>
+
+
+                                    <Modal
+                                        open={openedit}
+                                        title="Add Post"
+                                        onOk={editHandleOk}
+                                        onCancel={editHandleCancel}
+                                        footer={[
+
+                                            <Button key="submit" type="primary" onClick={editHandleOk}  >
+                                                Submit
+                                            </Button>,
+
+                                        ]}
+                                    >
+                                        <label> Edit Ttile</label>
+                                        <input type="text" className="form-control" name="title"
+                                        />
+                                        <label> Edit Description</label>
+                                        <textarea className="form-control" name="description"
+                                        ></textarea>
+                                        <label> Edit Image</label>
+                                        <input type="file" name="image" className="form-control" />
+                                    </Modal>
+                                </Typography>
                             </div>
                         </div>
+                        {
+
+                            allpost.map((element, index) => {
+                                return (
+
+                                    <Card key={index} sx={{ maxWidth: 1100, marginTop: 10 }}>
+                                        <CardHeader
+                                            avatar={
+                                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                                                    R
+                                                </Avatar>
+                                            }
+                                            action={
+                                                <Dropdown menu={{ items }} trigger={['click']} onClick={(e) => { record(element.id) }}>
+                                                    <a onClick={(e) => e.preventDefault()}>
+
+                                                        <MoreVertIcon />
+
+                                                    </a>
+                                                </Dropdown>
+
+                                            } className="post_style"
+                                            title={element.x.title}
+                                            subheader={moment(element.x.post_date).format('DD/MM/YYYY')}
+                                        />
+
+                                        <CardContent>
+                                            <Typography variant="body2" color="text.secondary">
+                                                {element.x.description}
+                                            </Typography>
+                                        </CardContent>
+                                        <CardContent>
+                                            <Typography variant="body2" color="text.secondary">
+                                                <img src={element.x.image} width="100%" height="450" />
+                                            </Typography>
+                                        </CardContent>
+                                        <CardActions disableSpacing >
+                                            <IconButton aria-label="add to favorites" >
+                                                {element?.isLike?(
+
+                                                    <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id) }} style={{
+                                                        backgroundColor: isActive ? 'white' : '',
+                                                        color: isActive ? 'red' : '',
+                                                    }} />
+                                                ):
+                                                (
+                                                    
+                                                    <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id) }}  />
+                                                )
+                                                
+                                                }
 
 
-                    </CardContent>
-                </Card>
+                                            </IconButton>
+                                            <IconButton aria-label="share">
+                                                <MapsUgcIcon />
+                                            </IconButton>
 
-                <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                    <CardContent>
-                        <div className='row'>
-                            <div className='col-sm-4'>
-                                <Avatar className='avatar_img' alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                            </div>
-                            <div className='col-sm-8'>
-                                Word of the Day
-                                Word of the Day
-                            </div>
-                        </div>
+                                        </CardActions>
 
-
-                    </CardContent>
-                </Card>
+                                    </Card>
+                                )
+                            })
+                        }
+                    </Box>
+                </Typography>
 
             </Box>
+            <Box className='sub_box'
+                component="main"
+                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(25% - ${drawerWidth}px)` } }}
+            >
+                <Toolbar />
+                <Typography paragraph>
+                    <Box
+                        component="sidebar"
+                        sx={{ width: { sm: drawerWidth } }}
+                        className="sidebar">
+                        <h4 className="mt-4">Events</h4>
+                        <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                            <CardContent>
+                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                    Word of the Day
+                                </Typography>
 
-            {/* Sidebar end */}
+                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                    adjective
+                                    <Divider className='event_divider' />
+                                </Typography>
+
+                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                    Word of the Day
+                                </Typography>
+
+                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                    adjective
+
+                                </Typography>
+                                <CreditCardIcon /> Add Reminder
+                            </CardContent>
+                        </Card>
 
 
-        </Box >
+                        <h4 className='mt-4'>Today</h4>
+                        <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                            <CardContent>
+                                <div className='row'>
+                                    <div className='col-sm-4'>
+                                        <Avatar className='avatar_img' alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                                    </div>
+                                    <div className='col-sm-8'>
+                                        Word of the Day
+                                        Word of the Day
+                                    </div>
+                                </div>
+
+
+                            </CardContent>
+                        </Card>
+
+                        <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                            <CardContent>
+                                <div className='row'>
+                                    <div className='col-sm-4'>
+                                        <Avatar className='avatar_img' alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                                    </div>
+                                    <div className='col-sm-8'>
+                                        Word of the Day
+                                        Word of the Day
+                                    </div>
+                                </div>
+
+
+                            </CardContent>
+                        </Card>
+
+                    </Box>
+                </Typography>
+
+            </Box>
+        </Box>
     );
 }
-
-Dashboard.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-};
-
-export default Dashboard;

@@ -47,7 +47,7 @@ export default function LeaveStatus(props: Props) {
       <img src="logo.png" className='logo_img'></img></div>
       <Divider />
       <List>
-        {[ <Link to="/profile">Profile</Link>,  <Link to="/leaves">Leaves</Link>,  <Link to="/applyleave">Apply Leave</Link>, 'Drafts'].map((text, index) => (
+        {['Profile', 'Teams', 'Send email', 'Drafts'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>

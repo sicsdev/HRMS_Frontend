@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Header from "../../utils/header";
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 
-
+const drawerWidth = 240;
 const AddUser = () => {
 
    
@@ -56,9 +59,14 @@ const AddUser = () => {
   return (
     <>
     <Header/>
-      <div className="container mt-4">
+    <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(95% - ${drawerWidth}px)` } }}
+      >
+        <Toolbar />
+        <Typography paragraph>
      
-        <div className="col-sm-6 mx-auto">
+        <div className="col-sm-6 mx-auto mt-4">
           <div className="card">
             <div className="card-header">
               <h4 className="text-center pt-2">Add New Employee </h4>
@@ -197,7 +205,9 @@ const AddUser = () => {
             </div>
           </div>
         </div>
-      </div>
+        </Typography>
+      
+      </Box>
     </>
   );
 };
