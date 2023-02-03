@@ -236,9 +236,7 @@ export default function LeaveStatus(props: Props) {
                
                 console.log(res.data)
               
-                // const filter_data = allpost.filter((x) => x._id != id)
-                // setAllPost(filter_data)
-             
+            
                 setAllPost(res.data)
                 
 
