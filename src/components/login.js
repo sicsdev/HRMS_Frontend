@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-
+import { BASE_URL } from "../baseUrl";
 const Login = () => {
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ const Login = () => {
 
 
     axios
-      .post(`http://localhost:8000/login`, data)
+      .post(`${BASE_URL}/login`, data)
       .then((res) => {
         console.log(res.data);
         setData(res.data)

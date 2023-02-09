@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "../utils/header";
-import UserDashboard from "../../components/userDashboard";
+import Dashboard from "../../components/dashboard";
 import { BASE_URL } from "../../baseUrl";
-function Dashboardpage() {
+
+function Dashboards() {
     const navigate = useNavigate();
     const [role, setRole] = useState('')
     const [show, setShow] = useState(false)
@@ -27,8 +28,9 @@ function Dashboardpage() {
                 .then((res) => {
 
                     setRole(res.data.role)
-                    if (res.data.role == 0) {
+                    if (res.data.role == 2) {
                         setShow(true)
+
                     }
                     else {
                         navigate('/login')
@@ -47,7 +49,7 @@ function Dashboardpage() {
             {show ?
                 <div>
                     <Header />
-                    <UserDashboard />
+                    <Dashboard />
                 </div>
                 : ''
             }
@@ -60,4 +62,4 @@ function Dashboardpage() {
 
     )
 }
-export default Dashboardpage;
+export default Dashboards;

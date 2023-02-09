@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../../utils/header';
+import Header from '../utils/header';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Dayjs } from 'dayjs';
@@ -8,6 +8,7 @@ import { CalendarMode } from 'antd/es/calendar/generateCalendar'
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { BASE_URL } from '../../baseUrl';
 
 function Leaves() {
 
@@ -34,7 +35,7 @@ function Leaves() {
                 token: authtokens,
             },
         };
-        axios.get(`http://localhost:8000/single_user_apply_leave`, token)
+        axios.get(`${BASE_URL}/single_user_apply_leave`, token)
             .then((res) => {
                 console.log(res.data, "check2")
                 setLeaveValue(res.data)

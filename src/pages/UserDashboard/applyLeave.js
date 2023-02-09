@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../utils/header";
+import Header from "../utils/header";
 import axios from "axios";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -14,7 +14,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { BASE_URL } from "../../baseUrl";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 0;
@@ -68,7 +68,7 @@ function ApplyLeave() {
 
     useEffect(() => {
 
-        axios.get(`http://localhost:8000/all_leave`)
+        axios.get(`${BASE_URL}/all_leave`)
             .then((res) => {
                 console.log(res.data, "check1")
                 setLeaveValue(res.data)
@@ -102,7 +102,7 @@ function ApplyLeave() {
 
 
         axios
-            .post(`http://localhost:8000/apply_leave`, submitval, token)
+            .post(`${BASE_URL}/apply_leave`, submitval, token)
             .then((res) => {
                 console.log(res.data);
 

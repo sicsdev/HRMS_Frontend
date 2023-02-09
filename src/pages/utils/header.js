@@ -23,7 +23,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useNavigate } from 'react-router-dom';
-import Dashboard from '../components/dashboard';
+import Dashboard from '../../components/dashboard';
 
 const drawerWidth = 240;
 

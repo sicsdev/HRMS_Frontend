@@ -28,7 +28,7 @@ import * as moment from 'moment';
 import { DownOutlined } from '@ant-design/icons';
 import { MenuProps } from 'antd';
 import MenuIcon from '@mui/icons-material/Menu';
-
+import { BASE_URL } from "../baseUrl";
 import { Dropdown, Space } from 'antd';
 
 import InputLabel from '@mui/material/InputLabel';
@@ -57,6 +57,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 
 function Dashboard(props) {
+
     const navigate = useNavigate();
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -77,7 +78,7 @@ function Dashboard(props) {
     const [expanded, setExpanded] = React.useState(false);
     const [profileval, setProfileVal] = React.useState('');
     const [login, setLogin] = React.useState('');
-
+    const [isActive, setIsActive] = useState([]);
     const [openname, setOpenname] = useState(false);
     const [openedit, setOpenEdit] = useState(false);
     const [addpost, setAddPost] = useState('')
@@ -86,6 +87,7 @@ function Dashboard(props) {
     const [imageval, setImageVal] = useState('')
 
     const [allpost, setAllPost] = useState([]);
+    const [likeval, setLikeVal] = useState([]);
 
 
     const handlePost = async (e) => {
@@ -129,7 +131,7 @@ function Dashboard(props) {
         formData.append("image", imageval);
 
 
-        axios.post(`http://localhost:8000/add_post`, formData)
+        axios.post(`${BASE_URL}/add_post`, formData)
             .then((res) => {
 
                 setAddPost(res.data)
@@ -163,7 +165,7 @@ function Dashboard(props) {
             },
         };
 
-        axios.get(`http://localhost:8000/profile`, token)
+        axios.get(`${BASE_URL}/profile`, token)
             .then((res) => {
 
                 setProfileVal(res.data)
@@ -183,7 +185,7 @@ function Dashboard(props) {
     }
 
     const handleDelete = () => {
-        axios.delete(`http://localhost:8000/delete_post/${id}`)
+        axios.delete(`${BASE_URL}/delete_post/${id}`)
             .then((res) => {
                 console.log(res.data)
                 const filter_data = allpost.filter((x) => x._id != id)
@@ -197,7 +199,14 @@ function Dashboard(props) {
 
     useEffect(() => {
 
-        axios.get(`http://localhost:8000/all_post`)
+        let authtokens = localStorage.getItem("authtoken");
+        let token = {
+            headers: {
+                token: authtokens,
+            },
+        };
+
+        axios.get(`${BASE_URL}/all_post`, token)
             .then((res) => {
                 console.log(res.data)
                 setAllPost(res.data)
@@ -208,6 +217,10 @@ function Dashboard(props) {
             });
 
     }, [])
+
+
+
+
     const logout = () => {
         localStorage.removeItem('authtoken');
         setLogin(false);
@@ -215,6 +228,40 @@ function Dashboard(props) {
     };
 
 
+
+    const post_id = (e, element) => {
+        e.preventDefault();
+        console.log(element);
+
+
+        let authtokens = localStorage.getItem("authtoken");
+        let token = {
+            headers: {
+                token: authtokens
+            },
+        };
+
+        axios.post(`${BASE_URL}/like/${element}`, {}, token)
+            .then((res) => {
+                console.log(res.data)
+
+                setLikeVal(res.data)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+
+
+        // let likedOrNot=likeval.indexOf(likeval.like)
+        // console.log(likedOrNot, "like")
+        // if(likedOrNot<0){
+        //     return true;
+        // }
+
+
+
+    }
 
     const drawer = (
         <div>
@@ -267,6 +314,8 @@ function Dashboard(props) {
         },
 
     ];
+
+
 
 
     return (
@@ -448,23 +497,39 @@ function Dashboard(props) {
                                         </Dropdown>
 
                                     } className="post_style"
-                                    title={element.title}
-                                    subheader={moment(element.post_date).format('DD/MM/YYYY')}
+                                    title={element.x.title}
+                                    subheader={moment(element.x.post_date).format('DD/MM/YYYY')}
                                 />
 
                                 <CardContent>
                                     <Typography variant="body2" color="text.secondary">
-                                        {element.description}
+                                        {element.x.description}
                                     </Typography>
                                 </CardContent>
                                 <CardContent>
                                     <Typography variant="body2" color="text.secondary">
-                                        <img src={element.image} />
+                                        <img src={element.x.image} />
                                     </Typography>
                                 </CardContent>
                                 <CardActions disableSpacing >
                                     <IconButton aria-label="add to favorites" >
-                                        <FavoriteIcon />
+                                        {element?.isLike ? (
+
+                                            <FavoriteIcon key={index}
+
+                                                onClick={(e) => { post_id(e, element.x._id) }} style={{
+                                                    backgroundColor: isActive ? 'white' : '',
+                                                    color: isActive ? 'red' : '',
+                                                }} />
+                                        ) :
+                                            (
+
+                                                <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id) }} />
+                                            )
+
+                                        }
+
+
                                     </IconButton>
                                     <IconButton aria-label="share">
                                         <MapsUgcIcon />
@@ -479,43 +544,9 @@ function Dashboard(props) {
 
 
 
-
-                {/* <Card sx={{ maxWidth: 1100, marginTop: 7 }}>
-                    <CardHeader
-                        avatar={
-                            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                R
-                            </Avatar>
-                        }
-                        action={
-                            <Dropdown menu={{ items }} trigger={['click']}>
-                                <a onClick={(e) => e.preventDefault()}>
-                                    <MoreVertIcon />
-                                </a>
-                            </Dropdown>
-                        } className="post_style"
-                        title="Shrimp and Chorizo Paella"
-                        subheader="September 14, 2016"
-                    />
-                    <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                            This impressive paella is a perfect party dish and a fun meal to cook
-                            together with your guests. Add 1 cup of frozen peas along with the mussels,
-                            if you like.
-                        </Typography>
-                    </CardContent>
-                    <CardActions className='icon_style'>
-                        <IconButton aria-label="add to favorites">
-                            <FavoriteIcon />
-                        </IconButton>
-                        <IconButton aria-label="share">
-                            <MapsUgcIcon />
-                        </IconButton>
-                    </CardActions>
-                </Card> */}
             </Box>
 
-            {/* Sidebar */}
+
             <Box
                 component="sidebar"
                 sx={{ width: { sm: drawerWidth } }}

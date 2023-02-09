@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../utils/header";
+import Header from "../utils/header";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { BASE_URL } from "../../baseUrl";
 
 
 
@@ -30,7 +31,7 @@ function LeaveRequest() {
 
     useEffect(() => {
 
-        axios.get(`http://localhost:8000/get_apply_leaves`)
+        axios.get(`${BASE_URL}/get_apply_leaves`)
             .then((res) => {
                 console.log(res.data, "check1")
                 setRequest(res.data)
@@ -48,7 +49,7 @@ function LeaveRequest() {
 
         console.log(id, item, apply_leave_id, "gfjhsd");
 
-        axios.post(`http://localhost:8000/update_leave/${id}`, { leave_type: item, apply_leave_id: apply_leave_id }
+        axios.post(`${BASE_URL}/update_leave/${id}`, { leave_type: item, apply_leave_id: apply_leave_id }
 
         )
             .then((res) => {
@@ -67,7 +68,7 @@ function LeaveRequest() {
 
         e.preventDefault();
         console.log(id, apply_leave_id, "gfjhsd");
-        axios.put(`http://localhost:8000/cancel_leave/${id}`, { apply_leave_id: apply_leave_id }
+        axios.put(`${BASE_URL}/cancel_leave/${id} `, { apply_leave_id: apply_leave_id }
 
         )
             .then((res) => {
@@ -89,7 +90,7 @@ function LeaveRequest() {
             {request ?
                 <Box
                     component="main"
-                    sx={{ flexGrow: 1, p: 3, width: { sm: `calc(95% - ${drawerWidth}px)` } }}
+                    sx={{ flexGrow: 1, p: 3, width: { sm: `calc(95 % - ${drawerWidth}px)` } }}
                 >
                     <Toolbar />
                     <Typography paragraph>

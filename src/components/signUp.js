@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
-
+import { BASE_URL } from "../baseUrl";
 const SignUp = () => {
 
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ const SignUp = () => {
     // const { username, email, password,dob,phonenumber } = data;
 
     axios
-      .post(`http://localhost:8000/signup`, data)
+      .post(`${BASE_URL}/signup`, data)
       .then((res) => {
         console.log(res.data);
         setData(res.data)

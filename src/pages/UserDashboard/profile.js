@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../utils/header";
+import Header from "../utils/header";
 import { UserOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
 import { Dayjs } from 'dayjs';
@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import axios from "axios";
 import moment from "moment";
+import { BASE_URL } from "../../baseUrl";
 
 const bull = (
     <Box
@@ -53,7 +54,7 @@ function Profile() {
             },
         };
 
-        axios.get(`http://localhost:8000/profile`, token)
+        axios.get(`${BASE_URL}/profile`, token)
             .then((res) => {
                 console.log(res.data)
                 setProfile(res.data)

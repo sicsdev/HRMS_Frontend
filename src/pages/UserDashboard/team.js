@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../../utils/header";
+import Header from "../utils/header";
 import { Button, Checkbox, Form, Input } from 'antd';
 
 function Team() {

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import Avatar from '@mui/material/Avatar';
 import { Button, Modal } from 'antd';
 import axios from "axios";
-import Header from "../utils/header";
+import Header from "../pages/utils/header";
+import { BASE_URL } from "../baseUrl";
 const Setting = () => {
 
 
@@ -58,7 +59,7 @@ const Setting = () => {
       },
     };
 
-    axios.put(`http://localhost:8000/imageupload`, { image: image }, token)
+    axios.put(`${BASE_URL}/imageupload`, { image: image }, token)
       .then((res) => {
 
         setImageVal(res.data)
@@ -90,7 +91,7 @@ const Setting = () => {
       },
     };
 
-    axios.put(`http://localhost:8000/editemail`, { email: email }, token)
+    axios.put(`${BASE_URL}/editemail`, { email: email }, token)
       .then((res) => {
 
         setEmailVal(res.data)
@@ -121,7 +122,7 @@ const Setting = () => {
       },
     };
 
-    axios.put(`http://localhost:8000/editphone`, { phonenumber: phonenumber }, token)
+    axios.put(`${BASE_URL}/editphone`, { phonenumber: phonenumber }, token)
       .then((res) => {
 
         setPhoneVal(res.data)
@@ -155,7 +156,7 @@ const Setting = () => {
       },
     };
 
-    axios.put(`http://localhost:8000/editusername`, { username: username }, token)
+    axios.put(`${BASE_URL}/editusername`, { username: username }, token)
       .then((res) => {
         console.log(username)
         setUsernameVal(res.data)
@@ -188,7 +189,7 @@ const Setting = () => {
       },
     };
 
-    axios.put(`http://localhost:8000/editpassword`, { password: password }, token)
+    axios.put(`${BASE_URL}/editpassword`, { password: password }, token)
       .then((res) => {
 
         setPasswordVal(res.data)
@@ -219,7 +220,7 @@ const Setting = () => {
       },
     };
 
-    axios.put(`http://localhost:8000/editdob`, { dob: dob }, token)
+    axios.put(`${BASE_URL}/editdob`, { dob: dob }, token)
       .then((res) => {
 
         setDobVal(res.data)
@@ -253,7 +254,7 @@ const Setting = () => {
       },
     };
 
-    axios.get(`http://localhost:8000/profile`, token)
+    axios.get(`${BASE_URL}/profile`, token)
       .then((res) => {
 
         setProfile(res.data)

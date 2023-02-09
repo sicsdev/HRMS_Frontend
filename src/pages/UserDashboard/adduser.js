@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Header from "../../utils/header";
-
+import Header from "../utils/header";
+import { BASE_URL } from "../../baseUrl";
 
 const AddUser = () => {
 
@@ -37,7 +37,7 @@ const AddUser = () => {
     const { name, email, password, dob, phonenumber, date_of_joining, emp_id, designation } = newuser;
 
     axios
-      .post(`http://localhost:8000/add_user`, newuser)
+      .post(`${BASE_URL}/add_user`, newuser)
       .then((res) => {
         console.log(res.data);
         setNewUser(res.data)
