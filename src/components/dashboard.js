@@ -228,6 +228,18 @@ function Dashboard(props) {
     };
 
 
+    useEffect(() => {
+        axios.get(`http://localhost:8000/all_employee`)
+            .then((res) => {
+                setAllEmployee(res.data)
+                console.log(res.data, "all_employees")
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
 
     const post_id = (e, element) => {
         e.preventDefault();
@@ -576,38 +588,36 @@ function Dashboard(props) {
                 </Card>
 
 
-                <h4 className='mt-4'>Today</h4>
-                <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                    <CardContent>
-                        <div className='row'>
-                            <div className='col-sm-4'>
-                                <Avatar className='avatar_img' alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                            </div>
-                            <div className='col-sm-8'>
-                                Word of the Day
-                                Word of the Day
-                            </div>
-                        </div>
+                <h4 className='mt-4'>Upcomming Birthday</h4>
+                {
+                    allemployee.map((item, elem) => {
+                        let newDate2 = moment.utc(item.dob).format("MMM DD, YYYY");
+                        return (
+
+                            <>
+
+                                <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                    <CardContent>
+
+                                        <div className='row'>
+                                            <div className='col-sm-4'>
+                                                <Avatar className='avatar_img' alt="Remy Sharp" src={item.image} />
+                                            </div>
+                                            <div className='col-sm-8'>
+                                                {item.name}
+                                                <div>
+                                                    {newDate2}</div>
+                                            </div>
+                                        </div>
 
 
-                    </CardContent>
-                </Card>
+                                    </CardContent>
+                                </Card>
+                            </>
+                        )
+                    })
+                }
 
-                <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                    <CardContent>
-                        <div className='row'>
-                            <div className='col-sm-4'>
-                                <Avatar className='avatar_img' alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                            </div>
-                            <div className='col-sm-8'>
-                                Word of the Day
-                                Word of the Day
-                            </div>
-                        </div>
-
-
-                    </CardContent>
-                </Card>
 
             </Box>
 
