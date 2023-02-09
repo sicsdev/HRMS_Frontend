@@ -33,7 +33,7 @@ const Login = () => {
         console.log(res.data);
         setData(res.data)
         localStorage.setItem('authtoken', res.data.authtoken);
-        navigate('/dashboard');
+        navigate('/dashboardpage');
       })
       .catch((err) => {
         console.log(err);

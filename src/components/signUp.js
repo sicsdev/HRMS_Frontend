@@ -36,7 +36,7 @@ const SignUp = () => {
       .then((res) => {
         console.log(res.data);
         setData(res.data)
-        localStorage.setItem('authtoken', res.data.authtoken);
+        // localStorage.setItem('authtoken', res.data.authtoken);
         navigate('/login');
       })
       .catch((err) => {
