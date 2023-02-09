@@ -60,6 +60,7 @@ function Dashboard(props) {
 
     const navigate = useNavigate();
     const { window } = props;
+
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
 
@@ -85,7 +86,7 @@ function Dashboard(props) {
     const [addtitle, setAddTitle] = useState('')
     const [id, setId] = useState('')
     const [imageval, setImageVal] = useState('')
-
+    const [allemployee, setAllEmployee] = useState([]);
     const [allpost, setAllPost] = useState([]);
     const [likeval, setLikeVal] = useState([]);
 
@@ -229,7 +230,7 @@ function Dashboard(props) {
 
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/all_employee`)
+        axios.get(`${BASE_URL}/all_employee`)
             .then((res) => {
                 setAllEmployee(res.data)
                 console.log(res.data, "all_employees")
@@ -287,13 +288,13 @@ function Dashboard(props) {
 
                 </div>
                 <div className='profile_name'>
-                    <h5 className='mt-4 '>{profileval.username}</h5>
-                    <h5 className='mt-1'>#SICS40958</h5>
+                    <h5 className='mt-4 '>{profileval.name}</h5>
+                    <h5 className='mt-1'>{profileval.emp_id}</h5>
                 </div>
                 <div className='profile_details'>
                     <div className='row setting'>
                         <div className='col-sm-6 col-6'>
-                            <h6>Designation</h6>
+                            <h6>{profileval.designation}</h6>
                             <h6>Reporting Manager</h6>
                             <h6>Leave Quota</h6>
 
