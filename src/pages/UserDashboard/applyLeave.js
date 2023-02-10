@@ -76,6 +76,7 @@ function ApplyLeave() {
         let token = {
             headers: {
                 token: authtokens,
+
             },
         };
 
@@ -83,7 +84,12 @@ function ApplyLeave() {
             navigate('/login')
         }
         else {
-            axios.get(`${BASE_URL}/all_leave`)
+            const config = {
+                header: {
+                    "Content-Type": "application/json",
+                },
+            };
+            axios.get(`${BASE_URL}/all_leave`, config)
                 .then((res) => {
                     console.log(res.data, "check1")
                     setLeaveValue(res.data)
@@ -114,6 +120,7 @@ function ApplyLeave() {
         let token = {
             headers: {
                 token: authtokens,
+                "Content-Type": "application/json",
             },
         };
 

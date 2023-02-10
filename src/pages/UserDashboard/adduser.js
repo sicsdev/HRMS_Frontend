@@ -39,6 +39,7 @@ const AddUser = () => {
     let token = {
       headers: {
         token: authtokens,
+        "Content-Type": "application/json",
       },
     };
 

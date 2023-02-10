@@ -154,8 +154,13 @@ function Dashboard(props) {
         formData.append("description", addpost);
         formData.append("image", imageval);
 
+        const config = {
+            header: {
+                "Content-Type": "application/json",
+            },
+        };
 
-        axios.post(`${BASE_URL}/add_post`, formData)
+        axios.post(`${BASE_URL}/add_post`, formData, config)
             .then((res) => {
 
                 setAddPost(res.data)
@@ -183,6 +188,7 @@ function Dashboard(props) {
         let token = {
             headers: {
                 token: authtokens,
+                "Content-Type": "application/json",
             },
         };
 
@@ -252,7 +258,12 @@ function Dashboard(props) {
     }
 
     const handleDelete = () => {
-        axios.delete(`${BASE_URL}/delete_post/${id}`)
+        const config = {
+            header: {
+                "Content-Type": "application/json",
+            },
+        };
+        axios.delete(`${BASE_URL}/delete_post/${id}`, config)
             .then((res) => {
                 console.log(res.data)
                 const filter_data = allpost.filter((x) => x._id != id)
@@ -270,6 +281,7 @@ function Dashboard(props) {
         let token = {
             headers: {
                 token: authtokens,
+                "Content-Type": "application/json",
             },
         };
 
@@ -296,7 +308,12 @@ function Dashboard(props) {
 
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/all_employee`)
+        const config = {
+            header: {
+                "Content-Type": "application/json",
+            },
+        };
+        axios.get(`${BASE_URL}/all_employee`, config)
             .then((res) => {
                 setAllEmployee(res.data)
                 console.log(res.data, "all_employees")
@@ -309,8 +326,12 @@ function Dashboard(props) {
     }, [])
 
     useEffect(() => {
-
-        axios.get(`http://localhost:8000/event`)
+        const config = {
+            header: {
+                "Content-Type": "application/json",
+            },
+        };
+        axios.get(`http://localhost:8000/event`, config)
             .then((res) => {
                 setEvent(res.data)
 
@@ -330,7 +351,8 @@ function Dashboard(props) {
         let authtokens = localStorage.getItem("authtoken");
         let token = {
             headers: {
-                token: authtokens
+                token: authtokens,
+                "Content-Type": "application/json",
             },
         };
 

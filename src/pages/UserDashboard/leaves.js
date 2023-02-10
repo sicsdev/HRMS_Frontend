@@ -34,6 +34,7 @@ function Leaves() {
         let token = {
             headers: {
                 token: authtokens,
+
             },
         };
 
@@ -41,7 +42,12 @@ function Leaves() {
             navigate('/login')
         }
         else {
-            axios.get(`${BASE_URL}/single_user_apply_leave`, token)
+            const config = {
+                header: {
+                    "Content-Type": "application/json",
+                },
+            };
+            axios.get(`${BASE_URL}/single_user_apply_leave`, config)
                 .then((res) => {
                     console.log(res.data, "check2")
                     setLeaveValue(res.data)

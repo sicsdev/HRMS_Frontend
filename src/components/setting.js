@@ -66,7 +66,7 @@ const Setting = () => {
     let axoisimage = {
       headers: {
         'token': authtokens,
-
+        "Content-Type": "application/json",
       }
     };
 
@@ -98,6 +98,7 @@ const Setting = () => {
     let token = {
       headers: {
         token: authtokens,
+        "Content-Type": "application/json",
       },
     };
 
@@ -129,6 +130,7 @@ const Setting = () => {
     let token = {
       headers: {
         token: authtokens,
+        "Content-Type": "application/json",
       },
     };
 
@@ -163,6 +165,7 @@ const Setting = () => {
     let token = {
       headers: {
         token: authtokens,
+        "Content-Type": "application/json",
       },
     };
 
@@ -196,6 +199,7 @@ const Setting = () => {
     let token = {
       headers: {
         token: authtokens,
+        "Content-Type": "application/json",
       },
     };
 
@@ -227,6 +231,7 @@ const Setting = () => {
     let token = {
       headers: {
         token: authtokens,
+        "Content-Type": "application/json",
       },
     };
 
@@ -261,6 +266,7 @@ const Setting = () => {
     let token = {
       headers: {
         token: authtokens,
+        "Content-Type": "application/json",
       },
     };
 

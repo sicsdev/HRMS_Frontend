@@ -38,6 +38,7 @@ function LeaveRequest() {
         let token = {
             headers: {
                 token: authtokens,
+
             },
         };
 
@@ -45,7 +46,12 @@ function LeaveRequest() {
             navigate('/login')
         }
         else {
-            axios.get(`${BASE_URL}/get_apply_leaves`)
+            const config = {
+                header: {
+                    "Content-Type": "application/json",
+                },
+            };
+            axios.get(`${BASE_URL}/get_apply_leaves`, config)
                 .then((res) => {
                     console.log(res.data, "check1")
                     setRequest(res.data)
@@ -63,7 +69,7 @@ function LeaveRequest() {
     const list = (e, id, item, apply_leave_id) => {
         e.preventDefault();
 
-        console.log(id, item, apply_leave_id, "gfjhsd");
+
 
         axios.post(`${BASE_URL}/update_leave/${id}`, { leave_type: item, apply_leave_id: apply_leave_id }
 
@@ -83,7 +89,8 @@ function LeaveRequest() {
     const cancel_request = (e, id, apply_leave_id) => {
 
         e.preventDefault();
-        console.log(id, apply_leave_id, "gfjhsd");
+
+
         axios.put(`${BASE_URL}/cancel_leave/${id} `, { apply_leave_id: apply_leave_id }
 
         )

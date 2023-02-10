@@ -129,9 +129,13 @@ function UserDashboard(props) {
         formData.append("title", addtitle);
         formData.append("description", addpost);
         formData.append("image", imageval);
+        const config = {
+            header: {
+                "Content-Type": "application/json",
+            },
+        };
 
-
-        axios.post(`${BASE_URL}/add_post`, formData)
+        axios.post(`${BASE_URL}/add_post`, formData, config)
             .then((res) => {
 
                 setAddPost(res.data)
@@ -162,6 +166,7 @@ function UserDashboard(props) {
         let token = {
             headers: {
                 token: authtokens,
+                "Content-Type": "application/json",
             },
         };
 
@@ -203,6 +208,7 @@ function UserDashboard(props) {
         let token = {
             headers: {
                 token: authtokens,
+                "Content-Type": "application/json",
             },
         };
 
@@ -237,7 +243,13 @@ function UserDashboard(props) {
 
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/all_employee`)
+        const config = {
+            header: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        axios.get(`${BASE_URL}/all_employee`, config)
             .then((res) => {
                 setAllEmployee(res.data)
                 console.log(res.data, "all_employees")
@@ -250,8 +262,14 @@ function UserDashboard(props) {
     }, [])
 
     useEffect(() => {
+        const config = {
+            header: {
+                "Content-Type": "application/json",
+            },
+        };
 
-        axios.get(`${BASE_URL}/event`)
+
+        axios.get(`${BASE_URL}/event`, config)
             .then((res) => {
                 setEvent(res.data)
                 console.log(res.data, "dddddddd")
@@ -271,7 +289,8 @@ function UserDashboard(props) {
         let authtokens = localStorage.getItem("authtoken");
         let token = {
             headers: {
-                token: authtokens
+                token: authtokens,
+                "Content-Type": "application/json",
             },
         };
 

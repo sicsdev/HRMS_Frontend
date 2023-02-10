@@ -53,12 +53,14 @@ function Profile() {
         let token = {
             headers: {
                 token: authtokens,
+                "Content-Type": "application/json",
             },
         };
         if (!authtokens) {
             Navigate('/login')
         }
         else {
+
             axios.get(`${BASE_URL}/profile`, token)
                 .then((res) => {
                     console.log(res.data)

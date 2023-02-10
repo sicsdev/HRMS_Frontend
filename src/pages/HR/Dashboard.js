@@ -20,6 +20,7 @@ function Dashboards() {
             let display = {
                 headers: {
                     'token': authtokens,
+                    "Content-Type": "application/json",
                 }
             }
 

@@ -54,6 +54,7 @@ function Header({ window, component }) {
         let token = {
             headers: {
                 token: authtokens,
+                "Content-Type": "application/json",
             },
         };
         if (!authtokens) {
