@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "../utils/header";
 import { BASE_URL } from "../../baseUrl";
-
+import { useNavigate } from "react-router-dom";
 const AddUser = () => {
 
-
+  const navigate = useNavigate();
   const [newuser, setNewUser] = useState({
     name: "",
     password: "",
@@ -32,6 +32,22 @@ const AddUser = () => {
 
   }
 
+
+  useEffect(() => {
+
+    let authtokens = localStorage.getItem("authtoken");
+    let token = {
+      headers: {
+        token: authtokens,
+      },
+    };
+
+    if (!authtokens) {
+      navigate('/login')
+    }
+  }, [])
+
+
   const add = () => {
 
     const { name, email, password, dob, phonenumber, date_of_joining, emp_id, designation } = newuser;
@@ -53,10 +69,13 @@ const AddUser = () => {
   }
 
 
+
+
+
   return (
     <>
       <Header />
-      <div className="container mt-4">
+      <div className="container mt-4 top">
 
         <div className="col-sm-6 mx-auto">
           <div className="card">

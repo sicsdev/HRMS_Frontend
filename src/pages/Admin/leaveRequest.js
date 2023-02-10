@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "../utils/header";
+
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,7 +7,8 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { BASE_URL } from "../../baseUrl";
-
+import Header from "../utils/header";
+import { useNavigate } from "react-router-dom";
 
 
 const ITEM_HEIGHT = 48;
@@ -26,20 +27,35 @@ const MenuProps = {
 
 
 function LeaveRequest() {
+    const navigate = useNavigate();
     const [request, setRequest] = useState([]);
     const [value, setValue] = useState([]);
 
     useEffect(() => {
 
-        axios.get(`${BASE_URL}/get_apply_leaves`)
-            .then((res) => {
-                console.log(res.data, "check1")
-                setRequest(res.data)
-            })
-            .catch((err) => {
-                console.log(err);
 
-            });
+        let authtokens = localStorage.getItem("authtoken");
+        let token = {
+            headers: {
+                token: authtokens,
+            },
+        };
+
+        if (!authtokens) {
+            navigate('/login')
+        }
+        else {
+            axios.get(`${BASE_URL}/get_apply_leaves`)
+                .then((res) => {
+                    console.log(res.data, "check1")
+                    setRequest(res.data)
+                })
+                .catch((err) => {
+                    console.log(err);
+
+                });
+
+        }
 
     }, [])
 

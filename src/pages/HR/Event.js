@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Events from "../../components/event";
 import Header from "../utils/header";
-import UserDashboard from "../../components/userDashboard";
 import { BASE_URL } from "../../baseUrl";
-function Dashboardpage() {
+function Event() {
+
     const navigate = useNavigate();
     const [role, setRole] = useState('')
     const [show, setShow] = useState(false)
@@ -27,7 +28,7 @@ function Dashboardpage() {
                 .then((res) => {
 
                     setRole(res.data.role)
-                    if (res.data.role == 0) {
+                    if (res.data.role == 2) {
                         setShow(true)
                     }
                     else {
@@ -42,16 +43,18 @@ function Dashboardpage() {
 
     }, [])
 
-
     return (
         <>
+
             {show ?
                 <div>
                     <Header />
-                    <UserDashboard />
+                    <Events />
                 </div>
                 : ''
             }
+
+
 
         </>
 
@@ -61,4 +64,5 @@ function Dashboardpage() {
 
     )
 }
-export default Dashboardpage;
+export default Event;
+

@@ -81,14 +81,14 @@ function UserDashboard(props) {
     const [isActive, setIsActive] = useState([]);
     const [openname, setOpenname] = useState(false);
     const [openedit, setOpenEdit] = useState(false);
-    const [addpost, setAddPost] = useState('')
-    const [addtitle, setAddTitle] = useState('')
-    const [id, setId] = useState('')
-    const [imageval, setImageVal] = useState('')
-
+    const [addpost, setAddPost] = useState('');
+    const [addtitle, setAddTitle] = useState('');
+    const [id, setId] = useState('');
+    const [imageval, setImageVal] = useState('');
+    const [allemployee, setAllEmployee] = useState([]);
     const [allpost, setAllPost] = useState([]);
     const [likeval, setLikeVal] = useState([]);
-
+    const [event, setEvent] = useState([]);
 
     const handlePost = async (e) => {
         setAddPost(e.target.value)
@@ -206,15 +206,23 @@ function UserDashboard(props) {
             },
         };
 
-        axios.get(`${BASE_URL}/all_post`, token)
-            .then((res) => {
-                console.log(res.data)
-                setAllPost(res.data)
 
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        if (!authtokens) {
+            navigate('/login')
+        }
+        else {
+            axios.get(`${BASE_URL}/all_post`, token)
+                .then((res) => {
+                    console.log(res.data)
+                    setAllPost(res.data)
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+        }
+
 
     }, [])
 
@@ -228,6 +236,32 @@ function UserDashboard(props) {
     };
 
 
+    useEffect(() => {
+        axios.get(`${BASE_URL}/all_employee`)
+            .then((res) => {
+                setAllEmployee(res.data)
+                console.log(res.data, "all_employees")
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
+
+    useEffect(() => {
+
+        axios.get(`${BASE_URL}/event`)
+            .then((res) => {
+                setEvent(res.data)
+                console.log(res.data, "dddddddd")
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
 
     const post_id = (e, element) => {
         e.preventDefault();
@@ -240,6 +274,8 @@ function UserDashboard(props) {
                 token: authtokens
             },
         };
+
+
 
         axios.post(`${BASE_URL}/like/${element}`, {}, token)
             .then((res) => {
@@ -275,8 +311,8 @@ function UserDashboard(props) {
 
                 </div>
                 <div className='profile_name'>
-                    <h5 className='mt-4 '>{profileval.username}</h5>
-                    <h5 className='mt-1'>#SICS40958</h5>
+                    <h5 className='mt-4 '>{profileval.name}</h5>
+                    <h5 className='mt-1'>{profileval.emp_id}</h5>
                 </div>
                 <div className='profile_details'>
                     <div className='row setting'>
@@ -287,7 +323,7 @@ function UserDashboard(props) {
 
                         </div>
                         <div className='col-sm-6 col-4'>
-                            <h6>Designer</h6>
+                            <h6>{profileval.designation}</h6>
                             <h6>userr</h6>
                             <h6>6</h6>
                         </div>
@@ -344,8 +380,9 @@ function UserDashboard(props) {
                     <Typography variant="h6" noWrap component="div">
                         {/* Responsive drawer */}
                     </Typography>
-
-                    <img src="apply_Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp; <img src="Vector.svg" ></img>
+                    <Link to="/applyleave">
+                        <img src="apply Leave.svg" ></img></Link>
+                    &nbsp;    Apply Leave  &nbsp; <img src="Vector.svg" ></img>
 
                     <div className="avatar_dropdown">
                         <Avatar alt="Remy Sharp" src={profileval.image} />
@@ -465,7 +502,7 @@ function UserDashboard(props) {
                                         <Dropdown menu={{ items }} trigger={['click']} onClick={(e) => { record(element.id) }}>
                                             <a onClick={(e) => e.preventDefault()}>
 
-                                                <MoreVertIcon />
+                                                {/* <MoreVertIcon /> */}
 
                                             </a>
                                         </Dropdown>
@@ -526,62 +563,65 @@ function UserDashboard(props) {
                 sx={{ width: { sm: drawerWidth } }}
                 className="sidebar">
                 <h4>Events</h4>
-                <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                    <CardContent>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            Word of the Day
-                        </Typography>
+                {
+                    event.map((i) => {
 
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            adjective
-                            <Divider className='event_divider' />
-                        </Typography>
+                        return (
 
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            Word of the Day
-                        </Typography>
-
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            adjective
-
-                        </Typography>
-                        <CreditCardIcon /> Add Reminder
-                    </CardContent>
-                </Card>
+                            <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                <CardContent>
 
 
-                <h4 className='mt-4'>Today</h4>
-                <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                    <CardContent>
-                        <div className='row'>
-                            <div className='col-sm-4'>
-                                <Avatar className='avatar_img' alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                            </div>
-                            <div className='col-sm-8'>
-                                Word of the Day
-                                Word of the Day
-                            </div>
-                        </div>
+                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                        <h5><b>{i.event_title} Event</b></h5>
+                                        <h6>  {moment.utc(i.event_date).format("MMM DD, YYYY")}</h6>
+                                        <Divider className='event_divider' />
+                                    </Typography>
+
+                                    <Typography sx={{ fontSize: 14, }} color="text.secondary" gutterBottom>
+                                        {i.event_description}
+                                    </Typography>
+                                    <Typography className="mt-5">
+                                        <CreditCardIcon /> Add Reminder
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        )
+                    })
+                }
 
 
-                    </CardContent>
-                </Card>
+                <h4 className='mt-4'>Upcomming Birthday</h4>
+                {
+                    allemployee.map((item, elem) => {
+                        let newDate2 = moment.utc(item.dob).format("MMM DD, YYYY");
+                        return (
 
-                <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                    <CardContent>
-                        <div className='row'>
-                            <div className='col-sm-4'>
-                                <Avatar className='avatar_img' alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                            </div>
-                            <div className='col-sm-8'>
-                                Word of the Day
-                                Word of the Day
-                            </div>
-                        </div>
+                            <>
+
+                                <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                    <CardContent>
+
+                                        <div className='row'>
+                                            <div className='col-sm-4'>
+                                                <Avatar className='avatar_img' alt="Remy Sharp" src={item.image} />
+                                            </div>
+                                            <div className='col-sm-8'>
+                                                {item.name}
+                                                <div>
+                                                    {newDate2}</div>
+                                            </div>
+                                        </div>
 
 
-                    </CardContent>
-                </Card>
+                                    </CardContent>
+                                </Card>
+                            </>
+                        )
+                    })
+                }
+
+
 
             </Box>
 

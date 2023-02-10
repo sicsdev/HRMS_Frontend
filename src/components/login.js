@@ -33,7 +33,14 @@ const Login = () => {
         console.log(res.data);
         setData(res.data)
         localStorage.setItem('authtoken', res.data.authtoken);
-        navigate('/dashboardpage');
+        if (res.data.user.role == 2) {
+
+          navigate('/dashboardpage')
+        }
+        else {
+          navigate('/dashboard')
+        }
+
       })
       .catch((err) => {
         console.log(err);

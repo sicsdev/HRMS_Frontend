@@ -4,9 +4,11 @@ import { Button, Modal } from 'antd';
 import axios from "axios";
 import Header from "../pages/utils/header";
 import { BASE_URL } from "../baseUrl";
+import { useNavigate } from "react-router-dom";
+import moment from "moment";
 const Setting = () => {
 
-
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [openemail, setOpenemail] = useState(false);
   const [openphone, setOpenphone] = useState(false);
@@ -50,28 +52,36 @@ const Setting = () => {
 
 
   const handleOk = () => {
+
     const image = imageval;
 
-    let authtokens = localStorage.getItem("authtoken");
-    let token = {
+
+    console.log(image)
+    const formData = new FormData();
+
+    formData.append("image", imageval);
+
+    let authtokens = localStorage.getItem('authtoken');
+
+    let axoisimage = {
       headers: {
-        token: authtokens,
-      },
+        'token': authtokens,
+
+      }
     };
 
-    axios.put(`${BASE_URL}/imageupload`, { image: image }, token)
+    axios.post(`${BASE_URL}`, formData, axoisimage)
       .then((res) => {
 
-        setImageVal(res.data)
-        setOpen(false)
-        console.log(res.data)
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
+    setOpen(false);
+
 
   }
-
   const handleCancel = () => {
     setOpen(false);
   };
@@ -254,14 +264,20 @@ const Setting = () => {
       },
     };
 
-    axios.get(`${BASE_URL}/profile`, token)
-      .then((res) => {
+    if (!authtokens) {
+      navigate('/login')
+    }
+    else {
+      axios.get(`${BASE_URL}/profile`, token)
+        .then((res) => {
 
-        setProfile(res.data)
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+          setProfile(res.data)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
   }, []);
 
   // },[nameHandleOk,emailHandleOk, phoneHandleOk, dobHandleOk, passwordHandleOk])
@@ -323,7 +339,7 @@ const Setting = () => {
                   <p>Username</p>
                 </div>
                 <div className='col-3 avatar_image'>
-                  <p>{profile.username}</p>
+                  <p>{profile.name}</p>
 
                 </div>
                 <div className='col-3'>
@@ -428,8 +444,9 @@ const Setting = () => {
                 <div className='col-6'>
                   <p>Date Of Birth</p>
                 </div>
-                <div className='col-3 avatar_image'>
-                  <p>{profile.dob}</p>
+                <div className='col-3 avatar_image' >
+
+                  <p>{moment(profile.dob).format('DD/MM/YYYY')}</p>
 
                 </div>
                 <div className='col-3'>

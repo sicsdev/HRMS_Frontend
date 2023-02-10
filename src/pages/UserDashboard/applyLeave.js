@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from "../../baseUrl";
+import { useNavigate } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 0;
@@ -31,6 +32,9 @@ const MenuProps = {
 
 
 function ApplyLeave() {
+
+
+    const navigate = useNavigate();
     const { token } = theme.useToken();
     const onPanelChange = (value: Dayjs, mode: CalendarMode) => {
         console.log(value.format('YYYY-MM-DD'), mode);
@@ -68,17 +72,30 @@ function ApplyLeave() {
 
     useEffect(() => {
 
-        axios.get(`${BASE_URL}/all_leave`)
-            .then((res) => {
-                console.log(res.data, "check1")
-                setLeaveValue(res.data)
+        let authtokens = localStorage.getItem("authtoken");
+        let token = {
+            headers: {
+                token: authtokens,
+            },
+        };
+
+        if (!authtokens) {
+            navigate('/login')
+        }
+        else {
+            axios.get(`${BASE_URL}/all_leave`)
+                .then((res) => {
+                    console.log(res.data, "check1")
+                    setLeaveValue(res.data)
 
 
 
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+
     }, [])
 
 
@@ -220,7 +237,7 @@ function ApplyLeave() {
                                             <input
                                                 type="submit"
                                                 name="submit"
-                                                className="btn btn-danger"
+                                                className="btn btn-primary"
                                                 value="Apply Leave"
                                                 onClick={add}
                                             />

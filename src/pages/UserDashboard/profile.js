@@ -14,6 +14,8 @@ import Typography from '@mui/material/Typography';
 import axios from "axios";
 import moment from "moment";
 import { BASE_URL } from "../../baseUrl";
+import { Navigate } from "react-router-dom";
+
 
 const bull = (
     <Box
@@ -53,17 +55,23 @@ function Profile() {
                 token: authtokens,
             },
         };
+        if (!authtokens) {
+            Navigate('/login')
+        }
+        else {
+            axios.get(`${BASE_URL}/profile`, token)
+                .then((res) => {
+                    console.log(res.data)
+                    setProfile(res.data)
 
-        axios.get(`${BASE_URL}/profile`, token)
-            .then((res) => {
-                console.log(res.data)
-                setProfile(res.data)
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
 
 
-            })
-            .catch((err) => {
-                console.log(err);
-            });
 
     }, [])
     const calculatePaidOff = (sick_leave, casual_leave) => {
@@ -111,7 +119,7 @@ function Profile() {
                         <div className="col-sm-8">
                             <div className="row">
                                 <div className="col-md-4">
-                                    <Avatar size={130} icon={<UserOutlined />} />
+                                    <Avatar size={130} icon={<UserOutlined />} src={profile.image} />
                                     <p className="pt-4"><b>{profile.name}</b></p>
                                     <p> {profile.emp_id}</p>
                                     <a href="/setting">
@@ -133,7 +141,7 @@ function Profile() {
                                     <label><b>Tenure</b></label>
                                     <p className="pt-3">    {monthDiff(profile.date_of_joining)}</p>
                                     <label><b>Birthday</b></label>
-                                    <p className="pt-3"> {profile.dob}</p>
+                                    <p className="pt-3"> {moment(profile.dob).format('DD/MM/YYYY')}</p>
                                 </div>
                             </div>
 

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -22,15 +22,20 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import { BASE_URL } from "../../baseUrl";
 import Dashboard from '../../components/dashboard';
+import Profile from '../UserDashboard/profile';
+import Setting from '../../components/setting';
+import axios from "axios";
 
 const drawerWidth = 240;
 
 function Header({ window, component }) {
-    const navigate = useNavigate();
-    // const { window } = props;
+
+
     const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [profile, setProfile] = useState('');
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -38,29 +43,60 @@ function Header({ window, component }) {
     const logout = () => {
         localStorage.removeItem('authtoken');
 
-        navigate('/login')
+        Navigate('/login')
     };
+
+
+    useEffect(() => {
+
+
+        let authtokens = localStorage.getItem("authtoken");
+        let token = {
+            headers: {
+                token: authtokens,
+            },
+        };
+        if (!authtokens) {
+            Navigate('/login')
+        }
+        else {
+            axios.get(`${BASE_URL}/profile`, token)
+                .then((res) => {
+                    console.log(res.data)
+                    setProfile(res.data)
+
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+
+
+
+    }, [])
     const drawer = (
         <div>
             <Toolbar />
             <img src="logo.png" className='center'></img>
             <Divider className='nav_divider text-center' />
-            <List >
+            <List className='side_links'>
 
                 {[
+                    <Link to="/dashboard">Dashboard </Link>,
                     <Link to="/profile">Profile </Link>,
 
-                    <Link to="/team">Team </Link>,
+                    // <Link to="/team">Team </Link>,
                     <Link to="/leaves">Leave Quota</Link>, ,
                     <Link to="/applyleave">Apply Leave </Link>,].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
 
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
+                        <ListItemButton>
+                            <ListItemIcon>
+
+                            </ListItemIcon>
+                            <ListItemText primary={text} />
+                        </ListItemButton>
+
                     ))}
             </List>
 
@@ -94,13 +130,15 @@ function Header({ window, component }) {
                     <Typography variant="h6" noWrap component="div">
 
                     </Typography>
-                    <img src="apply_Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp; <img src="Vector.svg" ></img>
+                    <Link to="/applyleave">
+                        <img src="apply Leave.svg" ></img> </Link>
+                    &nbsp;    Apply Leave  &nbsp; <img src="Vector.svg" ></img>
 
                     <div className="avatar_dropdown">
-                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                        <Avatar alt="Remy Sharp" src={profile.image} />
                         <div className="employe_info">
-                            <p></p>
-                            <p>employee</p>
+
+                            <p>{profile.name} </p>
                         </div>
                         <Box sx={{ minWidth: 120 }}>
                             <FormControl fullWidth>

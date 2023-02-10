@@ -223,6 +223,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 30px;
+  font-size: 0px;
 }
 
 .avatar_dropdown {
@@ -497,4 +498,34 @@ ul.MuiList-root.MuiList-padding li {
 
 p.MuiTypography-root.MuiTypography-body1.MuiTypography-paragraph {
   margin-left: 24%;
+}
+
+ul.MuiList-root.MuiList-padding li {
+  color: #00080f;
+  opacity: 0.7;
+}
+
+ul.MuiList-root.MuiList-padding li a {
+  color: black;
+  text-decoration: none;
+}
+
+.side_links a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.side_links a:hover {
+  color: #fff;
+}
+
+.top {
+  margin-left: 31%;
+}
+
+
+
+a.events {
+  color: white !important;
+  text-decoration: none !important;
 }

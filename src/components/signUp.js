@@ -29,7 +29,6 @@ const SignUp = () => {
 
   const add = () => {
 
-    // const { username, email, password,dob,phonenumber } = data;
 
     axios
       .post(`${BASE_URL}/signup`, data)

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../utils/header';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Dayjs } from 'dayjs';
 import { Calendar, theme } from 'antd';
@@ -9,9 +8,11 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { BASE_URL } from '../../baseUrl';
-
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 function Leaves() {
 
+    const navigate = useNavigate();
     const [leavevalue, setLeaveValue] = useState([]);
 
     const { token } = theme.useToken();
@@ -35,14 +36,21 @@ function Leaves() {
                 token: authtokens,
             },
         };
-        axios.get(`${BASE_URL}/single_user_apply_leave`, token)
-            .then((res) => {
-                console.log(res.data, "check2")
-                setLeaveValue(res.data)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+
+        if (!authtokens) {
+            navigate('/login')
+        }
+        else {
+            axios.get(`${BASE_URL}/single_user_apply_leave`, token)
+                .then((res) => {
+                    console.log(res.data, "check2")
+                    setLeaveValue(res.data)
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+
     }, [])
 
 
@@ -59,9 +67,13 @@ function Leaves() {
                         <h4 className='leave_quota'>Leave Quota</h4>
 
                     </div>
+
                     <div className='col-md-2'>
-                        <button className='btn btn-primary'>Apply Leaves</button>
+                        <Link to="/applyleave">
+                            <button className='btn btn-primary'>Apply Leaves</button>
+                        </Link>
                     </div>
+
                 </div>
                 <div className='row mt-4'>
                     <div className='col-sm-6'>

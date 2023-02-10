@@ -89,6 +89,12 @@ function Dashboard(props) {
     const [allemployee, setAllEmployee] = useState([]);
     const [allpost, setAllPost] = useState([]);
     const [likeval, setLikeVal] = useState([]);
+    const [event, setEvent] = useState([]);
+    const [editTitle, setEditTitle] = useState('');
+    const [editDescription, setEditDescription] = useState('');
+    const [updateimage, setUpdateImage] = useState('')
+    const [updateId, setUpdateId] = useState('');
+
 
 
     const handlePost = async (e) => {
@@ -118,6 +124,23 @@ function Dashboard(props) {
     const editShow = () => {
         setOpenEdit(true);
     };
+
+
+    const handlesubmit = async (e) => {
+        e.preventDefault();
+    };
+
+    const handleTitle = async (e) => {
+        setEditTitle(e.target.value)
+    }
+
+    const handleDescription = async (e) => {
+        setEditDescription(e.target.value)
+
+    }
+
+
+
 
     const nameHandleOk = () => {
 
@@ -152,9 +175,6 @@ function Dashboard(props) {
     };
 
 
-    const editHandleOk = () => {
-
-    }
 
     useEffect(() => {
 
@@ -183,6 +203,47 @@ function Dashboard(props) {
     const record = (id) => {
         console.log(id, "dahkasd")
         setId(id)
+        setUpdateId(id)
+    }
+
+
+    console.log(updateId, "fddfd");
+
+    const editHandleOk = () => {
+        const title = editTitle;
+        const description = editDescription;
+
+
+
+        console.log(title, description)
+        axios.put(`${BASE_URL}/edit_post/${updateId}`, { title: editTitle, description: editDescription })
+            .then((res) => {
+                setEditTitle(res.data.title)
+                setEditDescription(res.data.description)
+
+                console.log(res.data, "res.data")
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        setEditTitle("")
+        setEditDescription("")
+        setOpenEdit(false);
+
+
+        // const image = updateimage;
+        // console.log(image)
+        // const formData = new FormData();
+
+        // formData.append("image", updateimage);
+
+        // axios.post(`http://localhost:8000/updateimageupload/${updateId}`, formData)
+        //     .then((res) => {
+        //         console.log(res.data);
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //     });
     }
 
     const handleDelete = () => {
@@ -234,6 +295,20 @@ function Dashboard(props) {
             .then((res) => {
                 setAllEmployee(res.data)
                 console.log(res.data, "all_employees")
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
+
+    useEffect(() => {
+
+        axios.get(`http://localhost:8000/event`)
+            .then((res) => {
+                setEvent(res.data)
+
 
             })
             .catch((err) => {
@@ -294,13 +369,13 @@ function Dashboard(props) {
                 <div className='profile_details'>
                     <div className='row setting'>
                         <div className='col-sm-6 col-6'>
-                            <h6>{profileval.designation}</h6>
+                            <h6>Designation</h6>
                             <h6>Reporting Manager</h6>
                             <h6>Leave Quota</h6>
 
                         </div>
                         <div className='col-sm-6 col-4'>
-                            <h6>Designer</h6>
+                            <h6>{profileval.designation}</h6>
                             <h6>userr</h6>
                             <h6>6</h6>
                         </div>
@@ -358,12 +433,14 @@ function Dashboard(props) {
                         {/* Responsive drawer */}
                     </Typography>
 
-                    <img src="apply_Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp; <img src="Vector.svg" ></img>
+
+                    <Link to="/applyleave">
+                        <img src="apply Leave.svg" ></img> </Link> &nbsp;    Apply Leave  &nbsp; <img src="Vector.svg" ></img>
 
                     <div className="avatar_dropdown">
                         <Avatar alt="Remy Sharp" src={profileval.image} />
                         <div className="employe_info">
-                            <p>{profileval.username}</p>
+
                             <p>employee</p>
                         </div>
                         <Box sx={{ minWidth: 120 }}>
@@ -374,7 +451,8 @@ function Dashboard(props) {
                                     id="demo-simple-select"
 
                                 >
-                                    <MenuItem value={10}>Profile</MenuItem>
+                                    <MenuItem className="aline" value={10}>
+                                        <Link to="/profile">Profile</Link></MenuItem>
 
                                     <MenuItem value={20} onClick={logout}>Logout</MenuItem>
 
@@ -385,7 +463,7 @@ function Dashboard(props) {
                 </Toolbar>
 
 
-            </AppBar>
+            </AppBar >
 
             <Box
                 component="nav"
@@ -455,7 +533,7 @@ function Dashboard(props) {
                                 <input type="text" className="form-control" name="title" value={addtitle} onChange={(e) => handleTitlePost(e)}
                                 />
                                 <label> Add Description</label>
-                                <textarea className="form-control" name="description" onChange={(e) => handlePost(e)}
+                                <textarea className="form-control" value={addpost} name="description" onChange={(e) => handlePost(e)}
                                 ></textarea>
                                 <label> Add Image</label>
                                 <input type="file" name="image" className="form-control" onChange={(e) =>
@@ -468,9 +546,10 @@ function Dashboard(props) {
                                 title="Add Post"
                                 onOk={editHandleOk}
                                 onCancel={editHandleCancel}
+
                                 footer={[
 
-                                    <Button key="submit" type="primary" onClick={editHandleOk}  >
+                                    <Button key="submit" type="primary" onClick={editHandleOk} >
                                         Submit
                                     </Button>,
 
@@ -478,12 +557,15 @@ function Dashboard(props) {
                             >
                                 <label> Edit Ttile</label>
                                 <input type="text" className="form-control" name="title"
+                                    onChange={(e) => handleTitle(e)}
                                 />
                                 <label> Edit Description</label>
                                 <textarea className="form-control" name="description"
+                                    onChange={(e) => handleDescription(e)}
                                 ></textarea>
                                 <label> Edit Image</label>
-                                <input type="file" name="image" className="form-control" />
+                                {/* <input type="file" name="image" className="form-control" onChange={(e) =>
+                                    setUpdateImage(e.target.files[0])} /> */}
                             </Modal>
                         </Typography>
                     </div>
@@ -501,7 +583,7 @@ function Dashboard(props) {
                                         </Avatar>
                                     }
                                     action={
-                                        <Dropdown menu={{ items }} trigger={['click']} onClick={(e) => { record(element.id) }}>
+                                        <Dropdown menu={{ items }} trigger={['click']} onClick={(e) => { record(element.x.id) }}>
                                             <a onClick={(e) => e.preventDefault()}>
 
                                                 <MoreVertIcon />
@@ -563,30 +645,35 @@ function Dashboard(props) {
             <Box
                 component="sidebar"
                 sx={{ width: { sm: drawerWidth } }}
-                className="sidebar">
-                <h4>Events</h4>
-                <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                    <CardContent>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            Word of the Day
-                        </Typography>
+                className="sidebar ">
+                <h4 className="mt-4">Events<button className="btn btn-primary btn-sm top"><Link to="/event" className="events ">Add Event</Link></button></h4>
+                {
+                    event.map((i) => {
 
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            adjective
-                            <Divider className='event_divider' />
-                        </Typography>
+                        return (
 
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            Word of the Day
-                        </Typography>
+                            <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                <CardContent>
 
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            adjective
 
-                        </Typography>
-                        <CreditCardIcon /> Add Reminder
-                    </CardContent>
-                </Card>
+                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                                        <h5><b>{i.event_title} Event</b></h5>
+                                        <h6>  {moment.utc(i.event_date).format("MMM DD, YYYY")}</h6>
+                                        <Divider className='event_divider' />
+                                    </Typography>
+
+                                    <Typography sx={{ fontSize: 14, }} color="text.secondary" gutterBottom>
+                                        {i.event_description}
+                                    </Typography>
+                                    <Typography className="mt-5">
+                                        <CreditCardIcon /> Add Reminder
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        )
+                    })
+                }
+
 
 
                 <h4 className='mt-4'>Upcomming Birthday</h4>
