@@ -26,9 +26,14 @@ const Login = () => {
 
     // const {email, password} = data
 
+    const config = {
+      header: {
+        "Content-Type": "application/json",
+      },
+    };
 
     axios
-      .post(`${BASE_URL}/login`, data)
+      .post(`${BASE_URL}/login`, data, config)
       .then((res) => {
         console.log(res.data);
         setData(res.data)

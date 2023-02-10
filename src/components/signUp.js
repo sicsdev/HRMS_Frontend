@@ -29,9 +29,14 @@ const SignUp = () => {
 
   const add = () => {
 
+    const config = {
+      header: {
+        "Content-Type": "application/json",
+      },
+    };
 
     axios
-      .post(`${BASE_URL}/signup`, data)
+      .post(`${BASE_URL}/signup`, data, config)
       .then((res) => {
         console.log(res.data);
         setData(res.data)

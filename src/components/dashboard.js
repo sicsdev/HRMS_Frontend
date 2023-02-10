@@ -213,10 +213,15 @@ function Dashboard(props) {
         const title = editTitle;
         const description = editDescription;
 
-
+        const config = {
+            header: {
+                "Content-Type": "application/json",
+            },
+        };
 
         console.log(title, description)
-        axios.put(`${BASE_URL}/edit_post/${updateId}`, { title: editTitle, description: editDescription })
+
+        axios.put(`${BASE_URL}/edit_post/${updateId}`, { title: editTitle, description: editDescription }, config)
             .then((res) => {
                 setEditTitle(res.data.title)
                 setEditDescription(res.data.description)
