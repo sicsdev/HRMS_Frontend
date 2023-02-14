@@ -89,7 +89,9 @@ function UserDashboard(props) {
     const [allpost, setAllPost] = useState([]);
     const [likeval, setLikeVal] = useState([]);
     const [event, setEvent] = useState([]);
-
+    const [openComment, setOpenComment] = useState([]);
+    const [addcomment, setAddComment] = useState('')
+    const [postid, setPostId] = useState('');
     const handlePost = async (e) => {
         setAddPost(e.target.value)
     }
@@ -232,9 +234,6 @@ function UserDashboard(props) {
 
     }, [])
 
-
-
-
     const logout = () => {
         localStorage.removeItem('authtoken');
         setLogin(false);
@@ -281,7 +280,7 @@ function UserDashboard(props) {
 
     }, [])
 
-    const post_id = (e, element) => {
+    const post_id = (e, element, isLike) => {
         e.preventDefault();
         console.log(element);
 
@@ -301,6 +300,15 @@ function UserDashboard(props) {
                 console.log(res.data)
 
                 setLikeVal(res.data)
+                const filterrecord = allpost.map((val) => {
+
+                    if (val.x._id == element) {
+                        val.isLike = !isLike
+                    }
+                    console.log(val, "val")
+                    return val
+                })
+                setAllPost(filterrecord)
             })
             .catch((err) => {
                 console.log(err);
@@ -314,8 +322,48 @@ function UserDashboard(props) {
         //     return true;
         // }
 
+    }
+
+    const commentShowModal = (item, index) => {
+        openComment[index] = true
+        setOpenComment([...openComment])
+        setPostId(item);
+
+    };
+    const handleComment = async (e) => {
+        setAddComment(e.target.value)
+    }
+    const commentHandleOk = (index) => {
 
 
+        const content = addcomment
+        console.log(content);
+        if (content.length > 0) {
+
+            let authtokens = localStorage.getItem("authtoken");
+            let token = {
+                headers: {
+                    token: authtokens,
+                },
+            };
+
+            const formData = new FormData();
+            formData.append("content", addcomment);
+
+            axios.post(`${BASE_URL}/comment/${postid}`, { content: content }, token)
+                .then((res) => {
+                    console.log(res.data, "checkcomment")
+
+                    // console.log(tempp, "tempp")
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+        setAddComment('');
+        openComment[index] = false
+        setOpenComment([...openComment])
     }
 
     const drawer = (
@@ -400,8 +448,9 @@ function UserDashboard(props) {
                         {/* Responsive drawer */}
                     </Typography>
                     <Link to="/applyleave">
-                        <img src="apply Leave.svg" ></img></Link>
-                    &nbsp;    Apply Leave  &nbsp; <img src="Vector.svg" ></img>
+                        <img src="apply Leave.svg" ></img>
+                    </Link>
+                    &nbsp;    Apply Leave  &nbsp;
 
                     <div className="avatar_dropdown">
                         <Avatar alt="Remy Sharp" src={profileval.image} />
@@ -417,8 +466,8 @@ function UserDashboard(props) {
                                     id="demo-simple-select"
 
                                 >
-                                    <MenuItem value={10}>Profile</MenuItem>
-
+                                    <MenuItem value={10}>
+                                        <Link to="/profile">Profile</Link></MenuItem>
                                     <MenuItem value={20} onClick={logout}>Logout</MenuItem>
 
                                 </Select>
@@ -562,7 +611,68 @@ function UserDashboard(props) {
 
                                     </IconButton>
                                     <IconButton aria-label="share">
-                                        <MapsUgcIcon />
+
+
+
+
+                                        <MapsUgcIcon onClick={(e) => { commentShowModal(element.x._id, index) }} />
+                                        <Modal className="mt-4"
+                                            open={openComment[index]}
+                                            title="Add Comment"
+                                            onOk={() => commentHandleOk(index)}
+                                            onCancel={() => commentHandleOk(index)}
+                                            footer={[
+
+                                                <Button key="submit" type="primary" onClick={() => commentHandleOk(index)}  >
+                                                    Add Comment
+                                                </Button>,
+
+                                            ]}
+                                        >
+
+                                            {
+                                                element.x.comment?.map((item, i) => {
+                                                    return (
+                                                        <>
+
+                                                            <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                                                <CardContent>
+
+
+                                                                    <Typography sx={{ mb: 3, width: 200, height: 20 }} >
+                                                                        <div className="row">
+                                                                            <div className="col-4">
+                                                                                <Avatar className='avatar_img' alt="Remy Sharp" src={item.userId.image} />
+                                                                            </div>
+                                                                            <div className="col-8">
+                                                                                {item.userId.name}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="row">
+                                                                            <div className="col-4">
+
+                                                                            </div>
+                                                                            <div className="col-8">
+                                                                                <h6>  {item.content}</h6>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </Typography>
+                                                                </CardContent>
+                                                            </Card>
+
+
+                                                        </>
+                                                    )
+                                                })
+                                            }
+                                            <br />
+                                            <textarea className="form-control" name="content" value={addcomment} onChange={(e) => handleComment(e)}
+                                            ></textarea>
+
+                                        </Modal>
+
                                     </IconButton>
 
                                 </CardActions>
@@ -601,7 +711,7 @@ function UserDashboard(props) {
                                         {i.event_description}
                                     </Typography>
                                     <Typography className="mt-5">
-                                        <CreditCardIcon /> Add Reminder
+
                                     </Typography>
                                 </CardContent>
                             </Card>

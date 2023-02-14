@@ -15,6 +15,7 @@ import AddUser from './pages/UserDashboard/adduser';
 import LeaveRequest from './pages/Admin/leaveRequest';
 import Comment from './pages/utils/comment';
 import Event from './pages/HR/Event';
+import Invite from './pages/HR/invite';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
               <Route path="/leaverequest" element={<LeaveRequest />} />
               <Route path="/comments" element={<Comment />} />
               <Route path="/event" element={<Event />} />
+              <Route path="/invite" element={<Invite />} />
 
             </Routes>
           </div>

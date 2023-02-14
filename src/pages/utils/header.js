@@ -16,13 +16,13 @@ import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Link } from 'react-router-dom';
+
 import Avatar from '@mui/material/Avatar';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Navigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { BASE_URL } from "../../baseUrl";
 import Dashboard from '../../components/dashboard';
 import Profile from '../UserDashboard/profile';
@@ -33,17 +33,18 @@ const drawerWidth = 240;
 
 function Header({ window, component }) {
 
-
+    const navigate = useNavigate();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [profile, setProfile] = useState('');
+    const [role, setRole] = useState(1)
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
+
     const logout = () => {
         localStorage.removeItem('authtoken');
-
-        Navigate('/login')
+        navigate('/login')
     };
 
 
@@ -58,7 +59,7 @@ function Header({ window, component }) {
             },
         };
         if (!authtokens) {
-            Navigate('/login')
+            navigate('/login')
         }
         else {
             axios.get(`${BASE_URL}/profile`, token)
@@ -76,20 +77,68 @@ function Header({ window, component }) {
 
 
     }, [])
+
+    useEffect(() => {
+
+        let authtokens = localStorage.getItem("authtoken");
+        if (!authtokens) {
+            navigate('/login')
+        }
+        else {
+            let display = {
+                headers: {
+                    'token': authtokens,
+                }
+            }
+
+            axios.get(`http://localhost:8000/all`, display)
+                .then((res) => {
+                    setRole(res.data.role)
+
+                })
+                .catch((err) => {
+                    console.log(err);
+
+                });
+        };
+
+    }, [])
+
+
     const drawer = (
         <div>
             <Toolbar />
             <img src="logo.png" className='center'></img>
             <Divider className='nav_divider text-center' />
-            <List className='side_links'>
+            {role == 2 ?
+                <List className='side_links'>
 
-                {[
-                    <Link to="/dashboard">Dashboard </Link>,
-                    <Link to="/profile">Profile </Link>,
+                    {[
+                        <Link to="/dashboardpage">Dashboard </Link>,
+                        <Link to="/profile">Profile </Link>,
+                        <Link to="/leaves">Leave Quota</Link>,
+                        <Link to="/applyleave">Apply Leave </Link>,
+                        <Link to="/leaverequest">Leave Request</Link>,
+                        <Link to="/adduser">Add Employee</Link>,
+                        <Link to="/invite">Employee List</Link>].map((text, index) => (
 
-                    // <Link to="/team">Team </Link>,
-                    <Link to="/leaves">Leave Quota</Link>, ,
-                    <Link to="/applyleave">Apply Leave </Link>,].map((text, index) => (
+                            <ListItemButton>
+                                <ListItemIcon>
+
+                                </ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItemButton>
+
+                        ))}
+                </List>
+
+                :
+
+                <List className='side_links'>
+                    {[<Link to="/dashboard">Dashboard</Link>,
+                    <Link to="/profile">Profile</Link>,
+                    <Link to="/leaves">Leaves</Link>,
+                    <Link to="/applyleave">Apply Leave</Link>].map((text, index) => (
 
                         <ListItemButton>
                             <ListItemIcon>
@@ -99,9 +148,8 @@ function Header({ window, component }) {
                         </ListItemButton>
 
                     ))}
-            </List>
-
-
+                </List>
+            }
         </div >
     );
 
@@ -132,8 +180,9 @@ function Header({ window, component }) {
 
                     </Typography>
                     <Link to="/applyleave">
-                        <img src="apply Leave.svg" ></img> </Link>
-                    &nbsp;    Apply Leave  &nbsp; <img src="Vector.svg" ></img>
+                        <img src="apply Leave.svg" ></img>
+                        &nbsp;    Apply Leave  &nbsp;
+                    </Link>
 
                     <div className="avatar_dropdown">
                         <Avatar alt="Remy Sharp" src={profile.image} />

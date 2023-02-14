@@ -140,12 +140,12 @@ function LeaveRequest() {
                                                 return (
                                                     <>
                                                         <tr>
-                                                            <td>{element.userId.emp_id}</td>
-                                                            <td>{element.userId.name}</td>
-                                                            <td>{element.leave.name}</td>
-                                                            <td>{element.from_date}</td>
-                                                            <td>{element.to_date}</td>
-                                                            <td>{element.reason}</td>
+                                                            <td>{element.userId?.emp_id}</td>
+                                                            <td>{element.userId?.name}</td>
+                                                            <td>{element.leave?.name}</td>
+                                                            <td>{element?.from_date}</td>
+                                                            <td>{element?.to_date}</td>
+                                                            <td>{element?.reason}</td>
                                                             {/* <td><button  onClick={() => {list()}}>Approved</button></td> */}
                                                             <td><button className="btn btn-primary" onClick={(e) => { list(e, element.userId.id, element.leave.name, element._id) }}>Approved</button></td>
                                                             <td><button className="btn btn-primary" onClick={(e) => { cancel_request(e, element.userId.id, element._id) }}>Deny</button></td>

@@ -94,7 +94,9 @@ function Dashboard(props) {
     const [editDescription, setEditDescription] = useState('');
     const [updateimage, setUpdateImage] = useState('')
     const [updateId, setUpdateId] = useState('');
-
+    const [openComment, setOpenComment] = useState([]);
+    const [addcomment, setAddComment] = useState('')
+    const [postid, setPostId] = useState('');
 
 
     const handlePost = async (e) => {
@@ -110,7 +112,9 @@ function Dashboard(props) {
     };
 
 
-
+    const handleComment = async (e) => {
+        setAddComment(e.target.value)
+    }
     const editHandleCancel = () => {
         setOpenEdit(false);
     };
@@ -164,6 +168,17 @@ function Dashboard(props) {
             .then((res) => {
 
                 setAddPost(res.data)
+                let tmp = [...allpost]
+                tmp.unshift(
+                    {
+                        x: {
+                            title: res.data.data?.title,
+                            description: res.data.data?.description,
+                            image: res.data.data?.image
+                        }
+                    }
+                )
+                setAllPost([...tmp])
 
             })
             .catch((err) => {
@@ -266,7 +281,7 @@ function Dashboard(props) {
         axios.delete(`${BASE_URL}/delete_post/${id}`, config)
             .then((res) => {
                 console.log(res.data)
-                const filter_data = allpost.filter((x) => x._id != id)
+                const filter_data = allpost.filter((val) => val.x._id != id)
                 setAllPost(filter_data)
             })
             .catch((err) => {
@@ -331,7 +346,7 @@ function Dashboard(props) {
                 "Content-Type": "application/json",
             },
         };
-        axios.get(`http://localhost:8000/event`, config)
+        axios.get(`${BASE_URL}/event`, config)
             .then((res) => {
                 setEvent(res.data)
 
@@ -343,7 +358,7 @@ function Dashboard(props) {
 
     }, [])
 
-    const post_id = (e, element) => {
+    const post_id = (e, element, isLike) => {
         e.preventDefault();
         console.log(element);
 
@@ -361,6 +376,15 @@ function Dashboard(props) {
                 console.log(res.data)
 
                 setLikeVal(res.data)
+                const filterrecord = allpost.map((val) => {
+
+                    if (val.x._id == element) {
+                        val.isLike = !isLike
+                    }
+                    console.log(val, "val")
+                    return val
+                })
+                setAllPost(filterrecord)
             })
             .catch((err) => {
                 console.log(err);
@@ -377,6 +401,47 @@ function Dashboard(props) {
 
 
     }
+
+
+    const commentShowModal = (item, index) => {
+        openComment[index] = true
+        setOpenComment([...openComment])
+        setPostId(item);
+
+    };
+    const commentHandleOk = (index) => {
+
+
+        const content = addcomment
+        console.log(content);
+        if (content.length > 0) {
+
+            let authtokens = localStorage.getItem("authtoken");
+            let token = {
+                headers: {
+                    token: authtokens,
+                },
+            };
+
+            const formData = new FormData();
+            formData.append("content", addcomment);
+
+            axios.post(`${BASE_URL}/comment/${postid}`, { content: content }, token)
+                .then((res) => {
+                    console.log(res.data, "checkcomment")
+
+                    // console.log(tempp, "tempp")
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+        setAddComment('');
+        openComment[index] = false
+        setOpenComment([...openComment])
+    }
+
 
     const drawer = (
         <div>
@@ -432,7 +497,6 @@ function Dashboard(props) {
 
 
 
-
     return (
         <Box sx={{ display: 'flex' }} className="dashboard_page">
             <CssBaseline />
@@ -462,7 +526,7 @@ function Dashboard(props) {
 
 
                     <Link to="/applyleave">
-                        <img src="apply Leave.svg" ></img> </Link> &nbsp;    Apply Leave  &nbsp; <img src="Vector.svg" ></img>
+                        <img src="apply Leave.svg" ></img> </Link> &nbsp;    Apply Leave  &nbsp;
 
                     <div className="avatar_dropdown">
                         <Avatar alt="Remy Sharp" src={profileval.image} />
@@ -591,8 +655,8 @@ function Dashboard(props) {
                                     onChange={(e) => handleDescription(e)}
                                 ></textarea>
                                 <label> Edit Image</label>
-                                {/* <input type="file" name="image" className="form-control" onChange={(e) =>
-                                    setUpdateImage(e.target.files[0])} /> */}
+                                <input type="file" name="image" className="form-control" onChange={(e) =>
+                                    setUpdateImage(e.target.files[0])} />
                             </Modal>
                         </Typography>
                     </div>
@@ -654,7 +718,68 @@ function Dashboard(props) {
 
                                     </IconButton>
                                     <IconButton aria-label="share">
-                                        <MapsUgcIcon />
+
+
+
+
+                                        <MapsUgcIcon onClick={(e) => { commentShowModal(element.x._id, index) }} />
+                                        <Modal className="mt-4"
+                                            open={openComment[index]}
+                                            title="Add Comment"
+                                            onOk={() => commentHandleOk(index)}
+                                            onCancel={() => commentHandleOk(index)}
+                                            footer={[
+
+                                                <Button key="submit" type="primary" onClick={() => commentHandleOk(index)}  >
+                                                    Add Comment
+                                                </Button>,
+
+                                            ]}
+                                        >
+
+                                            {
+                                                element.x.comment?.map((item, i) => {
+                                                    return (
+                                                        <>
+
+                                                            <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                                                <CardContent>
+
+
+                                                                    <Typography sx={{ mb: 3, width: 200, height: 20 }} >
+                                                                        <div className="row">
+                                                                            <div className="col-4">
+                                                                                <Avatar className='avatar_img' alt="Remy Sharp" src={item.userId.image} />
+                                                                            </div>
+                                                                            <div className="col-8">
+                                                                                {item.userId.name}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="row">
+                                                                            <div className="col-4">
+
+                                                                            </div>
+                                                                            <div className="col-8">
+                                                                                <h6>  {item.content}</h6>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </Typography>
+                                                                </CardContent>
+                                                            </Card>
+
+
+                                                        </>
+                                                    )
+                                                })
+                                            }
+                                            <br />
+                                            <textarea className="form-control" name="content" value={addcomment} onChange={(e) => handleComment(e)}
+                                            ></textarea>
+
+                                        </Modal>
+
                                     </IconButton>
 
                                 </CardActions>
@@ -693,7 +818,7 @@ function Dashboard(props) {
                                         {i.event_description}
                                     </Typography>
                                     <Typography className="mt-5">
-                                        <CreditCardIcon /> Add Reminder
+
                                     </Typography>
                                 </CardContent>
                             </Card>

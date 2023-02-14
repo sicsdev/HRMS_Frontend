@@ -529,3 +529,7 @@ a.events {
   color: white !important;
   text-decoration: none !important;
 }
+
+.inviteBtn {
+  background-color: #0d6efd !important;
+}
