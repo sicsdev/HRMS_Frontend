@@ -37,7 +37,6 @@ function ApplyLeave() {
     const navigate = useNavigate();
     const { token } = theme.useToken();
     const onPanelChange = (value: Dayjs, mode: CalendarMode) => {
-        console.log(value.format('YYYY-MM-DD'), mode);
     };
 
     const wrapperStyle = {
@@ -48,6 +47,7 @@ function ApplyLeave() {
 
 
     const [leavevalue, setLeaveValue] = useState([]);
+    const [pendingLeave, setPendingLeave] = useState('');
 
     const [submitval, setSubmitVal] = useState({
         leave: "",
@@ -69,7 +69,6 @@ function ApplyLeave() {
 
     }
 
-
     useEffect(() => {
 
         let authtokens = localStorage.getItem("authtoken");
@@ -81,7 +80,7 @@ function ApplyLeave() {
         };
 
         if (!authtokens) {
-            navigate('/login')
+            navigate('/')
         }
         else {
             const config = {
@@ -91,7 +90,6 @@ function ApplyLeave() {
             };
             axios.get(`${BASE_URL}/all_leave`, config)
                 .then((res) => {
-                    console.log(res.data, "check1")
                     setLeaveValue(res.data)
 
 
@@ -104,7 +102,47 @@ function ApplyLeave() {
 
     }, [])
 
+    useEffect(() => {
 
+
+        let authtokens = localStorage.getItem("authtoken");
+        let token = {
+            headers: {
+                token: authtokens,
+                "Content-Type": "application/json",
+            },
+        };
+        if (!authtokens) {
+            navigate('/')
+        }
+        else {
+
+            axios.get(`${BASE_URL}/profile`, token)
+                .then((res) => {
+                    setPendingLeave(res.data)
+
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+
+
+
+    }, [])
+
+    const calculatePaidOff = (sick_leave, casual_leave) => {
+
+        let s_count = 0
+        if (sick_leave < 0) {
+            s_count += sick_leave
+        }
+        if (casual_leave < 0) {
+            s_count += casual_leave
+        }
+        return Math.abs(s_count)
+    }
     const add = () => {
 
 
@@ -128,15 +166,14 @@ function ApplyLeave() {
         axios
             .post(`${BASE_URL}/apply_leave`, submitval, token)
             .then((res) => {
-                console.log(res.data);
-
+                toast.success("Leave Applied")
 
             })
             .catch((err) => {
                 console.log(err);
 
             });
-        setSubmitVal({ reason: '', date: '' })
+        setSubmitVal({ leave: "", reason: "", from_date: "", to_date: "" })
     }
 
 
@@ -152,14 +189,14 @@ function ApplyLeave() {
                         <div className="row avail-leaves-card-row">
                             <div className="col-md-4">
                                 <div className=" avail-leaves-card">
-                                    <div className="count"> 03</div>
-                                    <div className="heading">Earned Leaves Available</div>
+                                    <div className="count">  {pendingLeave.leave?.casual_leave >= 0 ? pendingLeave.leave?.casual_leave : 0}</div>
+                                    <div className="heading">Casual Leaves Available</div>
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className=" avail-leaves-card">
-                                    <div className="count"> 03</div>
-                                    <div className="heading">Earned Leaves Available</div>
+                                    <div className="count"> {pendingLeave.leave?.sick_leave >= 0 ? pendingLeave.leave?.sick_leave : 0}</div>
+                                    <div className="heading">Sick Leaves Available</div>
                                 </div>
                             </div>
                             <div className="col-md-4">
@@ -177,7 +214,7 @@ function ApplyLeave() {
 
                                         <div className="form-group" align="left">
                                             <label>Type Of Leave</label>
-                                            <select id="dino-select" className="form-control" name="leave" onChange={values} required>
+                                            <select id="dino-select" className="form-control" name="leave" onChange={values} value={submitval.leave} required>
                                                 <option>Select Leave</option>
                                                 <optgroup label="Half Day">
 

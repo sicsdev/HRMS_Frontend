@@ -44,7 +44,7 @@ function Header({ window, component }) {
 
     const logout = () => {
         localStorage.removeItem('authtoken');
-        navigate('/login')
+        navigate('/')
     };
 
 
@@ -59,7 +59,7 @@ function Header({ window, component }) {
             },
         };
         if (!authtokens) {
-            navigate('/login')
+            navigate('/')
         }
         else {
             axios.get(`${BASE_URL}/profile`, token)
@@ -82,7 +82,7 @@ function Header({ window, component }) {
 
         let authtokens = localStorage.getItem("authtoken");
         if (!authtokens) {
-            navigate('/login')
+            navigate('/')
         }
         else {
             let display = {
@@ -91,7 +91,7 @@ function Header({ window, component }) {
                 }
             }
 
-            axios.get(`http://localhost:8000/all`, display)
+            axios.get(`${BASE_URL}/all`, display)
                 .then((res) => {
                     setRole(res.data.role)
 
@@ -108,7 +108,7 @@ function Header({ window, component }) {
     const drawer = (
         <div>
             <Toolbar />
-            <img src="logo.png" className='center'></img>
+            <img src="./logo.png" className='center'></img>
             <Divider className='nav_divider text-center' />
             {role == 2 ?
                 <List className='side_links'>
@@ -120,16 +120,17 @@ function Header({ window, component }) {
                         <Link to="/applyleave">Apply Leave </Link>,
                         <Link to="/leaverequest">Leave Request</Link>,
                         <Link to="/adduser">Add Employee</Link>,
-                        <Link to="/invite">Employee List</Link>].map((text, index) => (
+                        <Link to="/invite">Employee List</Link>, <Link to="/addproject">Add Project</Link>,
+                    ].map((text, index) => (
 
-                            <ListItemButton>
-                                <ListItemIcon>
+                        <ListItemButton>
+                            <ListItemIcon>
 
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
+                            </ListItemIcon>
+                            <ListItemText primary={text} />
+                        </ListItemButton>
 
-                        ))}
+                    ))}
                 </List>
 
                 :
@@ -179,13 +180,14 @@ function Header({ window, component }) {
                     <Typography variant="h6" noWrap component="div">
 
                     </Typography>
-                    <Link to="/applyleave">
-                        <img src="apply Leave.svg" ></img>
-                        &nbsp;    Apply Leave  &nbsp;
-                    </Link>
-
+                    <div className="applyleavedec">
+                        <Link to="/applyleave">
+                            <img src="apply Leave.svg" ></img>
+                            &nbsp;    Apply Leave  &nbsp;
+                        </Link>
+                    </div>
                     <div className="avatar_dropdown">
-                        <Avatar alt="Remy Sharp" src={profile.image} />
+                        <Avatar alt={profile.name} src={profile.image} />
                         <div className="employe_info">
 
                             <p>{profile.name} </p>

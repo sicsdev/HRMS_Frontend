@@ -1,13 +1,13 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/login';
-import Signup from './components/signUp';
+// import Signup from './components/signUp';
 import Dashboard from './components/dashboard';
 import Setting from './components/setting';
 // import UserDashboard from './components/userDashboard';
 import Dashboardpage from './pages/UserDashboard/dashboard';
 import Dashboards from './pages/HR/Dashboard';
-import Team from './pages/UserDashboard/team';
+
 import ApplyLeave from './pages/UserDashboard/applyLeave';
 import Profile from './pages/UserDashboard/profile';
 import Leaves from './pages/UserDashboard/leaves';
@@ -16,6 +16,9 @@ import LeaveRequest from './pages/Admin/leaveRequest';
 import Comment from './pages/utils/comment';
 import Event from './pages/HR/Event';
 import Invite from './pages/HR/invite';
+import AddProjectPage from './pages/HR/addproject';
+import AddTeamPage from './pages/HR/addteam';
+
 
 function App() {
   return (
@@ -24,13 +27,13 @@ function App() {
         <div className='App'>
           <div>
             <Routes>
-              <Route path="/" element={<Signup />} />
-              <Route path="/login" element={<Login />} />
+              {/* <Route path="/" element={<Signup />} /> */}
+              <Route path="/" element={<Login />} />
               <Route path="/dashboardpage" element={<Dashboards />} />
               <Route path="/dashboard" element={<Dashboardpage />} />
               {/* <Route path="/dashboard" element={<Dashboard />} /> */}
               <Route path="/setting" element={<Setting />} />
-              <Route path="/team" element={<Team />} />
+
               <Route path="/applyleave" element={<ApplyLeave />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/leaves" element={<Leaves />} />
@@ -39,6 +42,8 @@ function App() {
               <Route path="/comments" element={<Comment />} />
               <Route path="/event" element={<Event />} />
               <Route path="/invite" element={<Invite />} />
+              <Route path="/addproject" element={<AddProjectPage />} />
+              <Route path="/project/:code" element={<AddTeamPage />} />
 
             </Routes>
           </div>

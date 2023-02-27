@@ -35,7 +35,6 @@ function Profile() {
 
 
     const onPanelChange = (value: Dayjs, mode: CalendarMode) => {
-        console.log(value.format('YYYY-MM-DD'), mode);
     };
 
     const wrapperStyle = {
@@ -57,13 +56,12 @@ function Profile() {
             },
         };
         if (!authtokens) {
-            Navigate('/login')
+            Navigate('/')
         }
         else {
 
             axios.get(`${BASE_URL}/profile`, token)
                 .then((res) => {
-                    console.log(res.data)
                     setProfile(res.data)
 
 
@@ -76,9 +74,9 @@ function Profile() {
 
 
     }, [])
+
     const calculatePaidOff = (sick_leave, casual_leave) => {
 
-        console.log(sick_leave, casual_leave, "flow1")
         let s_count = 0
         if (sick_leave < 0) {
             s_count += sick_leave
@@ -123,7 +121,7 @@ function Profile() {
                                 <div className="col-md-4">
                                     <Avatar size={130} icon={<UserOutlined />} src={profile.image} />
                                     <p className="pt-4"><b>{profile.name}</b></p>
-                                    <p> {profile.emp_id}</p>
+                                    <p> #{profile.emp_id}</p>
                                     <a href="/setting">
                                         <button className="btn btn-primary">Edit Profile   </button>
                                     </a>
@@ -143,7 +141,7 @@ function Profile() {
                                     <label><b>Tenure</b></label>
                                     <p className="pt-3">    {monthDiff(profile.date_of_joining)}</p>
                                     <label><b>Birthday</b></label>
-                                    <p className="pt-3"> {moment(profile.dob).format('DD/MM/YYYY')}</p>
+                                    <p className="pt-3"> {moment(profile.dob).format('MMM d, YYYY')}</p>
                                 </div>
                             </div>
 

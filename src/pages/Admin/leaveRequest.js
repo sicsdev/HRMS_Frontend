@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import { BASE_URL } from "../../baseUrl";
 import Header from "../utils/header";
 import { useNavigate } from "react-router-dom";
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 const ITEM_HEIGHT = 48;
@@ -43,7 +45,7 @@ function LeaveRequest() {
         };
 
         if (!authtokens) {
-            navigate('/login')
+            navigate('/')
         }
         else {
             const config = {
@@ -53,7 +55,6 @@ function LeaveRequest() {
             };
             axios.get(`${BASE_URL}/get_apply_leaves`, config)
                 .then((res) => {
-                    console.log(res.data, "check1")
                     setRequest(res.data)
                 })
                 .catch((err) => {
@@ -75,7 +76,6 @@ function LeaveRequest() {
 
         )
             .then((res) => {
-                console.log(res.data)
                 toast.success("Leave Approved")
 
             })
@@ -95,7 +95,6 @@ function LeaveRequest() {
 
         )
             .then((res) => {
-                console.log(res.data)
                 toast.error("Leave Rejected")
 
             })
@@ -147,8 +146,18 @@ function LeaveRequest() {
                                                             <td>{element?.to_date}</td>
                                                             <td>{element?.reason}</td>
                                                             {/* <td><button  onClick={() => {list()}}>Approved</button></td> */}
-                                                            <td><button className="btn btn-primary" onClick={(e) => { list(e, element.userId.id, element.leave.name, element._id) }}>Approved</button></td>
-                                                            <td><button className="btn btn-primary" onClick={(e) => { cancel_request(e, element.userId.id, element._id) }}>Deny</button></td>
+                                                            {/* <td><button className="btn btn-primary" onClick={(e) => { list(e, element.userId.id, element.leave.name, element._id) }}>Approved</button></td>
+                                                            <td><button className="btn btn-primary" onClick={(e) => { cancel_request(e, element.userId.id, element._id) }}>Deny</button></td> */}
+
+                                                            {element.status == "approved" ? <td> <CheckIcon className="right" /></td>
+                                                                : element.status == "pending" ?
+                                                                    <>
+                                                                        <td><CheckIcon className="not_approve" onClick={(e) => { list(e, element.userId.id, element.leave.name, element._id) }} /></td>
+                                                                        <td> <CloseIcon onClick={(e) => { cancel_request(e, element.userId.id, element._id) }} /></td>
+                                                                    </>
+
+                                                                    : <td><CloseIcon className="reject" /></td>
+                                                            }
                                                         </tr>
                                                     </>
                                                 )

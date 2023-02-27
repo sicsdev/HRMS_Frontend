@@ -38,10 +38,9 @@ const SignUp = () => {
     axios
       .post(`${BASE_URL}/signup`, data, config)
       .then((res) => {
-        console.log(res.data);
         setData(res.data)
         // localStorage.setItem('authtoken', res.data.authtoken);
-        navigate('/login');
+        navigate('/');
       })
       .catch((err) => {
         console.log(err);

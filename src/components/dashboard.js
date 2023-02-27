@@ -7,6 +7,9 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
@@ -62,6 +65,13 @@ function Dashboard(props) {
     const { window } = props;
 
     const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [editevent, setEditEvent] = useState(false);
+    const [eventtitle, setEventTitle] = useState('')
+    const [eventdescription, setEventDescription] = useState('')
+    const [eventdate, setEventDate] = useState('')
+    const [eventstarttime, setEventStartTime] = useState('')
+    const [eventendtime, setEventEndTime] = useState('')
+    const [eventid, setEventId] = useState('')
 
 
     const handleDrawerToggle = () => {
@@ -80,6 +90,8 @@ function Dashboard(props) {
     const [profileval, setProfileVal] = React.useState('');
     const [login, setLogin] = React.useState('');
     const [isActive, setIsActive] = useState([]);
+    const [postpageid, setPostPageId] = useState('')
+    const [editcontent, setEditContent] = useState('')
     const [openname, setOpenname] = useState(false);
     const [openedit, setOpenEdit] = useState(false);
     const [addpost, setAddPost] = useState('')
@@ -90,15 +102,15 @@ function Dashboard(props) {
     const [allpost, setAllPost] = useState([]);
     const [likeval, setLikeVal] = useState([]);
     const [event, setEvent] = useState([]);
-    const [editTitle, setEditTitle] = useState('');
-    const [editDescription, setEditDescription] = useState('');
+    const [edittitle, setEditTitle] = useState('');
+    const [editdescription, setEditDescription] = useState('');
     const [updateimage, setUpdateImage] = useState('')
     const [updateId, setUpdateId] = useState('');
     const [openComment, setOpenComment] = useState([]);
     const [addcomment, setAddComment] = useState('')
     const [postid, setPostId] = useState('');
-
-
+    const [editcomment, setEditComment] = useState(false);
+    const [commentid, setCommentId] = useState('')
     const handlePost = async (e) => {
         setAddPost(e.target.value)
     }
@@ -221,33 +233,32 @@ function Dashboard(props) {
     }, [])
 
 
-    const record = (id) => {
-        console.log(id, "dahkasd")
-        setId(id)
-        setUpdateId(id)
+    const record = (value) => {
+        setId(value.id)
+        setUpdateId(value.id)
+        setEditTitle(value.title)
+        setEditDescription(value.description)
     }
 
-
-    console.log(updateId, "fddfd");
-
     const editHandleOk = () => {
-        const title = editTitle;
-        const description = editDescription;
 
-        const config = {
-            header: {
-                "Content-Type": "application/json",
-            },
-        };
+        const title = edittitle;
+        const description = editdescription;
+        const image = updateimage;
 
-        console.log(title, description)
+        const formData = new FormData();
 
-        axios.put(`${BASE_URL}/edit_post/${updateId}`, { title: editTitle, description: editDescription }, config)
+        formData.append("image", updateimage);
+        formData.append("title", edittitle);
+        formData.append("description", editdescription);
+
+        console.log(title, description, image, "ssssssssssssss")
+
+        axios.put(`${BASE_URL}/edit_post/${updateId}`, formData)
             .then((res) => {
                 setEditTitle(res.data.title)
                 setEditDescription(res.data.description)
 
-                console.log(res.data, "res.data")
             })
             .catch((err) => {
                 console.log(err);
@@ -257,19 +268,6 @@ function Dashboard(props) {
         setOpenEdit(false);
 
 
-        // const image = updateimage;
-        // console.log(image)
-        // const formData = new FormData();
-
-        // formData.append("image", updateimage);
-
-        // axios.post(`http://localhost:8000/updateimageupload/${updateId}`, formData)
-        //     .then((res) => {
-        //         console.log(res.data);
-        //     })
-        //     .catch((err) => {
-        //         console.log(err);
-        //     });
     }
 
     const handleDelete = () => {
@@ -280,7 +278,6 @@ function Dashboard(props) {
         };
         axios.delete(`${BASE_URL}/delete_post/${id}`, config)
             .then((res) => {
-                console.log(res.data)
                 const filter_data = allpost.filter((val) => val.x._id != id)
                 setAllPost(filter_data)
             })
@@ -302,7 +299,6 @@ function Dashboard(props) {
 
         axios.get(`${BASE_URL}/all_post`, token)
             .then((res) => {
-                console.log(res.data)
                 setAllPost(res.data)
 
             })
@@ -318,7 +314,7 @@ function Dashboard(props) {
     const logout = () => {
         localStorage.removeItem('authtoken');
         setLogin(false);
-        navigate('/login')
+        navigate('/')
     };
 
 
@@ -331,7 +327,6 @@ function Dashboard(props) {
         axios.get(`${BASE_URL}/all_employee`, config)
             .then((res) => {
                 setAllEmployee(res.data)
-                console.log(res.data, "all_employees")
 
             })
             .catch((err) => {
@@ -360,7 +355,6 @@ function Dashboard(props) {
 
     const post_id = (e, element, isLike) => {
         e.preventDefault();
-        console.log(element);
 
 
         let authtokens = localStorage.getItem("authtoken");
@@ -373,7 +367,6 @@ function Dashboard(props) {
 
         axios.post(`${BASE_URL}/like/${element}`, {}, token)
             .then((res) => {
-                console.log(res.data)
 
                 setLikeVal(res.data)
                 const filterrecord = allpost.map((val) => {
@@ -381,7 +374,6 @@ function Dashboard(props) {
                     if (val.x._id == element) {
                         val.isLike = !isLike
                     }
-                    console.log(val, "val")
                     return val
                 })
                 setAllPost(filterrecord)
@@ -389,15 +381,6 @@ function Dashboard(props) {
             .catch((err) => {
                 console.log(err);
             });
-
-
-
-        // let likedOrNot=likeval.indexOf(likeval.like)
-        // console.log(likedOrNot, "like")
-        // if(likedOrNot<0){
-        //     return true;
-        // }
-
 
 
     }
@@ -413,7 +396,6 @@ function Dashboard(props) {
 
 
         const content = addcomment
-        console.log(content);
         if (content.length > 0) {
 
             let authtokens = localStorage.getItem("authtoken");
@@ -428,9 +410,6 @@ function Dashboard(props) {
 
             axios.post(`${BASE_URL}/comment/${postid}`, { content: content }, token)
                 .then((res) => {
-                    console.log(res.data, "checkcomment")
-
-                    // console.log(tempp, "tempp")
 
                 })
                 .catch((err) => {
@@ -442,36 +421,56 @@ function Dashboard(props) {
         setOpenComment([...openComment])
     }
 
+    const monthDiff = (date_of_joining) => {
+
+        const past_date = new Date();
+        const current_date = new Date(date_of_joining);
+        const difference = (past_date.getFullYear() * 12 + past_date.getMonth()) - (current_date.getFullYear() * 12 + current_date.getMonth());
+        let months;
+        // const months = (difference / 12 | 0) + " years and " + difference % 12 + " months"
+        if (difference > 12) {
+            months = (difference / 12 | 0) + " years and " + difference % 12 + " months"
+
+        } else {
+            months = difference % 12 + " months"
+        }
+
+        return months;
+    }
+
+
 
     const drawer = (
         <div>
 
-            <Toolbar />
-            <List>
+            {/* <Toolbar /> */}
+            <List className="sidebar_header_user">
                 <img src="logo.png"></img>
                 <Divider className='nav_divider' />
                 <div className='avatar'>
-                    <Avatar className='avatar_img' alt="Remy Sharp" src={profileval.image} />
+                    <Avatar className='avatar_img' alt={profileval.name} src={profileval.image} />
 
                 </div>
                 <div className='profile_name'>
                     <h5 className='mt-4 '>{profileval.name}</h5>
-                    <h5 className='mt-1'>{profileval.emp_id}</h5>
+                    <h5 className='mt-1'>#{profileval.emp_id}</h5>
                 </div>
                 <div className='profile_details'>
-                    <div className='row setting'>
-                        <div className='col-sm-6 col-6'>
-                            <h6>Designation</h6>
-                            <h6>Reporting Manager</h6>
-                            <h6>Leave Quota</h6>
 
-                        </div>
-                        <div className='col-sm-6 col-4'>
-                            <h6>{profileval.designation}</h6>
-                            <h6>userr</h6>
-                            <h6>6</h6>
-                        </div>
+
+                    <div className='row user_info'>
+                        <p>Designation </p><p className="fade_info">{profileval.designation}</p>
+                        <p>Email </p><p className="fade_info">{profileval.email}</p>
+                        <p>Phone No </p><p className="fade_info">{profileval.phonenumber}</p>
+                        <p>Tenure </p><p className="fade_info">{monthDiff(profileval.date_of_joining)}</p>
+                        <p>Birthday </p><p className="fade_info">{moment(profileval.dob).format('MMM d, YYYY')}</p>
+
+
                     </div>
+
+
+
+
                 </div>
                 <div className='logout_button mt-4'>
                     <button className='btn btn-primary' onClick={logout}>Logout</button>
@@ -495,7 +494,99 @@ function Dashboard(props) {
 
     ];
 
+    const delete_event = (e, id) => {
+        e.preventDefault();
 
+        axios.delete(`${BASE_URL}/delete_event/${id}`)
+            .then((res) => {
+                const filter_data = event.filter((val) => val._id != id)
+                setEvent(filter_data)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }
+
+    const editEventShow = (e, element) => {
+        e.preventDefault();
+        setEventTitle(element.event_title)
+        setEventDate(element.event_date)
+        setEventDescription(element.event_description)
+        setEventStartTime(element.start_time)
+        setEventEndTime(element.end_time)
+        setEventId(element._id)
+        setEditEvent(true);
+    };
+
+
+    const editeventOk = () => {
+
+        const event_title = eventtitle;
+        const event_description = eventdescription;
+        const event_date = eventdate;
+        const start_time = eventstarttime;
+        const end_time = eventendtime;
+
+
+
+        axios.put(`${BASE_URL}/edit_event/${eventid}`, { event_title: eventtitle, event_description: eventdescription, event_date: eventdate, start_time: eventstarttime, end_time: eventendtime })
+            .then((res) => {
+
+                setEventTitle(res.data.event_title)
+                setEventDate(res.data.event_date)
+                setEventDescription(res.data.event_description)
+                setEventStartTime(res.data.start_time)
+                setEventEndTime(res.data.end_time)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        setEditEvent(false);
+    };
+
+    const editEventCancel = () => {
+        setEditEvent(false);
+    };
+
+    const showEditComment = (e, id, element) => {
+        e.preventDefault();
+        setCommentId(id)
+        setPostPageId(element)
+        setEditComment(true);
+    };
+
+
+    const editCommentOk = () => {
+
+        const content = editcontent
+
+        axios.put(`${BASE_URL}/edit_comment/`, { _id: commentid, post_id: postpageid, content: editcontent })
+            .then((res) => {
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        setEditComment(false);
+    };
+
+    const editCommentCancel = () => {
+        setEditComment(false);
+    };
+
+    const delete_comment = (e, id, element) => {
+        e.preventDefault();
+
+        axios.post(`${BASE_URL}/delete_comment`, { _id: id, post_id: element })
+            .then((res) => {
+
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
     return (
         <Box sx={{ display: 'flex' }} className="dashboard_page">
@@ -524,15 +615,16 @@ function Dashboard(props) {
                         {/* Responsive drawer */}
                     </Typography>
 
-
-                    <Link to="/applyleave">
-                        <img src="apply Leave.svg" ></img> </Link> &nbsp;    Apply Leave  &nbsp;
-
+                    <div className="applyleavedec">
+                        <Link to="/applyleave">
+                            <img src="apply Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp;
+                        </Link>
+                    </div>
                     <div className="avatar_dropdown">
-                        <Avatar alt="Remy Sharp" src={profileval.image} />
-                        <div className="employe_info">
 
-                            <p>employee</p>
+                        <Avatar alt={profileval.name} src={profileval.image} />
+                        <div className="employe_info">
+                            <p>{profileval.name}</p>
                         </div>
                         <Box sx={{ minWidth: 120 }}>
                             <FormControl fullWidth>
@@ -647,11 +739,11 @@ function Dashboard(props) {
                                 ]}
                             >
                                 <label> Edit Ttile</label>
-                                <input type="text" className="form-control" name="title"
+                                <input type="text" className="form-control" name="title" value={edittitle}
                                     onChange={(e) => handleTitle(e)}
                                 />
                                 <label> Edit Description</label>
-                                <textarea className="form-control" name="description"
+                                <textarea className="form-control" name="description" value={editdescription}
                                     onChange={(e) => handleDescription(e)}
                                 ></textarea>
                                 <label> Edit Image</label>
@@ -674,7 +766,7 @@ function Dashboard(props) {
                                         </Avatar>
                                     }
                                     action={
-                                        <Dropdown menu={{ items }} trigger={['click']} onClick={(e) => { record(element.x.id) }}>
+                                        <Dropdown menu={{ items }} trigger={['click']} onClick={(e) => { record(element.x) }}>
                                             <a onClick={(e) => e.preventDefault()}>
 
                                                 <MoreVertIcon />
@@ -742,30 +834,58 @@ function Dashboard(props) {
                                                     return (
                                                         <>
 
-                                                            <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                                                                <CardContent>
-
-
-                                                                    <Typography sx={{ mb: 3, width: 200, height: 20 }} >
-                                                                        <div className="row">
-                                                                            <div className="col-4">
-                                                                                <Avatar className='avatar_img' alt="Remy Sharp" src={item.userId.image} />
-                                                                            </div>
-                                                                            <div className="col-8">
-                                                                                {item.userId.name}
-                                                                            </div>
+                                                            <Card sx={{ minWidth: 200, marginTop: 4, padding: 0 }} className="card_events">
+                                                                <CardContent sx={{ paddingBottom: 0 }}>
+                                                                    {/* <Typography sx={{ mb: 10, width: 200, height: 10 }} > */}
+                                                                    <div className="comment-header">
+                                                                        <div className="">
+                                                                            <Avatar className='avatar_img' alt="Remy Sharp" src={item.userId?.image} />
                                                                         </div>
-                                                                        <div className="row">
-                                                                            <div className="col-4">
+                                                                        <div>
 
-                                                                            </div>
-                                                                            <div className="col-8">
-                                                                                <h6>  {item.content}</h6>
+                                                                            <div className="">
+                                                                                {item.userId?.name}
                                                                             </div>
 
                                                                         </div>
+                                                                    </div>
+                                                                    <div className="row">
+                                                                        <div className="col-3">
 
-                                                                    </Typography>
+                                                                        </div>
+                                                                        <div className="col-9 content">
+                                                                            <h6>  {item.content}</h6>
+                                                                            <h7 style={{ "float": "right" }}>
+
+
+
+                                                                                <Modal
+                                                                                    open={editcomment}
+                                                                                    title="Edit Comment"
+                                                                                    onOk={editCommentOk}
+                                                                                    onCancel={editCommentCancel}
+                                                                                    footer={[
+
+                                                                                        <Button key="submit" type="primary" onClick={editCommentOk}>
+                                                                                            Edit
+                                                                                        </Button>,
+
+                                                                                    ]}
+                                                                                >
+                                                                                    <label>Edit Comment</label>
+                                                                                    <textarea name="content" className="form-control edit_comment" onChange={(e) => { setEditContent(e.target.value) }}></textarea>
+                                                                                </Modal>
+                                                                                <ModeEditIcon className="edit_comment"
+                                                                                    onClick={(e) => { showEditComment(e, item._id, element.x._id) }}></ModeEditIcon>
+                                                                                <DeleteIcon className="delete_comment" onClick={(e) => { delete_comment(e, item._id, element.x._id) }}> </DeleteIcon>
+                                                                            </h7>
+
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                    {/* </Typography> */}
+
                                                                 </CardContent>
                                                             </Card>
 
@@ -774,6 +894,7 @@ function Dashboard(props) {
                                                     )
                                                 })
                                             }
+
                                             <br />
                                             <textarea className="form-control" name="content" value={addcomment} onChange={(e) => handleComment(e)}
                                             ></textarea>
@@ -809,19 +930,50 @@ function Dashboard(props) {
 
 
                                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                        <h5><b>{i.event_title} Event</b></h5>
-                                        <h6>  {moment.utc(i.event_date).format("MMM DD, YYYY")}</h6>
+                                        <h5><b>{i.event_title} </b>
+                                            <ModeEditIcon className="event_edit_icon" onClick={(e) => { editEventShow(e, i) }}></ModeEditIcon>
+                                            <Modal
+                                                open={editevent}
+                                                title="Edit Comment"
+                                                onOk={editeventOk}
+                                                onCancel={editEventCancel}
+                                                footer={[
+
+                                                    <Button key="submit" type="primary" onClick={editeventOk}>
+                                                        Edit
+                                                    </Button>,
+
+                                                ]}
+                                            >
+
+                                                <label>Event Title</label>
+                                                <input type="text" name="event_title" value={eventtitle} onChange={(e) => setEventTitle(e.target.value)} className="form-control" />
+                                                <label>Event Date</label>
+                                                <input type="date" name="event_date" value={eventdate} onChange={(e) => setEventDate(e.target.value)} className="form-control" />
+                                                <label>Event Description</label>
+                                                <textarea className="form-control event_description" onChange={(e) => setEventDescription(e.target.value)} name="event_description" value={eventdescription} ></textarea>
+                                                <label>Start Time</label>
+                                                <input type="text" name="start_time" value={eventstarttime} onChange={(e) => setEventStartTime(e.target.value)} className="form-control" />
+                                                <label>End Time</label>
+                                                <input type="text" name="end_time" value={eventendtime} onChange={(e) => setEventEndTime(e.target.value)} className="form-control" />
+
+                                            </Modal>
+
+
+                                            <DeleteOutlineIcon onClick={(e) => { delete_event(e, i._id) }}></DeleteOutlineIcon></h5>
+                                        <h6>  {moment(i.event_date).format("MMM DD, YYYY")}</h6>
                                         <Divider className='event_divider' />
                                     </Typography>
 
                                     <Typography sx={{ fontSize: 14, }} color="text.secondary" gutterBottom>
                                         {i.event_description}
                                     </Typography>
-                                    <Typography className="mt-5">
-
+                                    <Typography className="mt-3">
+                                        < p>{i.start_time} - {i.end_time}</p>
                                     </Typography>
                                 </CardContent>
                             </Card>
+
                         )
                     })
                 }

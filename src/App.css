@@ -11,6 +11,10 @@
   pointer-events: none;
 }
 
+body {
+  text-decoration: none !important;
+}
+
 .center {
   display: block;
   margin-left: auto;
@@ -119,6 +123,14 @@
   text-align: left;
   margin-top: 28px;
   font-weight: 600;
+}
+
+input.form-control.add_userInput {
+  background: #d3d3d37a;
+}
+
+select.form-control.add_userInput {
+  background: #d3d3d37a;
 }
 
 /* .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.MuiCard-root.card_events.css-1geropv-MuiPaper-root-MuiCard-root {
@@ -285,6 +297,12 @@ fieldset.MuiOutlinedInput-notchedOutline {
 .MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft {
   width: 20%;
   background-color: #000;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar .MuiCardContent-root {
+  border-left: 4px solid #2373B2;
 }
 
 .static_width.layout {
@@ -386,6 +404,19 @@ fieldset.MuiOutlinedInput-notchedOutline {
 }
 
 @media screen and (max-width:767px) {
+  .static_width {
+    margin-left: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .apply-leaves-main-layout {
+    padding-right: 0;
+  }
+
+  p.MuiTypography-root.MuiTypography-body1.MuiTypography-paragraph {
+    margin-left: 0 !important;
+  }
+
   .container.static_width.requestpage {
     overflow-x: scroll;
   }
@@ -497,7 +528,7 @@ ul.MuiList-root.MuiList-padding li {
 }
 
 p.MuiTypography-root.MuiTypography-body1.MuiTypography-paragraph {
-  margin-left: 24%;
+  margin-left: 20%;
 }
 
 ul.MuiList-root.MuiList-padding li {
@@ -532,4 +563,165 @@ a.events {
 
 .inviteBtn {
   background-color: #0d6efd !important;
+}
+
+.applyleavedec a {
+  color: #f8f9fa !important;
+  text-decoration: none !important;
+}
+
+.right {
+  color: green;
+}
+
+.reject {
+  color: red;
+}
+
+.row.user_info {
+  margin: 0 !important;
+  padding: 0 15px;
+}
+
+.row.user_info p {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  text-align: left;
+  width: 35%;
+  padding-left: 0;
+}
+
+.row.user_info .fade_info {
+  color: rgba(255, 255, 255, 0.7);
+  padding-left: 0;
+  width: 65%;
+  word-break: break-all;
+}
+
+.sidebar_header_user {
+  height: 100vh;
+  margin-top: 35px !important;
+}
+
+.add_userInput {
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  height: 40px;
+  padding: 15px;
+  margin-top: 11px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+}
+
+.add-UserLayout {
+  padding-left: 45px;
+}
+
+.add-UserLayout .addUserLabel {
+  float: left;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.add-UserLayout .custom-row {
+  margin-bottom: 30px;
+
+}
+
+.add-UserLayout .add-employee-btn {
+  background: #2373B2;
+  color: #fff;
+  width: 155px;
+  height: 36px;
+  border: none;
+  float: left;
+}
+
+.add-user-heading {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  color: #000000;
+  margin-bottom: 10%;
+  text-align: left;
+
+
+}
+
+.layout.mt-5 {
+  margin-left: 7%;
+}
+
+.comment-header {
+  display: flex;
+  gap: 10px;
+}
+
+.layout {
+  text-align: left;
+}
+
+.col-md-4.border_style {
+  border-left: 4px solid #2373B2;
+}
+
+.row.mt-5.add-team_border {
+  margin-left: 6%;
+}
+
+main.MuiBox-root .row {
+  margin-right: 0;
+}
+
+button.add_team_button {
+  float: right;
+  background: #2373B2;
+  color: white;
+}
+
+h5.team_button {
+  margin-left: 7%;
+  padding-top: 6%;
+}
+
+.edit-profile input {
+
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+  /* identical to box height */
+
+
+  color: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+input.add-project-btn {
+  margin-top: 45px;
+  background: #2373B2;
+  color: white;
+}
+
+.edit-profile h4 {
+  text-align: left;
+  margin: 0;
+  padding-left: 33px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  /* identical to box height */
+
+
+  color: rgba(0, 0, 0, 0.5);
 }
