@@ -38,7 +38,6 @@ const Events = () => {
         axios
             .post(`${BASE_URL}/add_event`, submitval, token)
             .then((res) => {
-                console.log(res.data);
 
 
             })

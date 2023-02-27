@@ -14,7 +14,7 @@ function Dashboards() {
 
         let authtokens = localStorage.getItem("authtoken");
         if (!authtokens) {
-            navigate('/login')
+            navigate('/')
         }
         else {
             let display = {
@@ -34,7 +34,7 @@ function Dashboards() {
 
                     }
                     else {
-                        navigate('/login')
+                        navigate('/')
                     }
                 })
                 .catch((err) => {

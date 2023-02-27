@@ -14,7 +14,7 @@ function Event() {
 
         let authtokens = localStorage.getItem("authtoken");
         if (!authtokens) {
-            navigate('/login')
+            navigate('/')
         }
         else {
             let display = {
@@ -33,7 +33,7 @@ function Event() {
                         setShow(true)
                     }
                     else {
-                        navigate('/login')
+                        navigate('/')
                     }
                 })
                 .catch((err) => {

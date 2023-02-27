@@ -18,7 +18,6 @@ function Leaves() {
     const { token } = theme.useToken();
 
     const onPanelChange = (value: Dayjs, mode: CalendarMode) => {
-        console.log(value.format('YYYY-MM-DD'), mode);
     };
 
     const wrapperStyle = {
@@ -40,13 +39,12 @@ function Leaves() {
         };
 
         if (!authtokens) {
-            navigate('/login')
+            navigate('/')
         }
         else {
 
             axios.get(`${BASE_URL}/single_user_apply_leave`, token)
                 .then((res) => {
-                    console.log(res.data, "check2")
                     setLeaveValue(res.data)
                 })
                 .catch((err) => {
@@ -91,57 +89,6 @@ function Leaves() {
                         </div>
                     </div>
                     <div className='col-sm-6 mt-4'>
-
-                        <h5>Leave Balance</h5>
-                        <div className='leave_details mt-4'>
-                            <div className='row'>
-                                <div className='col-3'>
-
-                                </div>
-                                <div className='col-3 text-end'>
-                                    <h6>Pending</h6>
-                                </div>
-                                <div className='col-3 text-end'>
-                                    <h6>Availed</h6>
-                                </div>
-                            </div>
-                            <div className='row pt-4'>
-                                <div className='col-3 earned_leave'>
-                                    Earned Leave
-                                </div>
-                                <div className='col-3 text-end'>
-                                    <h6>2</h6>
-                                </div>
-                                <div className='col-3 text-end'>
-                                    <h6>1</h6>
-                                </div>
-                            </div>
-                            <div className='row pt-4'>
-                                <div className='col-3 casual_leave'>
-                                    Casual Leave
-                                </div>
-                                <div className='col-3 text-end'>
-                                    <h6>2</h6>
-                                </div>
-                                <div className='col-3 text-end'>
-                                    <h6>1</h6>
-                                </div>
-                            </div>
-                            <div className='row pt-4'>
-                                <div className='col-3 sick_leave'>
-                                    Sick Leave
-                                </div>
-                                <div className='col-3 text-end'>
-                                    <h6>2</h6>
-                                </div>
-                                <div className='col-3 text-end'>
-                                    <h6>1</h6>
-                                </div>
-                            </div>
-
-
-
-                        </div>
                         <div className='leave_request'>
                             <h5>Leave Requests</h5>
                             <table class="table mt-4">

@@ -187,14 +187,12 @@ function UserDashboard(props) {
 
 
     const record = (id) => {
-        console.log(id, "dahkasd")
         setId(id)
     }
 
     const handleDelete = () => {
         axios.delete(`${BASE_URL}/delete_post/${id}`)
             .then((res) => {
-                console.log(res.data)
                 const filter_data = allpost.filter((x) => x._id != id)
                 setAllPost(filter_data)
             })
@@ -216,7 +214,7 @@ function UserDashboard(props) {
 
 
         if (!authtokens) {
-            navigate('/login')
+            navigate('/')
         }
         else {
             axios.get(`${BASE_URL}/all_post`, token)
@@ -237,7 +235,7 @@ function UserDashboard(props) {
     const logout = () => {
         localStorage.removeItem('authtoken');
         setLogin(false);
-        navigate('/login')
+        navigate('/')
     };
 
 
@@ -251,7 +249,6 @@ function UserDashboard(props) {
         axios.get(`${BASE_URL}/all_employee`, config)
             .then((res) => {
                 setAllEmployee(res.data)
-                console.log(res.data, "all_employees")
 
             })
             .catch((err) => {
@@ -271,7 +268,6 @@ function UserDashboard(props) {
         axios.get(`${BASE_URL}/event`, config)
             .then((res) => {
                 setEvent(res.data)
-                console.log(res.data, "dddddddd")
 
             })
             .catch((err) => {
@@ -282,7 +278,6 @@ function UserDashboard(props) {
 
     const post_id = (e, element, isLike) => {
         e.preventDefault();
-        console.log(element);
 
 
         let authtokens = localStorage.getItem("authtoken");
@@ -297,7 +292,6 @@ function UserDashboard(props) {
 
         axios.post(`${BASE_URL}/like/${element}`, {}, token)
             .then((res) => {
-                console.log(res.data)
 
                 setLikeVal(res.data)
                 const filterrecord = allpost.map((val) => {
@@ -305,7 +299,6 @@ function UserDashboard(props) {
                     if (val.x._id == element) {
                         val.isLike = !isLike
                     }
-                    console.log(val, "val")
                     return val
                 })
                 setAllPost(filterrecord)
@@ -313,14 +306,6 @@ function UserDashboard(props) {
             .catch((err) => {
                 console.log(err);
             });
-
-
-
-        // let likedOrNot=likeval.indexOf(likeval.like)
-        // console.log(likedOrNot, "like")
-        // if(likedOrNot<0){
-        //     return true;
-        // }
 
     }
 
@@ -337,7 +322,6 @@ function UserDashboard(props) {
 
 
         const content = addcomment
-        console.log(content);
         if (content.length > 0) {
 
             let authtokens = localStorage.getItem("authtoken");
@@ -352,9 +336,6 @@ function UserDashboard(props) {
 
             axios.post(`${BASE_URL}/comment/${postid}`, { content: content }, token)
                 .then((res) => {
-                    console.log(res.data, "checkcomment")
-
-                    // console.log(tempp, "tempp")
 
                 })
                 .catch((err) => {
@@ -374,7 +355,7 @@ function UserDashboard(props) {
                 <img src="logo.png"></img>
                 <Divider className='nav_divider' />
                 <div className='avatar'>
-                    <Avatar className='avatar_img' alt="Remy Sharp" src={profileval.image} />
+                    <Avatar className='avatar_img' alt={profileval.name} src={profileval.image} />
 
                 </div>
                 <div className='profile_name'>
@@ -385,14 +366,12 @@ function UserDashboard(props) {
                     <div className='row setting'>
                         <div className='col-sm-6 col-6'>
                             <h6>Designation</h6>
-                            <h6>Reporting Manager</h6>
-                            <h6>Leave Quota</h6>
+                            <h6>Birthday</h6>
 
                         </div>
                         <div className='col-sm-6 col-4'>
                             <h6>{profileval.designation}</h6>
-                            <h6>userr</h6>
-                            <h6>6</h6>
+                            <h6>{profileval.dob}</h6>
                         </div>
                     </div>
                 </div>
@@ -447,25 +426,25 @@ function UserDashboard(props) {
                     <Typography variant="h6" noWrap component="div">
                         {/* Responsive drawer */}
                     </Typography>
-                    <Link to="/applyleave">
-                        <img src="apply Leave.svg" ></img>
-                    </Link>
-                    &nbsp;    Apply Leave  &nbsp;
+                    <div className="applyleavedec">
+                        <Link to="/applyleave">
+                            <img src="apply Leave.svg" ></img>
 
+                            &nbsp;    Apply Leave  &nbsp;
+                        </Link>
+                    </div>
                     <div className="avatar_dropdown">
-                        <Avatar alt="Remy Sharp" src={profileval.image} />
+                        <Avatar alt={profileval.name} src={profileval.image} />
                         <div className="employe_info">
                             <p>{profileval.username}</p>
-                            <p>employee</p>
+                            <p>{profileval.name}</p>
                         </div>
                         <Box sx={{ minWidth: 120 }}>
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label"></InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-
-                                >
+                                    id="demo-simple-select">
                                     <MenuItem value={10}>
                                         <Link to="/profile">Profile</Link></MenuItem>
                                     <MenuItem value={20} onClick={logout}>Logout</MenuItem>

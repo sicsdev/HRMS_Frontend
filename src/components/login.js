@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from "../baseUrl";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const Login = () => {
   const navigate = useNavigate();
 
@@ -23,6 +26,12 @@ const Login = () => {
   }
 
   const add = () => {
+    const { email, password } = data;
+
+    if (!email || !password) {
+      toast.error("Email or Password is required")
+      return
+    }
 
     // const {email, password} = data
 
@@ -33,11 +42,10 @@ const Login = () => {
     };
 
     axios
-      .post(`${BASE_URL}/login`, data, config)
+      .post(`${BASE_URL}/login`, data)
       .then((res) => {
-        console.log(res.data);
         setData(res.data)
-        localStorage.setItem('authtoken', res.data.authtoken);
+        localStorage.setItem("authtoken", res.data.authtoken);
         if (res.data.user.role == 2) {
 
           navigate('/dashboardpage')
@@ -49,6 +57,7 @@ const Login = () => {
       })
       .catch((err) => {
         console.log(err);
+        toast.error(err?.response?.data?.msg)
 
       });
     setData({ email: "", password: "" })
@@ -58,60 +67,63 @@ const Login = () => {
 
   return (
     <>
-      <div className="container mt-4">
+      <ToastContainer></ToastContainer>
+      <div className="container">
+        <div className="row mt-4">
+          <div className="col-sm-6">
+            <img src="logo.png"></img>
+            <img src="loginimg.gif" className="gif_file" height="400" />
+          </div>
+          <div className="col-sm-6 mt-3">
+            <h5 className="employee_page p-1">EMPLOYEE LOGIN</h5>
+            <form onSubmit={handlesubmit} className="form_handle">
+              <div className="form-login-wrapper">
+                <div className="form-group mt-4" align="left">
+                  <label>Email Id</label>
+                  <input
+                    type="email"
+                    className="form-control formtext email"
 
-        <div className="col-sm-6 mx-auto">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="text-center pt-5">Login </h3>
-            </div>
-            <div className="card-body">
-              <form onSubmit={handlesubmit}>
-                <div className="form-login-wrapper">
-                  <div className="form-group" align="left">
-                    <label>Email*</label>
-                    <input
-                      type="email"
-                      className="form-control formtext email"
+                    placeholder="Email"
+                    name="email"
+                    id="Email"
+                    onChange={setdata}
+                    value={data.email}
 
-                      placeholder="Email"
-                      name="email"
-                      id="Email"
-                      onChange={setdata}
-                      value={data.email}
-
-                    />
-                  </div>
-
-                  <div className="form-group " align="left">
-                    <label>Password*</label>
-                    <input
-                      type="password"
-                      className="form-control formtext password"
-                      placeholder="Password"
-                      name="password"
-                      value={data.password}
-                      onChange={setdata}
-
-                    />
-                  </div>
-
-                  <div className="submit-btn mt-2" align="right">
-                    <input
-                      type="submit"
-                      name="submit"
-                      className="btn btn-danger"
-                      value="Login" onClick={add}
-
-                    />
-                  </div>
+                  />
                 </div>
-              </form>
-            </div>
+
+                <div className="form-group mt-4" align="left">
+                  <label>Password</label>
+                  <input
+                    type="password"
+                    className="form-control formtext password"
+                    placeholder="Password"
+                    name="password"
+                    value={data.password}
+                    onChange={setdata}
+
+                  />
+
+
+
+                  <input
+                    type="submit"
+                    name="submit"
+                    className="form-control formtext mt-4"
+                    value="Login" onClick={add}
+
+                  />
+
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
+
     </>
+
   );
 };
 
