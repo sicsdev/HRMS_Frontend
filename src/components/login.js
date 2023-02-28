@@ -45,6 +45,7 @@ const Login = () => {
       .post(`${BASE_URL}/login`, data)
       .then((res) => {
         setData(res.data)
+        toast.success("Login Successfully")
         localStorage.setItem("authtoken", res.data.authtoken);
         if (res.data.user.role == 2 || res.data.user.role == 1) {
 
