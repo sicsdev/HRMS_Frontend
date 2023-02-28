@@ -64,8 +64,6 @@ const Login = () => {
     setData({ email: "", password: "" })
   }
 
-
-
   return (
     <>
       <ToastContainer></ToastContainer>
