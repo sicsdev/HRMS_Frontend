@@ -785,9 +785,14 @@ function Dashboard(props) {
                                     </Typography>
                                 </CardContent>
                                 <CardContent>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <img src={element.x.image} />
-                                    </Typography>
+                                    {element.x.image ?
+
+                                        <Typography variant="body2" color="text.secondary">
+                                            <img src={element.x.image} width="100%" height="450" />
+                                        </Typography>
+                                        :
+                                        ''
+                                    }
                                 </CardContent>
                                 <CardActions disableSpacing >
                                     <IconButton aria-label="add to favorites" >

@@ -216,50 +216,6 @@ const Setting = () => {
       >
         <Toolbar />
         <Typography paragraph>
-          {/* <form className="edit-profile-page">
-            <div className="row">
-              <div className="col-md-2">
-                <Stack direction="row" spacing={2}>
-                  <Badge
-                    overlap="circular"
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                    badgeContent={
-                      <SmallAvatar className="small_avatar" >
-                        <EditIcon className="edit_icon" onClick={showModal} />
-                      </SmallAvatar>
-                    }
-                  >
-                    <Avatar alt="Travis Howard" src={image} className="edit_profile" />
-                  </Badge>
-
-                </Stack>
-                <Modal
-                  open={open}
-                  title="Image"
-                  onOk={handleOk}
-                  onCancel={handleCancel}
-                  footer={[
-
-                    <Button key="submit" type="primary" onClick={handleOk}>
-                      Submit
-                    </Button>,
-
-                  ]}
-                >
-                  <input type="file" name="image" onChange={(e) =>
-                    setImageVal(e.target.files[0])} />
-
-                </Modal>
-              </div>
-              <div className="col-md-5">
-                <div>
-
-                </div>
-              </div>
-              <div className="col-md-5"></div>
-            </div>
-
-          </form> */}
 
 
 
@@ -280,7 +236,7 @@ const Setting = () => {
                       </SmallAvatar>
                     }
                   >
-                    <Avatar alt="Travis Howard" src={image} className="edit_profile" sx={{ width: 150, height: 150 }} />
+                    <Avatar alt={fillname} src={image} className="edit_profile" sx={{ width: 150, height: 150 }} />
                   </Badge>
 
                 </Stack>

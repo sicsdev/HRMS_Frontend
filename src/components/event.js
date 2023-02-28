@@ -4,8 +4,10 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { BASE_URL } from "../baseUrl";
+import { useNavigate } from 'react-router-dom';
 const drawerWidth = 240;
 const Events = () => {
+    const navigate = useNavigate();
     const [submitval, setSubmitVal] = useState({
         event_title: "",
         event_date: "",
@@ -38,7 +40,7 @@ const Events = () => {
         axios
             .post(`${BASE_URL}/add_event`, submitval, token)
             .then((res) => {
-
+                navigate('/dashboardpage')
 
             })
             .catch((err) => {
