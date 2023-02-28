@@ -45,7 +45,6 @@ function ApplyLeave() {
         borderRadius: token.borderRadiusLG,
     };
 
-
     const [leavevalue, setLeaveValue] = useState([]);
     const [pendingLeave, setPendingLeave] = useState('');
 
@@ -64,6 +63,7 @@ function ApplyLeave() {
 
 
     const values = (e) => {
+        console.log(submitval)
 
         setSubmitVal({ ...submitval, [e.target.name]: e.target.value });
 
@@ -149,6 +149,7 @@ function ApplyLeave() {
         const { reason, from_date, to_date, leave } = submitval;
 
         if (!reason || !from_date || !leave || !to_date) {
+
             toast.error("All fields are required")
             return
         }
@@ -167,7 +168,7 @@ function ApplyLeave() {
             .post(`${BASE_URL}/apply_leave`, submitval, token)
             .then((res) => {
                 toast.success("Leave Applied")
-
+                navigate('/leaves')
             })
             .catch((err) => {
                 console.log(err);
@@ -201,7 +202,7 @@ function ApplyLeave() {
                             </div>
                             <div className="col-md-4">
                                 <div className=" avail-leaves-card">
-                                    <div className="count"> 03</div>
+                                    <div className="count"> 3</div>
                                     <div className="heading">Earned Leaves Available</div>
                                 </div>
                             </div>
@@ -223,7 +224,7 @@ function ApplyLeave() {
 
                                                             if (item.category == 'half day') {
                                                                 return (
-                                                                    <option value={item._id}>{item.name}</option>
+                                                                    <option value={item._id}>{item.name} </option>
                                                                 )
                                                             }
                                                         })
@@ -236,7 +237,7 @@ function ApplyLeave() {
                                                         leavevalue.map((item) => {
                                                             if (item.category == 'full day') {
                                                                 return (
-                                                                    <option value={item._id}>{item.name}</option>
+                                                                    <option value={item._id}>{item.name} </option>
                                                                 )
                                                             }
                                                         })
@@ -244,6 +245,7 @@ function ApplyLeave() {
                                                 </optgroup>
                                             </select>
                                         </div>
+
                                         <div className="form-group" align="left">
                                             <label>From Date</label>
                                             <input
@@ -253,6 +255,7 @@ function ApplyLeave() {
                                                 placeholder="From Date"
                                                 name="from_date"
                                                 onChange={values}
+
                                                 value={submitval.from_date}
 
                                             />
@@ -266,6 +269,8 @@ function ApplyLeave() {
                                                 placeholder="To Date"
                                                 name="to_date"
                                                 onChange={values}
+                                                // disabled={submitval.leave == 'full_leave' ? false : true}
+
                                                 value={submitval.to_date}
 
                                             />

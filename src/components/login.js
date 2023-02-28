@@ -46,7 +46,7 @@ const Login = () => {
       .then((res) => {
         setData(res.data)
         localStorage.setItem("authtoken", res.data.authtoken);
-        if (res.data.user.role == 2) {
+        if (res.data.user.role == 2 || res.data.user.role == 1) {
 
           navigate('/dashboardpage')
         }

@@ -17,7 +17,7 @@ const AddUser = () => {
   const [show, setShow] = useState(false)
   const [newuser, setNewUser] = useState({
     name: "",
-    password: "",
+    first_login: "",
     email: "",
     dob: "",
     phonenumber: "",
@@ -61,7 +61,7 @@ const AddUser = () => {
 
   const add = () => {
 
-    const { name, email, password, dob, phonenumber, date_of_joining, emp_id, designation } = newuser;
+    const { name, email, first_login, dob, phonenumber, date_of_joining, emp_id, designation } = newuser;
 
     axios
       .post(`${BASE_URL}/add_user`, newuser)
@@ -78,7 +78,7 @@ const AddUser = () => {
         console.log(err);
 
       });
-    setNewUser({ name: "", email: "", password: "", emp_id: "", phonenumber: "", dob: "", date_of_joining: "", designation: "" })
+    setNewUser({ name: "", email: "", first_login: "", emp_id: "", phonenumber: "", dob: "", date_of_joining: "", designation: "" })
   }
 
 
@@ -100,7 +100,7 @@ const AddUser = () => {
         .then((res) => {
 
           setRole(res.data.role)
-          if (res.data.role == 2) {
+          if (res.data.role == 2 || res.data.role == 1) {
             setShow(true)
           }
           else {
@@ -148,7 +148,7 @@ const AddUser = () => {
                   <div className="col-md-4">
                     <label className="addUserLabel">Password</label>
                     <input className="form-control add_userInput" onChange={values}
-                      value={newuser.password} placeholder="Enter Password" type="string" name="password" />
+                      value={newuser.first_login} placeholder="Enter Password" type="string" name="first_login" />
                   </div>
                 </div>
                 <div className="row justify-content-between custom-row">
