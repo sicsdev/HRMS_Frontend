@@ -7,7 +7,7 @@ import Setting from './components/setting';
 // import UserDashboard from './components/userDashboard';
 import Dashboardpage from './pages/UserDashboard/dashboard';
 import Dashboards from './pages/HR/Dashboard';
-import LeaveRequests from './pages/Admin/leaverequest';
+import LeaveRequests from './pages/Admin/leaveRequest';
 import ApplyLeave from './pages/UserDashboard/applyLeave';
 import Profile from './pages/UserDashboard/profile';
 import Leaves from './pages/UserDashboard/leaves';
