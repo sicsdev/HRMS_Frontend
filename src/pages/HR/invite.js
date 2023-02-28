@@ -12,8 +12,6 @@ import { BASE_URL } from "../../baseUrl";
 import CheckIcon from '@mui/icons-material/Check';
 
 
-
-
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 0;
 
@@ -43,7 +41,7 @@ function Invite() {
 
         let authtokens = localStorage.getItem("authtoken");
         if (!authtokens) {
-            navigate('/login')
+            navigate('/')
         }
         else {
             let display = {
@@ -57,11 +55,11 @@ function Invite() {
                 .then((res) => {
 
                     setRole(res.data.role)
-                    if (res.data.role == 2) {
+                    if (res.data.role == 2 || res.data.role == 1) {
                         setShow(true)
                     }
                     else {
-                        navigate('/login')
+                        navigate('/')
                     }
                 })
                 .catch((err) => {
@@ -91,6 +89,8 @@ function Invite() {
         e.preventDefault();
         axios.post(`${BASE_URL}/invite`, { _id: id })
             .then((res) => {
+                toast.success("Invite Sent")
+                window.location.reload();
 
             })
             .catch((err) => {
@@ -112,7 +112,7 @@ function Invite() {
 
                     <Box
                         component="main"
-                        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(95% - ${drawerWidth}px)` } }}
+                        sx={{ flexGrow: 1, p: 3 }}
                     >
                         <Toolbar />
                         <Typography paragraph>
@@ -128,6 +128,7 @@ function Invite() {
                                             <th>Email</th>
                                             <th>Action</th>
                                         </thead>
+
                                         <tbody>
                                             {
                                                 request.map((element) => {
@@ -137,7 +138,6 @@ function Invite() {
                                                                 <td>{element.name}</td>
                                                                 <td>{element.emp_id}</td>
                                                                 <td>{element.email}</td>
-                                                                {/* <button className="btn btn-primary inviteBtn" onClick={(e) => { invite(e, element._id) }}>Invite Link</button> */}
                                                                 {element.invite_status == "true" ? <td> <CheckIcon /></td>
                                                                     : <td><button className="btn btn-primary inviteBtn" onClick={(e) => { invite(e, element._id) }}>Invite Link</button></td>
                                                                 }
@@ -147,6 +147,7 @@ function Invite() {
                                                 })
                                             }
                                         </tbody>
+
                                     </table>
                                 </div>
                             </div>

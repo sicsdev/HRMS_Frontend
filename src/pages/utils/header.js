@@ -94,7 +94,7 @@ function Header({ window, component }) {
             axios.get(`${BASE_URL}/all`, display)
                 .then((res) => {
                     setRole(res.data.role)
-
+                    console.log(res.data.role, "abcccccc")
                 })
                 .catch((err) => {
                     console.log(err);
@@ -120,7 +120,8 @@ function Header({ window, component }) {
                         <Link to="/applyleave">Apply Leave </Link>,
                         <Link to="/leaverequest">Leave Request</Link>,
                         <Link to="/adduser">Add Employee</Link>,
-                        <Link to="/invite">Employee List</Link>, <Link to="/addproject">Add Project</Link>,
+                        <Link to="/invite">Employee List</Link>,
+                        <Link to="/addproject">Add Project</Link>,
                     ].map((text, index) => (
 
                         <ListItemButton>
@@ -132,25 +133,41 @@ function Header({ window, component }) {
 
                     ))}
                 </List>
+                : role == 1 ?
 
-                :
+                    <List className='side_links'>
+                        {[<Link to="/dashboardpage">Dashboard</Link>, <Link to="/profile" className="header_toggle">Profile</Link>, <Link to="/admin_leave_request">Leave Request</Link>, <Link to="/adduser">Add Employee</Link>, <Link to="/invite">Employee List</Link>].map((text, index) => (
 
-                <List className='side_links'>
-                    {[<Link to="/dashboard">Dashboard</Link>,
-                    <Link to="/profile">Profile</Link>,
-                    <Link to="/leaves">Leaves</Link>,
-                    <Link to="/applyleave">Apply Leave</Link>].map((text, index) => (
+                            <ListItemButton>
+                                <ListItemIcon>
 
-                        <ListItemButton>
-                            <ListItemIcon>
+                                </ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItemButton>
 
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
+                        ))}
+                    </List>
 
-                    ))}
-                </List>
+
+                    :
+
+                    <List className='side_links'>
+                        {[<Link to="/dashboard">Dashboard</Link>,
+                        <Link to="/profile">Profile</Link>,
+                        <Link to="/leaves">Leaves</Link>,
+                        <Link to="/applyleave">Apply Leave</Link>].map((text, index) => (
+
+                            <ListItemButton>
+                                <ListItemIcon>
+
+                                </ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItemButton>
+
+                        ))}
+                    </List>
             }
+
         </div >
     );
 

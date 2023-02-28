@@ -54,7 +54,7 @@ body {
 }
 
 .sidebar {
-  position: fixed;
+  /* position: fixed; */
   top: 94px;
   right: 0;
 }
@@ -121,7 +121,7 @@ body {
 
 .sidebar.sidebar.MuiBox-root {
   text-align: left;
-  margin-top: 28px;
+  margin-top: 110px;
   font-weight: 600;
 }
 
@@ -295,7 +295,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
 }
 
 .MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft {
-  width: 20%;
+  /* width: 20%; */
   background-color: #000;
   height: 100vh;
   overflow: hidden;
@@ -592,12 +592,18 @@ a.events {
   padding-left: 0;
 }
 
+
 .row.user_info .fade_info {
   color: rgba(255, 255, 255, 0.7);
   padding-left: 0;
   width: 65%;
   word-break: break-all;
+  padding-left: 10px !important;
 }
+
+/* p.fade_info {
+  padding-left: 10px !important;
+} */
 
 .sidebar_header_user {
   height: 100vh;

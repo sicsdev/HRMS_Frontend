@@ -48,7 +48,7 @@ function Dashboardpage() {
         <>
             {show ?
                 <div>
-                    <Header />
+                    {/* <Header /> */}
                     <UserDashboard />
                 </div>
                 : ''

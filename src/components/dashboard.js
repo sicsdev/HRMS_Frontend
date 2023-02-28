@@ -40,7 +40,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 
-const drawerWidth = 340;
+const drawerWidth = 250;
 
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -256,6 +256,8 @@ function Dashboard(props) {
 
         axios.put(`${BASE_URL}/edit_post/${updateId}`, formData)
             .then((res) => {
+                window.location.reload();
+
                 setEditTitle(res.data.title)
                 setEditDescription(res.data.description)
 
@@ -986,6 +988,7 @@ function Dashboard(props) {
 
 
                 <h4 className='mt-4'>Upcomming Birthday</h4>
+
                 {
                     allemployee.map((item, elem) => {
                         let newDate2 = moment.utc(item.dob).format("MMM DD, YYYY");

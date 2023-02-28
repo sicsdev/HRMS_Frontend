@@ -347,6 +347,26 @@ function UserDashboard(props) {
         setOpenComment([...openComment])
     }
 
+    const monthDiff = (date_of_joining) => {
+
+        const past_date = new Date();
+        const current_date = new Date(date_of_joining);
+        const difference = (past_date.getFullYear() * 12 + past_date.getMonth()) - (current_date.getFullYear() * 12 + current_date.getMonth());
+        let months;
+        // const months = (difference / 12 | 0) + " years and " + difference % 12 + " months"
+        if (difference > 12) {
+            months = (difference / 12 | 0) + " years and " + difference % 12 + " months"
+
+        } else {
+            months = difference % 12 + " months"
+        }
+
+        return months;
+    }
+
+
+
+
     const drawer = (
         <div>
 
@@ -360,19 +380,17 @@ function UserDashboard(props) {
                 </div>
                 <div className='profile_name'>
                     <h5 className='mt-4 '>{profileval.name}</h5>
-                    <h5 className='mt-1'>{profileval.emp_id}</h5>
+                    <h5 className='mt-1'>#{profileval.emp_id}</h5>
                 </div>
                 <div className='profile_details'>
-                    <div className='row setting'>
-                        <div className='col-sm-6 col-6'>
-                            <h6>Designation</h6>
-                            <h6>Birthday</h6>
+                    <div className='row user_info'>
+                        <p>Designation </p><p className="fade_info">{profileval.designation}</p>
+                        <p>Email </p><p className="fade_info">{profileval.email}</p>
+                        <p>Phone No </p><p className="fade_info">{profileval.phonenumber}</p>
+                        <p>Tenure </p><p className="fade_info">{monthDiff(profileval.date_of_joining)}</p>
+                        <p>Birthday </p><p className="fade_info">{moment(profileval.dob).format('MMM d, YYYY')}</p>
 
-                        </div>
-                        <div className='col-sm-6 col-4'>
-                            <h6>{profileval.designation}</h6>
-                            <h6>{profileval.dob}</h6>
-                        </div>
+
                     </div>
                 </div>
                 <div className='logout_button mt-4'>

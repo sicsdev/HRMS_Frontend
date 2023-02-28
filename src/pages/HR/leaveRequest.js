@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
+
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../baseUrl";
 import Header from "../utils/header";
+import { useNavigate } from "react-router-dom";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { BASE_URL } from "../../baseUrl";
+
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 0;
 
-const drawerWidth = 320;
+const drawerWidth = 240;
 const MenuProps = {
     PaperProps: {
         style: {
@@ -23,81 +26,48 @@ const MenuProps = {
     },
 };
 
-function LeaveRequests() {
 
+
+function LeaveRequest() {
     const navigate = useNavigate();
     const [request, setRequest] = useState([]);
-    const [role, setRole] = useState('')
-    const [show, setShow] = useState(false)
-
-
+    const [value, setValue] = useState([]);
 
     useEffect(() => {
 
-        let authtokens = localStorage.getItem("authtoken");
-        if (!authtokens) {
-            navigate('/login')
-        }
-        else {
-            let display = {
-                headers: {
-                    'token': authtokens,
-                }
-            }
 
-
-            axios.get(`${BASE_URL}/all`, display)
-                .then((res) => {
-
-                    setRole(res.data.role)
-                    if (res.data.role == 1) {
-                        setShow(true)
-
-                    }
-                    else {
-                        navigate('/login')
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-
-                });
-        };
-
-    }, [])
-
-    useEffect(() => {
         let authtokens = localStorage.getItem("authtoken");
         let token = {
             headers: {
                 token: authtokens,
+
             },
         };
 
         if (!authtokens) {
-            navigate('/login')
-
-        } else {
-
+            navigate('/')
+        }
+        else {
+            let authtokens = localStorage.getItem("authtoken");
             let token = {
                 headers: {
                     token: authtokens,
+                    "Content-Type": "application/json",
 
                 },
+            }
 
-            };
-            axios.get(`${BASE_URL}/admin_get_apply_leave`)
+
+            axios.get(`${BASE_URL}/get_apply_leaves`, token)
                 .then((res) => {
-                    console.log(res.data, "check1")
                     setRequest(res.data)
-
                 })
                 .catch((err) => {
                     console.log(err);
 
                 });
-        }
 
+        }
 
     }, [])
 
@@ -111,10 +81,7 @@ function LeaveRequests() {
 
         )
             .then((res) => {
-                window.location.reload();
-                console.log(res.data, "checking")
                 toast.success("Leave Approved")
-
 
             })
             .catch((err) => {
@@ -127,12 +94,12 @@ function LeaveRequests() {
     const cancel_request = (e, id, apply_leave_id) => {
 
         e.preventDefault();
-        console.log(id, apply_leave_id, "gfjhsd");
-        axios.put(`${BASE_URL}/cancel_leave/${id}`, { apply_leave_id: apply_leave_id }
+
+
+        axios.put(`${BASE_URL}/cancel_leave/${id} `, { apply_leave_id: apply_leave_id }
 
         )
             .then((res) => {
-                console.log(res.data)
                 toast.error("Leave Rejected")
 
             })
@@ -145,19 +112,18 @@ function LeaveRequests() {
 
     return (
         <>
-
             <Header />
             <ToastContainer></ToastContainer>
             {request ?
                 <Box
                     component="main"
-                    sx={{ flexGrow: 1, p: 3 }}
+                    sx={{ flexGrow: 1, p: 3, width: { sm: `calc(95 % - ${drawerWidth}px)` } }}
                 >
                     <Toolbar />
                     <Typography paragraph>
 
                         <h5 className="mt-4"><b>Leave Requests</b></h5>
-                        <div className="leave">
+                        <div className="leave request1">
                             <h6 className="sick_border"> Sick/Casual Leave Requests</h6>
                             <div className="col-sm-8 mt-4">
                                 <table class="table ">
@@ -171,22 +137,20 @@ function LeaveRequests() {
 
                                         <th>Reason</th>
                                     </thead>
-
                                     {request.length > 0 ?
                                         <tbody>
 
                                             {
-                                                request?.map((element) => {
+                                                request.map((element) => {
                                                     return (
                                                         <>
                                                             <tr>
                                                                 <td>{element.userId?.emp_id}</td>
                                                                 <td>{element.userId?.name}</td>
                                                                 <td>{element.leave?.name}</td>
-                                                                <td>{element.from_date}</td>
-                                                                <td>{element.to_date}</td>
-                                                                <td>{element.reason}</td>
-
+                                                                <td>{element?.from_date}</td>
+                                                                <td>{element?.to_date}</td>
+                                                                <td>{element?.reason}</td>
 
                                                                 {element.status == "approved" ? <td> <CheckIcon className="right" /></td>
                                                                     : element.status == "pending" ?
@@ -197,9 +161,6 @@ function LeaveRequests() {
 
                                                                         : <td><CloseIcon className="reject" /></td>
                                                                 }
-
-
-
                                                             </tr>
                                                         </>
                                                     )
@@ -208,7 +169,6 @@ function LeaveRequests() {
 
 
                                         </tbody>
-
                                         :
                                         <h5 className="leave_no_found">No Record Found</h5>
                                     }
@@ -223,4 +183,4 @@ function LeaveRequests() {
         </>
     )
 }
-export default LeaveRequests;
+export default LeaveRequest;

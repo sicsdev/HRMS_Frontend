@@ -29,7 +29,7 @@ function Dashboards() {
                 .then((res) => {
 
                     setRole(res.data.role)
-                    if (res.data.role == 2) {
+                    if (res.data.role == 2 || res.data.role == 1) {
                         setShow(true)
 
                     }
@@ -49,7 +49,7 @@ function Dashboards() {
         <>
             {show ?
                 <div>
-                    <Header />
+                    {/* <Header /> */}
                     <Dashboard />
                 </div>
                 : ''
