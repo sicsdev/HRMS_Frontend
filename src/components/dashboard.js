@@ -33,11 +33,13 @@ import { MenuProps } from 'antd';
 import MenuIcon from '@mui/icons-material/Menu';
 import { BASE_URL } from "../baseUrl";
 import { Dropdown, Space } from 'antd';
-
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+
+import Badge from '@mui/material/Badge';
 
 
 const drawerWidth = 250;
@@ -111,6 +113,28 @@ function Dashboard(props) {
     const [postid, setPostId] = useState('');
     const [editcomment, setEditComment] = useState(false);
     const [commentid, setCommentId] = useState('')
+    const [anniversary, setAnniversary] = useState([])
+
+
+
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+
+
+
     const handlePost = async (e) => {
         setAddPost(e.target.value)
     }
@@ -311,7 +335,30 @@ function Dashboard(props) {
     }, [])
 
 
+    useEffect(() => {
+        axios.get(`${BASE_URL}/employee_birthday`)
+            .then((res) => {
+                setAllEmployee(res.data)
 
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
+
+
+    useEffect(() => {
+        axios.get(`${BASE_URL}/employee_anniversary`)
+            .then((res) => {
+                setAnniversary(res.data)
+                console.log(res.data, "annivery")
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
 
     const logout = () => {
         localStorage.removeItem('authtoken');
@@ -448,9 +495,11 @@ function Dashboard(props) {
             {/* <Toolbar /> */}
             <List className="sidebar_header_user">
                 <img src="logo.png"></img>
+
+
                 <Divider className='nav_divider' />
                 <div className='avatar'>
-                    <Avatar className='avatar_img' alt={profileval.name} src={profileval.image} />
+                    <Avatar className='avatar_img' alt={profileval.name} src={BASE_URL + "/" + profileval.image} />
 
                 </div>
                 <div className='profile_name'>
@@ -621,10 +670,18 @@ function Dashboard(props) {
                         <Link to="/applyleave">
                             <img src="apply Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp;
                         </Link>
+                        <Badge badgeContent={4} color="primary">
+                            <NotificationsIcon color="white" onClick={showModal} />
+                        </Badge>
+                        <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                            <p>Some contents...</p>
+                            <p>Some contents...</p>
+                            <p>Some contents...</p>
+                        </Modal>
                     </div>
                     <div className="avatar_dropdown">
 
-                        <Avatar alt={profileval.name} src={profileval.image} />
+                        <Avatar alt={profileval.name} src={BASE_URL + "/" + profileval.image} />
                         <div className="employe_info">
                             <p>{profileval.name}</p>
                         </div>
@@ -790,7 +847,7 @@ function Dashboard(props) {
                                     {element.x.image ?
 
                                         <Typography variant="body2" color="text.secondary">
-                                            <img src={BASE_URL+"/"+element.x.image} width="100%" height="450" alt="Image" />
+                                            <img src={BASE_URL + "/" + element.x.image} width="100%" height="450" alt="Image" />
                                         </Typography>
                                         :
                                         ''
@@ -846,7 +903,7 @@ function Dashboard(props) {
                                                                     {/* <Typography sx={{ mb: 10, width: 200, height: 10 }} > */}
                                                                     <div className="comment-header">
                                                                         <div className="">
-                                                                            <Avatar className='avatar_img' alt="Remy Sharp" src={item.userId?.image} />
+                                                                            <Avatar className='avatar_img' alt={item.userId?.name} src={item.userId?.image} />
                                                                         </div>
                                                                         <div>
 
@@ -986,10 +1043,10 @@ function Dashboard(props) {
 
 
 
-                <h4 className='mt-4'>Upcomming Birthday's</h4>
+                <h6 className='mt-4'><b>Upcomming Birthday's</b></h6>
 
                 {
-                    allemployee.map((item, elem) => {
+                    allemployee?.map((item, elem) => {
                         let newDate2 = moment.utc(item.dob).format("MMM DD, YYYY");
                         return (
 
@@ -1000,7 +1057,7 @@ function Dashboard(props) {
 
                                         <div className='row'>
                                             <div className='col-sm-4'>
-                                                <Avatar className='avatar_img' alt={item.name} src={item.image} />
+                                                <Avatar className='avatar_img' alt={item.name} src={BASE_URL + "/" + item.image} />
 
                                             </div>
                                             <div className='col-sm-8'>
@@ -1017,15 +1074,11 @@ function Dashboard(props) {
                         )
                     })
                 }
-                <h4 className='mt-4'>Upcomming Anniversary's</h4>
 
+                <h6 className='mt-4'><b>Upcomming Work Anniversary's </b></h6>
                 {
-                    allemployee.map((item, elem) => {
-                        let newDate1 = moment.utc(item.date_of_joining).format("MMM DD, YYYY");
-                        // let date = new Date;
-                        // var a = moment([date]);
-                        // var b = moment([item.date_of_joining]);
-                        // let newDate1 = a.diff(b, 'days')
+                    anniversary?.map((i, elem) => {
+
                         return (
 
                             <>
@@ -1035,12 +1088,17 @@ function Dashboard(props) {
 
                                         <div className='row'>
                                             <div className='col-sm-4'>
-                                                <Avatar className='avatar_img' alt={item.name} src={item.image} />
+                                                <Avatar className='avatar_img' alt={i.name} src={BASE_URL + "/" + i.image} />
                                             </div>
                                             <div className='col-sm-8'>
-                                                {item.name}
-                                                <div>
-                                                    {newDate1}</div>
+                                                {i.name}
+                                                <div className="difference pt-1">
+                                                    {moment(i.date_of_joining).format("MMM DD, YYYY")}
+
+                                                </div>
+                                                <div className="difference pt-2">
+                                                    <b>{i.difference} </b> Anniversary
+                                                </div>
                                             </div>
                                         </div>
 

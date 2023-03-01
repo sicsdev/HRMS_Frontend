@@ -584,7 +584,7 @@ function UserDashboard(props) {
                                 </CardContent>
                                 <CardContent>
                                     <Typography variant="body2" color="text.secondary">
-                                        <img src={element.x.image} />
+                                        <img src={BASE_URL + "/" + element.x.image} />
                                     </Typography>
                                 </CardContent>
                                 <CardActions disableSpacing >

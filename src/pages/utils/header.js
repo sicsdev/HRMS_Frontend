@@ -28,7 +28,9 @@ import Dashboard from '../../components/dashboard';
 import Profile from '../UserDashboard/profile';
 import Setting from '../../components/setting';
 import axios from "axios";
-
+import Badge from '@mui/material/Badge';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { Button, Modal } from 'antd';
 const drawerWidth = 240;
 
 function Header({ window, component }) {
@@ -37,6 +39,26 @@ function Header({ window, component }) {
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [profile, setProfile] = useState('');
     const [role, setRole] = useState(1)
+
+
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+
+
+
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -109,6 +131,7 @@ function Header({ window, component }) {
         <div>
             <Toolbar />
             <img src="./logo.png" className='center'></img>
+
             <Divider className='nav_divider text-center' />
             {role == 2 ?
                 <List className='side_links'>
@@ -202,9 +225,17 @@ function Header({ window, component }) {
                             <img src="apply Leave.svg" ></img>
                             &nbsp;    Apply Leave  &nbsp;
                         </Link>
+                        <Badge badgeContent={4} color="primary">
+                            <NotificationsIcon color="white" onClick={showModal} />
+                        </Badge>
+                        <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                            <p>Some contents...</p>
+                            <p>Some contents...</p>
+                            <p>Some contents...</p>
+                        </Modal>
                     </div>
                     <div className="avatar_dropdown">
-                        <Avatar alt={profile.name} src={profile.image} />
+                        <Avatar alt={profile.name} src={BASE_URL + "/" + profile.image} />
                         <div className="employe_info">
 
                             <p>{profile.name} </p>
