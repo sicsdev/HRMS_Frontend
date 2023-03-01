@@ -92,6 +92,7 @@ function UserDashboard(props) {
     const [openComment, setOpenComment] = useState([]);
     const [addcomment, setAddComment] = useState('')
     const [postid, setPostId] = useState('');
+    const [anniversary, setAnniversary] = useState([])
     const handlePost = async (e) => {
         setAddPost(e.target.value)
     }
@@ -184,6 +185,32 @@ function UserDashboard(props) {
             });
 
     }, [])
+
+    useEffect(() => {
+        axios.get(`${BASE_URL}/employee_birthday`)
+            .then((res) => {
+                setAllEmployee(res.data)
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
+
+
+    useEffect(() => {
+        axios.get(`${BASE_URL}/employee_anniversary`)
+            .then((res) => {
+                setAnniversary(res.data)
+                console.log(res.data, "annivery")
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
+
 
 
     const record = (id) => {
@@ -688,7 +715,7 @@ function UserDashboard(props) {
                 component="sidebar"
                 sx={{ width: { sm: drawerWidth } }}
                 className="sidebar">
-                <h4>Events</h4>
+                {/* <h4>Events</h4>
                 {
                     event.map((i) => {
 
@@ -714,12 +741,13 @@ function UserDashboard(props) {
                             </Card>
                         )
                     })
-                }
+                } */}
 
 
-                <h4 className='mt-4'>Upcomming Birthday</h4>
+                <h6 className='mt-4'><b>Upcomming Birthday's</b></h6>
+
                 {
-                    allemployee.map((item, elem) => {
+                    allemployee?.map((item, elem) => {
                         let newDate2 = moment.utc(item.dob).format("MMM DD, YYYY");
                         return (
 
@@ -730,12 +758,48 @@ function UserDashboard(props) {
 
                                         <div className='row'>
                                             <div className='col-sm-4'>
-                                                <Avatar className='avatar_img' alt="Remy Sharp" src={item.image} />
+                                                <Avatar className='avatar_img' alt={item.name} src={BASE_URL + "/" + item.image} />
+
                                             </div>
                                             <div className='col-sm-8'>
                                                 {item.name}
                                                 <div>
                                                     {newDate2}</div>
+                                            </div>
+                                        </div>
+
+
+                                    </CardContent>
+                                </Card>
+                            </>
+                        )
+                    })
+                }
+
+                <h6 className='mt-4'><b>Upcomming Work Anniversary's </b></h6>
+                {
+                    anniversary?.map((i, elem) => {
+
+                        return (
+
+                            <>
+
+                                <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                    <CardContent>
+
+                                        <div className='row'>
+                                            <div className='col-sm-4'>
+                                                <Avatar className='avatar_img' alt={i.name} src={BASE_URL + "/" + i.image} />
+                                            </div>
+                                            <div className='col-sm-8'>
+                                                {i.name}
+                                                <div className="difference pt-1">
+                                                    {moment(i.date_of_joining).format("MMM DD, YYYY")}
+
+                                                </div>
+                                                <div className="difference pt-2">
+                                                    <b>{i.difference} </b> Anniversary
+                                                </div>
                                             </div>
                                         </div>
 
