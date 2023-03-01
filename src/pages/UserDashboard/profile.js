@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "../utils/header";
 import { UserOutlined } from '@ant-design/icons';
-import { Avatar } from 'antd';
+import Avatar from '@mui/material/Avatar';
 import { Dayjs } from 'dayjs';
 import { Calendar, theme } from 'antd';
 import { CalendarMode } from 'antd/es/calendar/generateCalendar'
@@ -119,7 +119,9 @@ function Profile() {
                         <div className="col-sm-8">
                             <div className="row">
                                 <div className="col-md-4">
-                                    <Avatar size={130} icon={<UserOutlined />} src={BASE_URL + "/" + profile.image} />
+                                    {/* <Avatar size={130} src={BASE_URL + "/" + profile.image} /> */}
+                                    <Avatar className='avatar_img' alt={profile.name} src={BASE_URL + "/" + profile.image}
+                                        sx={{ width: 150, height: 150 }} />
                                     <p className="pt-4"><b>{profile.name}</b></p>
                                     <p> #{profile.emp_id}</p>
                                     <a href="/setting">

@@ -31,6 +31,7 @@ import axios from "axios";
 import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Button, Modal } from 'antd';
+import { Notification } from '../../helpers/constant'
 const drawerWidth = 240;
 
 function Header({ window, component }) {
@@ -39,6 +40,8 @@ function Header({ window, component }) {
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [profile, setProfile] = useState('');
     const [role, setRole] = useState(1)
+    const [notifications, setNotifications] = useState([])
+    const [notificationsCount, setNotificationsCount] = useState(0)
 
 
 
@@ -122,9 +125,28 @@ function Header({ window, component }) {
                     console.log(err);
 
                 });
+            axios.get(`${BASE_URL}/get_all_notification`, display)
+                .then((res) => {
+                    // setRole(res.data.role)
+                    console.log(res.data, "All")
+                    setNotifications(res.data)
+                    let tempCount = 0
+                    for (let x of res.data) {
+                        if (!x.is_read) {
+                            tempCount++
+                        }
+                    }
+                    setNotificationsCount(tempCount)
+
+                })
+                .catch((err) => {
+                    console.log(err);
+
+                });
         };
 
     }, [])
+
 
 
     const drawer = (
@@ -225,13 +247,19 @@ function Header({ window, component }) {
                             <img src="apply Leave.svg" ></img>
                             &nbsp;    Apply Leave  &nbsp;
                         </Link>
-                        <Badge badgeContent={4} color="primary">
+                        <Badge badgeContent={notificationsCount} color="primary">
                             <NotificationsIcon color="white" onClick={showModal} />
                         </Badge>
-                        <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
+                        <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
+                            {notifications?.map((item, index) => {
+                                return <>
+
+                                    <div className={item.is_read ? "notificationCard" : "notificationCard unReadNotification"}>
+                                        {item.type == "pending" ? `${item.userId.name} ${Notification['pending']}` : item.type == "approved" ? `` : ``}</div>
+                                </>
+                            })}
+
+
                         </Modal>
                     </div>
                     <div className="avatar_dropdown">
