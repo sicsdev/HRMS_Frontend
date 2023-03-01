@@ -528,7 +528,28 @@ ul.MuiList-root.MuiList-padding li {
 }
 
 p.MuiTypography-root.MuiTypography-body1.MuiTypography-paragraph {
-  margin-left: 20%;
+  margin-left: 18%;
+}
+
+label.mb-3.setting {
+  float: left;
+}
+
+input.submit-value {
+  background: #2373B2 !important;
+  color: white !important;
+  float: left;
+  width: 191px;
+  margin-top: 5%;
+}
+
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.edit_icon.css-i4bv87-MuiSvgIcon-root {
+
+  background: #2373Ba;
+}
+
+button.ant-btn.css-dev-only-do-not-override-sk7ap8.ant-btn-default.form-control {
+  background: rgba(0, 0, 0, 0.1);
 }
 
 ul.MuiList-root.MuiList-padding li {

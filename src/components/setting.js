@@ -13,7 +13,8 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import { BASE_URL } from "../baseUrl";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const drawerWidth = 320;
 
 const Setting = () => {
@@ -29,6 +30,10 @@ const Setting = () => {
   const [filldob, setDob] = useState('')
   const [imageval, setImageVal] = useState('')
   const [image, setImage] = useState('')
+  const [changePassword, setChangePassword] = useState(false);
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -133,6 +138,54 @@ const Setting = () => {
 
   }
 
+  const changePasswordCancel = () => {
+    setChangePassword(false);
+  };
+
+  const changePasswordShow = () => {
+    setChangePassword(true);
+  };
+
+
+  const changePasswordOk = () => {
+
+    let authtokens = localStorage.getItem("authtoken");
+    let axiostoken = {
+      headers: {
+        token: authtokens,
+      },
+    };
+
+    const old_password = oldPassword;
+    const new_password = newPassword;
+    const confirm_password = confirmPassword;
+
+    if (!old_password || !new_password || !confirm_password) {
+      toast.error("All fields are required")
+      return
+    }
+
+
+    axios.post(`${BASE_URL}/change_password`, {
+      old_password: oldPassword, new_password: newPassword,
+
+      confirm_password: confirmPassword
+    }, axiostoken)
+      .then((res) => {
+        toast.success(res.data.message)
+        setOldPassword('')
+        setNewPassword('')
+        setConfirmPassword('')
+        setChangePassword(false);
+
+
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.message)
+
+      });
+  }
 
 
   const update_records = async (req, res) => {
@@ -152,9 +205,10 @@ const Setting = () => {
     const phonenumber = fillphone;
     const dob = filldob;
 
-    axios.put(`${BASE_URL}/edit_profile/`, { name: fillname, email: fillemail, phonenumber: fillphone, password: fillpassword, dob: filldob }, token)
+    axios.put(`${BASE_URL}/edit_profile`, { name: fillname, email: fillemail, phonenumber: fillphone, password: fillpassword, dob: filldob }, token)
 
       .then((res) => {
+
         setName(res.data.name)
         setEmail(res.data.email)
         setPassword(res.data.password)
@@ -193,7 +247,7 @@ const Setting = () => {
           setPassword(res.data.password)
           setPhone(res.data.phonenumber)
           setDob(res.data.dob)
-          setImage(res.data.image)
+          setImage(BASE_URL + "/" + res.data.image)
         })
         .catch((err) => {
           console.log(err);
@@ -202,8 +256,6 @@ const Setting = () => {
 
 
   }, [])
-
-
 
 
 
@@ -216,11 +268,6 @@ const Setting = () => {
       >
         <Toolbar />
         <Typography paragraph>
-
-
-
-
-
 
           <form onSubmit={handlesubmit} className="edit-profile">
             <h4 className="mt-3"> Profile > Edit Profile</h4>
@@ -292,12 +339,31 @@ const Setting = () => {
               <div className="col-md-2">
 
               </div>
-              <div className="col-md-4 password-type">
-                <label className="mb-3 setting">Password</label>
-                <input type="password" onChange={(e) => handlePassword(e)} name="password" value={fillpassword} className="form-control edit_page_color" placeholder="Enter Password" />
-                <Button variant="contained" color="primary" type="submit">
+              <div className="col-md-4 password-type mt-4">
+                <label className="mb-3 setting ">Password</label>
+                <Button key="submit" className="form-control" onClick={changePasswordShow}>
                   Change Password
                 </Button>
+                <Modal
+                  open={changePassword}
+                  title="Change Password"
+                  onOk={changePasswordOk}
+                  onCancel={changePasswordCancel}
+                  footer={[
+
+                    <Button key="submit" type="primary" onClick={changePasswordOk}>
+                      Submit
+                    </Button>,
+
+                  ]}
+                >
+                  <label>Old Password</label>
+                  <input type="password" name="old_password" onChange={(e) => { setOldPassword(e.target.value) }} className="form-control" placeholder="Current Password" />
+                  <label>New Password</label>
+                  <input type="password" name="new_password" onChange={(e) => { setNewPassword(e.target.value) }} className="form-control" placeholder="New Password" />
+                  <label>Confirm Password</label>
+                  <input type="password" name="confirm_password" onChange={(e) => { setConfirmPassword(e.target.value) }} className="form-control" placeholder="New Password" />
+                </Modal>
               </div>
 
               <div className="col-4">

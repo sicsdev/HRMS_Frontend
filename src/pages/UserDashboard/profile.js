@@ -119,7 +119,7 @@ function Profile() {
                         <div className="col-sm-8">
                             <div className="row">
                                 <div className="col-md-4">
-                                    <Avatar size={130} icon={<UserOutlined />} src={profile.image} />
+                                    <Avatar size={130} icon={<UserOutlined />} src={BASE_URL + "/" + profile.image} />
                                     <p className="pt-4"><b>{profile.name}</b></p>
                                     <p> #{profile.emp_id}</p>
                                     <a href="/setting">
