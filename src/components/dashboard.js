@@ -790,7 +790,7 @@ function Dashboard(props) {
                                     {element.x.image ?
 
                                         <Typography variant="body2" color="text.secondary">
-                                            <img src={element.x.image} width="100%" height="450" />
+                                            <img src={BASE_URL+"/"+element.x.image} width="100%" height="450" alt="Image" />
                                         </Typography>
                                         :
                                         ''
@@ -921,12 +921,11 @@ function Dashboard(props) {
 
             </Box>
 
-
             <Box
                 component="sidebar"
                 sx={{ width: { sm: drawerWidth } }}
                 className="sidebar ">
-                <h4 className="mt-4">Events<button className="btn btn-primary btn-sm top"><Link to="/event" className="events ">Add Event</Link></button></h4>
+                {/* <h4 className="mt-4">Events<button className="btn btn-primary btn-sm top"><Link to="/event" className="events ">Add Event</Link></button></h4>
                 {
                     event.map((i) => {
 
@@ -983,11 +982,11 @@ function Dashboard(props) {
 
                         )
                     })
-                }
+                } */}
 
 
 
-                <h4 className='mt-4'>Upcomming Birthday</h4>
+                <h4 className='mt-4'>Upcomming Birthday's</h4>
 
                 {
                     allemployee.map((item, elem) => {
@@ -1001,7 +1000,8 @@ function Dashboard(props) {
 
                                         <div className='row'>
                                             <div className='col-sm-4'>
-                                                <Avatar className='avatar_img' alt="Remy Sharp" src={item.image} />
+                                                <Avatar className='avatar_img' alt={item.name} src={item.image} />
+
                                             </div>
                                             <div className='col-sm-8'>
                                                 {item.name}
@@ -1017,7 +1017,40 @@ function Dashboard(props) {
                         )
                     })
                 }
+                <h4 className='mt-4'>Upcomming Anniversary's</h4>
 
+                {
+                    allemployee.map((item, elem) => {
+                        let newDate1 = moment.utc(item.date_of_joining).format("MMM DD, YYYY");
+                        // let date = new Date;
+                        // var a = moment([date]);
+                        // var b = moment([item.date_of_joining]);
+                        // let newDate1 = a.diff(b, 'days')
+                        return (
+
+                            <>
+
+                                <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                    <CardContent>
+
+                                        <div className='row'>
+                                            <div className='col-sm-4'>
+                                                <Avatar className='avatar_img' alt={item.name} src={item.image} />
+                                            </div>
+                                            <div className='col-sm-8'>
+                                                {item.name}
+                                                <div>
+                                                    {newDate1}</div>
+                                            </div>
+                                        </div>
+
+
+                                    </CardContent>
+                                </Card>
+                            </>
+                        )
+                    })
+                }
 
             </Box>
 

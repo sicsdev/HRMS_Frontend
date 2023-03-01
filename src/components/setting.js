@@ -295,7 +295,11 @@ const Setting = () => {
               <div className="col-md-4 password-type">
                 <label className="mb-3 setting">Password</label>
                 <input type="password" onChange={(e) => handlePassword(e)} name="password" value={fillpassword} className="form-control edit_page_color" placeholder="Enter Password" />
+                <Button variant="contained" color="primary" type="submit">
+                  Change Password
+                </Button>
               </div>
+
               <div className="col-4">
               </div>
             </div>
