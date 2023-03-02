@@ -61,7 +61,7 @@ const Login = () => {
         toast.error(err?.response?.data?.msg)
 
       });
-    setData({ email: "", password: "" })
+
   }
 
   return (

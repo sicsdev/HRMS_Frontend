@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../utils/header";
 import { BASE_URL } from "../../baseUrl";
 import CheckIcon from '@mui/icons-material/Check';
-
+import { LoaderContext } from '../../App.js'
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 0;
@@ -28,7 +28,7 @@ const MenuProps = {
 
 
 function Invite() {
-
+    const { showLoader, hideLoader } = useContext(LoaderContext)
     const navigate = useNavigate();
     const [request, setRequest] = useState([]);
 
@@ -65,7 +65,8 @@ function Invite() {
                 .catch((err) => {
                     console.log(err);
 
-                });
+                })
+
         };
 
     }, [])
@@ -73,7 +74,7 @@ function Invite() {
 
 
     useEffect(() => {
-
+        showLoader()
         axios.get(`${BASE_URL}/all_add_employee`)
             .then((res) => {
                 setRequest(res.data)
@@ -81,7 +82,11 @@ function Invite() {
             .catch((err) => {
                 console.log(err);
 
-            });
+            }).finally(() => {
+
+                hideLoader()
+            })
+
 
     }, [])
 
@@ -128,26 +133,28 @@ function Invite() {
                                             <th>Email</th>
                                             <th>Action</th>
                                         </thead>
-
-                                        <tbody>
-                                            {
-                                                request.map((element) => {
-                                                    return (
-                                                        <>
-                                                            <tr>
-                                                                <td>{element.name}</td>
-                                                                <td>{element.emp_id}</td>
-                                                                <td>{element.email}</td>
-                                                                {element.invite_status == "true" ? <td> <CheckIcon /></td>
-                                                                    : <td><button className="btn btn-primary inviteBtn" onClick={(e) => { invite(e, element._id) }}>Invite Link</button></td>
-                                                                }
-                                                            </tr>
-                                                        </>
-                                                    )
-                                                })
-                                            }
-                                        </tbody>
-
+                                        {show.length > 0 ?
+                                            <tbody>
+                                                {
+                                                    request.map((element) => {
+                                                        return (
+                                                            <>
+                                                                <tr>
+                                                                    <td>{element.name}</td>
+                                                                    <td>{element.emp_id}</td>
+                                                                    <td>{element.email}</td>
+                                                                    {element.invite_status == "true" ? <td> <CheckIcon /></td>
+                                                                        : <td><button className="btn btn-primary inviteBtn" onClick={(e) => { invite(e, element._id) }}>Invite Link</button></td>
+                                                                    }
+                                                                </tr>
+                                                            </>
+                                                        )
+                                                    })
+                                                }
+                                            </tbody>
+                                            :
+                                            <h5 className="no_invite_found">No Record Found</h5>
+                                        }
                                     </table>
                                 </div>
                             </div>
