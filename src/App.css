@@ -33,6 +33,68 @@ main.main_box.MuiBox-root {
 .col-3.casual_leave {
   border-left: 2px solid blue;
 }
+.right {
+  color: green;
+}
+.reject{
+  color: red;
+}
+.avail-leaves-card {
+  display: flex;
+  gap: 2rem;
+  padding: 13px;
+  align-items: center;
+}
+
+.float-right {
+  float: right;
+}
+
+.avail-leaves-card-row {
+  background: #FFFFFF;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  margin-bottom: 2rem;
+}
+input.form-control.formtext.mt-4 {
+  background: #0a58ca;
+  color: white;
+}
+
+.apply-leaves-main-layout {
+  padding-right: 8%;
+}
+
+.avail-leaves-card .count {
+  font-size: 48px;
+  color: #E8BA18;
+  font-weight: 500px;
+  line-height: 72px;
+}
+.col-4.password-type {
+  margin-top: 2.5%;
+}
+h5.employee_page {
+  border-left: 6px solid blue;
+}
+form.form_handle {
+  margin-top: 21%;
+}
+.avail-leaves-card .heading {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+.apply_leave_page{
+  margin-top: 3%;
+}
+button.btn.btn-primary.btn-sm.event_button {
+  background: #2373B2;
+}
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.MuiCard-root.card_events {
+  border-left: 4px solid 
+  #2373B2;
+}
 header.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation4.MuiAppBar-root.MuiAppBar-colorPrimary.MuiAppBar-positionFixed.mui-fixed {
   height: 80px;
   background-color: black;
@@ -74,15 +136,224 @@ main.MuiBox-root {
 .row.mt-4 {
   margin-top: 7% !important;
 }
-.leave_request {
-  margin-top: 15%;
-}
+
 .row.profile.mt-3 {
   margin-left: 2%;
+}
+main.main_box.MuiBox-root {
+  margin-left: 8%;
+}
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft {
+    width: 380px !important;
+}
+h2.add-user-heading {
+  margin-top: 2%;
+}
+input.form-control.add_userInput {
+  background: #d3d3d396;
+}
+input.add-project-btn {
+  background: #2373B2;
+  color: white;
+  width: 190px;
+  height: 35px;
+}
+.submit-project {
+  margin-top: 3.5% !important;
+}
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.event_edit_icon{
+  margin-left: 5%;
+}
+p.MuiTypography-root.MuiTypography-body1.MuiTypography-paragraph.add_project {
+  margin-left: 2%;
+}
+p.MuiTypography-root.MuiTypography-body1.MuiTypography-paragraph.add_teams {
+  margin-left: 2%;
+  margin-top: 4%;
+}
+button.add_team_button {
+  float: right;
+}
+button.add_team_button {
+  width: 150px;
+  background: #2373B2;
+  color: white;
+}
+.add_userInput {
+ 
+  border: none;
+  height: 40px;
+  padding: 15px;
+  margin-top: 11px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+}
+.row.mt-5.add-team_border {
+  border-left: 3px solid #2373B2;
+}
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.MuiCard-root.team_card {
+  width: 320px;
+}
+button.btn.btn-primary.mt-1.invite_button {
+  background: #2373B2;
+}
+button.btn.btn-primary.newpost_button {
+  background: #2373B2;
+}
+/* .app_team {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+} */
+.dropdown-container {
+  width: 472px;
+}
+button.btn.btn-default.add_comment_button {
+  background: #2373B2;
+  color: white;
+}
+button.btn.btn-primary.leave_setting {
+  background: #2373B2;
+  margin-left: 3%;
+}
+textarea.form-control.edit_comment {
+  height: 20px;
+}
+button.btn.btn-primary.leave_check {
+  background: white;
+  color: #2373B2;
+}
+.MuiAvatar-root.MuiAvatar-circular.edit_profile {
+  height: 150px;
+  width: 150px;
+}
+p.MuiTypography-root.MuiTypography-body1.MuiTypography-paragraph.event_page{
+  margin-left: 2%;
+}
+textarea.form-control.comment_textarea {
+  height: 50px;
+}
+input.form-control.event_page_setting {
+  background: #d3d3d375;
+}
+
+select.form-control.add_userInput {
+  background: #d3d3d396;
+}
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.delete_comment {
+  font-size: 15px;
+  margin-left: 5%;
+}
+.add-UserLayout {
+  padding-left: 25px;
+}
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.edit_comment {
+  margin-left: 7%;
+  font-size: 15px;
+}
+.row.apply_leave_section {
+  margin-top: 8%;
+}
+select#dino-select {
+  background: #d3d3d375;
+}
+input.form-control.formtext.date {
+  background: #d3d3d375
+}
+textarea.form-control {
+  background: #d3d3d375;
+  height: 250px;
+}
+input.btn.btn-primary.apply_button {
+  background: #2373B2;
+  margin-top: 2%;
+}
+.add-UserLayout .addUserLabel {
+  float: left;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  
+}
+
+
+.add-UserLayout .custom-row {
+  margin-bottom: 30px;
+
+}
+
+.add-UserLayout .add-employee-btn {
+  background: #2373B2;
+  color: #fff;
+  width: 185px;
+  height: 36px;
+  border: none;
+  float: left;
+}
+input.btn.btn-primary.event_submit_button {
+  background: #2373B2;
+}
+.add-user-heading {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  color: #000000;
+  margin-bottom: 10%;
+  text-align: left;
+
+
+}
+.col-md-4.password-type {
+  margin-top: 2%;
+}
+input.submit-value {
+  width: 185px;
+  height: 36px;
+  background-color: #2373B2;
+  color:white;
+  margin-top: 7%;
+}
+main.MuiBox-root {
+  margin-left: 20%;
 }
 .row.profile {
   margin-left: 2%;
   margin-top: 3%;
+}
+button.btn.btn-primary.logout_style {
+  width: 65%;
+  background: #2373B2;
+}
+.row.user_info {
+  margin-top: 14%;
+  padding: 0 15px;
+  margin-left: 5%;
+}
+
+.row.user_info p {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 21px;
+  text-align: left;
+  width: 35%;
+  padding-left: 0;
+}
+
+.row.user_info .fade_info {
+  color: rgba(255, 255, 255, 0.7);
+  padding-left: 0;
+  width: 65%;
+  word-break: break-all;
+}
+.css-pv2v2v {
+  width: calc(95% - 315px);
 }
 ul.MuiList-root.MuiList-padding.css-h4y409-MuiList-root {
   margin-left: 0%;
@@ -102,6 +373,71 @@ main.sub_box.MuiBox-root.css-18glnma {
 .col-sm-3.mt-3.leavequota {
   padding-left: 4%;
 }
+button.btn.btn-primary.btn-sm {
+  margin-left: 53%;
+  margin-top: -28%;
+}
+a.events{
+  color: white !important;
+  text-decoration: none !important;
+}
+
+button.btn.btn-primary {
+  background: #2373B2;
+}
+.MuiAvatar-root.MuiAvatar-circular.MuiAvatar-colorDefault.small_avatar {
+  height: 36px;
+  width: 38px;
+  background: #2373B2;
+}
+button.ant-btn.css-dev-only-do-not-override-sk7ap8.ant-btn-default {
+  width: 430px;
+  background: #dee2e69e
+}
+button.ant-btn.css-dev-only-do-not-override-sk7ap8.ant-btn-default {
+ 
+  margin-top: 3%;
+}
+.leave_request {
+  width: 650px;
+}
+a.main_head {
+  color: black !important;
+}
+
+.MuiAvatar-root.MuiAvatar-circular.MuiAvatar-colorDefault.edit_profile {
+  width: 130px;
+  height: 120px;
+}
+.row.mt-4.edit_page {
+  margin-left: 2%;
+}
+.row.edit_page {
+  margin-left: 2%;
+}
+input.form-control.edit_page_color {
+  background: #dee2e69e;
+}
+
+
+a {
+  color: white !important;
+  text-decoration: none !important;
+}
+
+li.MuiListItem-root.MuiListItem-gutters {
+  text-align: center;
+  padding: 5%;
+}
+a.header_dropdowm {
+  color: black !important;
+}
+a.ant-dropdown-trigger {
+  color: blue !important;
+}
+.leave button.btn.btn-primary {
+  background: blue;
+}
 @media screen and (min-width:320px) and (max-width:767px){
   .MuiBox-root.css-k008qs {
     display: block;
@@ -120,6 +456,9 @@ main.MuiBox-root {
   margin-left: 0%;
   margin: auto;
 }
+.gif_file{
+  width: 100%;
+}
 main.sub_box.MuiBox-root.css-18glnma {
   margin-top: 2%;
 }
@@ -131,5 +470,11 @@ body {
   overflow: none;
 }
 
+.row.edit_page {
+  margin-left: 2%;
+}
+label.mb-3.setting {
+  margin-top: 2% !important;
+}
 
 }

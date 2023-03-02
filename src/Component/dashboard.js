@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from 'prop-types';
-
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
+import Badge from '@mui/material/Badge';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
@@ -23,17 +25,20 @@ import { Button, Modal } from 'antd';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CardHeader from '@mui/material/CardHeader';
 import { styled } from '@mui/material/styles';
+
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import { IconButtonProps } from '@mui/material/IconButton';
 import MapsUgcIcon from '@mui/icons-material/MapsUgc';
 import * as moment from 'moment';
 import { DownOutlined } from '@ant-design/icons';
 import { MenuProps } from 'antd';
 import { Dropdown, Space } from 'antd';
-
+import { format, getMonth } from 'date-fns'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { CompressOutlined } from "@mui/icons-material";
 
 
 const drawerWidth = 240;
@@ -56,7 +61,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     }),
 }));
 
-export default function LeaveStatus(props: Props) {
+export default function Dashboard(props: Props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -83,18 +88,53 @@ export default function LeaveStatus(props: Props) {
     const [openname, setOpenname] = useState(false);
     const [openedit, setOpenEdit] = useState(false);
     const [addpost, setAddPost] = useState('')
+    const [allemployee, setAllEmployee] = useState([]);
+    const [postid, setPostId] = useState('');
     const [addtitle, setAddTitle] = useState('')
     const [id, setId] = useState('')
     const [imageval, setImageVal] = useState('')
-
+    const [addcomment, setAddComment] = useState('')
+    const [openComment, setOpenComment] = useState([]);
+    const [commentid, setCommentId] = useState('')
     const [allpost, setAllPost] = useState([]);
+    const [editcomment, setEditComment] = useState(false);
     const [likeval, setLikeVal] = useState([]);
+   
+    const [updateId, setUpdateId] = useState('');
+    const [edittitle, setEditTitle] = useState('');
+    const [editdescription, setEditDescription] = useState('');
+    const [updateimage, setUpdateImage] = useState('')
+    const [postpageid, setPostPageId] = useState('')
+    const [editcontent, setEditContent] = useState('')
+    const [anniversary, setAnniversary] = useState([])
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
 
 
     const handlePost = async (e) => {
         setAddPost(e.target.value)
     }
 
+    const handleComment = async (e) => {
+        setAddComment(e.target.value)
+    }
+
+  
+    
     const handleTitlePost = async (e) => {
         setAddTitle(e.target.value)
     }
@@ -109,42 +149,62 @@ export default function LeaveStatus(props: Props) {
         setOpenEdit(false);
     };
 
-
     const nameShowModal = () => {
         setOpenname(true);
     };
 
+    const commentShowModal = (item, index) => {
+        openComment[index] = true
+        setOpenComment([...openComment])
+        setPostId(item);
 
-    const editShow = () => {
+    };
+
+
+    const editShow = (element) => {
+        // console.log("show",editdescription,editdescription,updateId)
         setOpenEdit(true);
     };
 
     const nameHandleOk = () => {
 
+        if (addtitle.length || addpost.length || imageval.length > 0) {
+            const description = addpost;
+            const title = addtitle
+            const image = imageval;
 
-        const description = addpost;
-        const title = addtitle
-        const image = imageval;
-
-        const formData = new FormData();
-        formData.append("title", addtitle);
-        formData.append("description", addpost);
-        formData.append("image", imageval);
+            const formData = new FormData();
+            formData.append("title", addtitle);
+            formData.append("description", addpost);
+            formData.append("image", imageval);
 
 
-        axios.post(`http://localhost:8000/add_post`, formData)
-            .then((res) => {
+            axios.post(`http://localhost:8000/add_post`, formData)
+                .then((res) => {
 
-                setAddPost(res.data)
+                    setAllPost(res.data)
+                    let tmp = [...allpost]
+                    tmp.unshift(
+                        {
+                            x: {
+                                title: res.data.data?.title,
+                                 description: res.data.data?.description,
+                                image: res.data.data?.image
+                            }
+                        }
+                    )
+                    setAllPost([...tmp])
 
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
         setAddPost('');
         setAddTitle('')
         setImageVal('');
         setOpenname(false);
+
 
     }
     const handleExpandClick = () => {
@@ -152,7 +212,98 @@ export default function LeaveStatus(props: Props) {
     };
 
 
+
     const editHandleOk = () => {
+
+        const title = edittitle;
+        const description = editdescription;
+        const image = updateimage;
+
+        const formData = new FormData();
+
+        formData.append("image", updateimage);
+        formData.append("title", edittitle);
+        formData.append("description", editdescription);
+
+        axios.put(`http://localhost:8000/edit_post/${updateId}`, formData)
+            .then((res) => {
+                setEditTitle(res.data.title)
+                setEditDescription(res.data.description)
+
+                getAllPostData()
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        setEditTitle("")
+        setEditDescription("")
+        setOpenEdit(false);
+
+
+    }
+    const commentHandleOk = (index) => {
+
+
+        const content = addcomment
+        console.log(content);
+        if (content.length > 0) {
+
+            let authtokens = localStorage.getItem("authtoken");
+            let token = {
+                headers: {
+                    token: authtokens,
+                },
+            };
+
+            const formData = new FormData();
+            formData.append("content", addcomment);
+
+            axios.post(`http://localhost:8000/comment/${postid}`, { content: content }, token)
+                .then((res) => {
+                
+                        getAllPostData()
+                
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+        setAddComment('');
+        openComment[index] = false
+        setOpenComment([...openComment])
+    }
+
+
+    const post_id = (e, element, isLike) => {
+        e.preventDefault();
+       
+        let authtokens = localStorage.getItem("authtoken");
+        let token = {
+            headers: {
+                token: authtokens
+            },
+        };
+
+        axios.post(`http://localhost:8000/like/${element}`, {}, token)
+            .then((res) => {
+                console.log(res.data)
+                setLikeVal(res.data)
+                const filterrecord = allpost.map((val) => {
+
+                    if (val.x._id == element) {
+                        val.isLike = !isLike
+                    }
+                 
+                    return val
+                })
+                setAllPost(filterrecord)
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
 
     }
 
@@ -172,6 +323,7 @@ export default function LeaveStatus(props: Props) {
                 setProfileVal(res.data)
                 setLogin(true)
 
+
             })
             .catch((err) => {
                 console.log(err);
@@ -180,16 +332,22 @@ export default function LeaveStatus(props: Props) {
     }, [])
 
 
-    const record = (id) => {
-        console.log(id, "dahkasd")
-        setId(id)
+    const record = (value) => {
+       
+        setId(value._id)
+        setUpdateId(value._id)
+        setEditTitle(value.title)
+        setEditDescription(value.description)
     }
+
+
 
     const handleDelete = () => {
         axios.delete(`http://localhost:8000/delete_post/${id}`)
             .then((res) => {
                 console.log(res.data)
-                const filter_data = allpost.filter((x) => x._id != id)
+                console.log(id, "checkud")
+                const filter_data = allpost.filter((val) => val.x._id != id)
                 setAllPost(filter_data)
             })
             .catch((err) => {
@@ -197,32 +355,12 @@ export default function LeaveStatus(props: Props) {
             });
     }
 
-
-    const post_id = (e, element) => {
-        e.preventDefault();
-        console.log(element);
-
-        let authtokens = localStorage.getItem("authtoken");
-        let token = {
-            headers: {
-                token: authtokens
-            },
-        };
-
-        axios.post(`http://localhost:8000/like/${element}`, {}, token)
-            .then((res) => {
-                console.log(res.data)
-                setLikeVal(res.data)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-    }
-
-
-
     useEffect(() => {
+        getAllPostData()
+
+    }, [])
+
+    const getAllPostData = () =>{
         let authtokens = localStorage.getItem("authtoken");
         let token = {
             headers: {
@@ -233,33 +371,113 @@ export default function LeaveStatus(props: Props) {
 
         axios.get(`http://localhost:8000/all_post`, token)
             .then((res) => {
-               
-                console.log(res.data)
-              
-            
-                setAllPost(res.data)
-                
 
+                console.log(res.data, "all_post")
+                setAllPost(res.data)
             })
             .catch((err) => {
                 console.log(err);
             });
+    }
 
-    }, [])
     const logout = () => {
         localStorage.removeItem('authtoken');
         setLogin(false);
         navigate('/login')
     };
 
+
+    useEffect(() => {
+        axios.get(`http://localhost:8000/employee_birthday`)
+            .then((res) => {
+                setAllEmployee(res.data)
+               
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+    }, [])
+
+
+    useEffect(() => {
+        axios.get(`http://localhost:8000/employee_anniversary`)
+        .then((res) => {
+            setAnniversary(res.data)
+           console.log(res.data, "annivery")
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
+    }, [])
+
+
    
-  
+    const monthDiff = (date_of_joining) => {
+
+        const past_date = new Date();
+        const current_date = new Date(date_of_joining);
+        const difference = (past_date.getFullYear() * 12 + past_date.getMonth()) - (current_date.getFullYear() * 12 + current_date.getMonth());
+        let months;
+
+        if (difference > 12) {
+            months = (difference / 12 | 0) + " years and " + difference % 12 + " month"
+
+        } else {
+            months = difference % 12 + " month"
+        }
+
+        return months;
+    }
+
+    const delete_comment = (e, id, element) => {
+        e.preventDefault();
+        console.log(id, element, "checkdelete")
+        axios.post(`http://localhost:8000/delete_comment`, { _id: id, post_id: element })
+            .then((res) => {
+                console.log(res.data)
 
 
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
+    const showEditComment = (e, id, element) => {
+        e.preventDefault();
+        setCommentId(id)
+        setPostPageId(element)
+        setEditComment(true);  
+    };
 
+    const editCommentOk = () => {
+       
+        const content  = editcontent
 
+        console.log(content,"ssssssssssssss")
 
+        axios.put(`http://localhost:8000/edit_comment/`, {_id: commentid, post_id: postpageid, content: editcontent})
+            .then((res) => {
+             
+                console.log(res.data, "final_data")
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        setEditComment(false);
+    };
+
+    const editCommentCancel = () => {
+        setEditComment(false);
+    };
+
+   
+
+   
+
+   
     const drawer = (
         <div>
             <Toolbar />
@@ -267,7 +485,7 @@ export default function LeaveStatus(props: Props) {
                 <img src="logo.png"></img>
                 <Divider className='nav_divider mt-4' />
                 <div className='avatar mt-4'>
-                    <Avatar className='avatar_img mx-auto' alt="Remy Sharp" src="" />
+                    <Avatar className='avatar_img mx-auto' alt={profileval.name} src={profileval.image} sx={{ height: '120px', width: '120px' }} />
 
                 </div>
                 <div className='profile_name'>
@@ -275,23 +493,19 @@ export default function LeaveStatus(props: Props) {
                     <h5 className='mt-1'>{profileval.emp_id}</h5>
                 </div>
                 <div className='profile_details mt-4'>
-                    <div className='row setting'>
-                        <div className='col-6 mt-4'>
-                            <h6>Designation</h6>
-                            <h6 className='pt-4' >Reporting Manager</h6>
-                            <h6 className='pt-4' >Leave Quota</h6>
 
-                        </div>
-                        <div className='col-6 mt-4'>
-                            <h6>{profileval.designation}</h6>
-                            <h6 className='pt-4'>Reporting Manager</h6>
-                            <h6 className='pt-4' >6</h6>
+                    <div className='row user_info'>
+                        <p>Designation </p><p className="fade_info">{profileval.designation}</p>
+                        <p>Email </p><p className="fade_info">{profileval.email}</p>
+                        <p>Phone No </p><p className="fade_info">{profileval.phonenumber}</p>
+                        <p>Tenure </p><p className="fade_info"> {monthDiff(profileval.date_of_joining)}</p>
+                        <p>Birthday </p><p className="fade_info">{moment(profileval.dob).format('DD/MM/YYYY')}</p>
 
-                        </div>
+
                     </div>
                 </div>
-                <div className='logout_button mt-4'>
-                    <button className='btn btn-primary' onClick={logout} >Logout</button>
+                <div className='logout_button mt-4 '>
+                    <button className='btn btn-primary logout_style' onClick={logout} >Logout</button>
 
                 </div>
             </List>
@@ -307,11 +521,11 @@ export default function LeaveStatus(props: Props) {
             label: <h6 onClick={handleDelete}>Delete </h6>,
             key: '1',
         },
-        {
 
-        },
 
     ];
+
+
 
 
     return (
@@ -337,21 +551,30 @@ export default function LeaveStatus(props: Props) {
                     <Typography variant="h6" noWrap component="div" className='header_menu'>
 
                         <div className='row'>
+                            
                             <div className='col-5 apply_logo'>
 
 
-                                <img src="apply Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp;
+                                <img src="apply_Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp;
+
+                                <Badge badgeContent={4} color="primary">
+                            <NotificationsIcon color="white" onClick={showModal} />
+                        </Badge>
                             </div>
+                           
+                        <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                            <p>Some contents...</p>
+                            <p>Some contents...</p>
+                            <p>Some contents...</p>
+                        </Modal>
                             <div className='col-5'>
                                 <div className='row header_setting' >
                                     <div className='col-4'>
-
-
-                                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: 50, height: 50 }} />
+                                        <Avatar alt={profileval.name} src={profileval.image} sx={{ width: 50, height: 50 }} />
                                     </div>
                                     <div className='col-8 mt-2'>
 
-                                        <p>employee</p>
+                                        <p>{profileval.name}</p>
 
                                     </div>
 
@@ -367,9 +590,9 @@ export default function LeaveStatus(props: Props) {
 
 
                                             <MenuItem value={10}>
-                                                <Link to="/setting">Setting</Link></MenuItem>
+                                                <Link to="/profile" className="main_head">Profile</Link></MenuItem>
 
-                                            <MenuItem value={20} >Logout</MenuItem>
+                                            <MenuItem value={20} onClick={logout}>Logout</MenuItem>
 
                                         </Select>
                                     </FormControl>
@@ -385,7 +608,7 @@ export default function LeaveStatus(props: Props) {
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
                 aria-label="mailbox folders"
             >
-                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+
                 <Drawer className="ddd"
                     container={container}
                     variant="temporary"
@@ -432,7 +655,7 @@ export default function LeaveStatus(props: Props) {
                             </div>
                             <div className='col-sm-2'>
                                 <Typography>
-                                    <button className='btn btn-primary' onClick={nameShowModal}>New Post</button>
+                                    <button className='btn btn-primary newpost_button' onClick={nameShowModal}>New Post</button>
 
 
                                     <Modal className="mt-4"
@@ -452,17 +675,16 @@ export default function LeaveStatus(props: Props) {
                                         <input type="text" className="form-control" name="title" value={addtitle} onChange={(e) => handleTitlePost(e)}
                                         />
                                         <label> Add Description</label>
-                                        <textarea className="form-control" name="description" onChange={(e) => handlePost(e)}
+                                        <textarea className="form-control" name="description" value={addpost} onChange={(e) => handlePost(e)}
                                         ></textarea>
                                         <label> Add Image</label>
                                         <input type="file" name="image" className="form-control" onChange={(e) =>
                                             setImageVal(e.target.files[0])} />
                                     </Modal>
 
-
                                     <Modal
                                         open={openedit}
-                                        title="Add Post"
+                                        title="Edit Post"
                                         onOk={editHandleOk}
                                         onCancel={editHandleCancel}
                                         footer={[
@@ -474,14 +696,23 @@ export default function LeaveStatus(props: Props) {
                                         ]}
                                     >
                                         <label> Edit Ttile</label>
-                                        <input type="text" className="form-control" name="title"
+                                        <input type="text" className="form-control" name="title" value={edittitle}
+                                            onChange={(e) => {
+                                                setEditTitle(e.target.value)
+                                            }}
                                         />
                                         <label> Edit Description</label>
-                                        <textarea className="form-control" name="description"
+                                        <textarea className="form-control" name="description" value={editdescription}
+                                            onChange={(e) => {
+                                                setEditDescription(e.target.value)
+                                            }}
                                         ></textarea>
                                         <label> Edit Image</label>
-                                        <input type="file" name="image" className="form-control" />
+                                        <input type="file" name="image" className="form-control" onChange={(e) =>
+                                            setUpdateImage(e.target.files[0])} />
                                     </Modal>
+
+
                                 </Typography>
                             </div>
                         </div>
@@ -493,12 +724,12 @@ export default function LeaveStatus(props: Props) {
                                     <Card key={index} sx={{ maxWidth: 1100, marginTop: 10 }}>
                                         <CardHeader
                                             avatar={
-                                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                                    R
+                                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" >
+                                                    HR
                                                 </Avatar>
                                             }
                                             action={
-                                                <Dropdown menu={{ items }} trigger={['click']} onClick={(e) => { record(element.id) }}>
+                                                <Dropdown menu={{ items }} trigger={['click']} onClick={(e) => { record(element.x) }}>
                                                     <a onClick={(e) => e.preventDefault()}>
 
                                                         <MoreVertIcon />
@@ -517,30 +748,117 @@ export default function LeaveStatus(props: Props) {
                                             </Typography>
                                         </CardContent>
                                         <CardContent>
-                                            <Typography variant="body2" color="text.secondary">
-                                                <img src={element.x.image} width="100%" height="450" />
-                                            </Typography>
+
+                                            {element.x.image ?
+
+                                                <Typography variant="body2" color="text.secondary">
+                                                    <img src={element.x.image} width="100%" height="450" />
+                                                </Typography>
+                                                :
+                                                ''
+                                            }
                                         </CardContent>
                                         <CardActions disableSpacing >
                                             <IconButton aria-label="add to favorites" >
-                                                {element?.isLike?(
+                                                {element?.isLike ? (
 
-                                                    <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id) }} style={{
+                                                    <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id, element?.isLike) }} style={{
                                                         backgroundColor: isActive ? 'white' : '',
                                                         color: isActive ? 'red' : '',
                                                     }} />
-                                                ):
-                                                (
-                                                    
-                                                    <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id) }}  />
-                                                )
-                                                
+                                                ) :
+                                                    (
+
+                                                        <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id, element?.isLike) }} />
+                                                    )
+
                                                 }
 
 
                                             </IconButton>
                                             <IconButton aria-label="share">
-                                                <MapsUgcIcon />
+
+
+                                                <MapsUgcIcon onClick={(e) => { commentShowModal(element.x._id, index) }} />
+                                                <Modal className="mt-4"
+                                                    open={openComment[index]}
+                                                    title="Add Comment"
+                                                    onOk={() => commentHandleOk(index)}
+                                                    onCancel={() => commentHandleOk(index)}
+                                                    footer={[
+
+                                                        <button className="btn btn-default add_comment_button" type="submit" onClick={() => commentHandleOk(index)}  >
+                                                            Add Comment
+                                                        </button>,
+
+                                                    ]}
+                                                >
+
+                                                    {
+                                                        element.x.comment?.map((item, i) => {
+                                                            return (
+                                                                <>
+
+                                                                    <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                                                        <CardContent>
+
+
+                                                                            <Typography sx={{ mb: 3, width: 200, height: 20 }} >
+                                                                                <div className="row">
+                                                                                    <div className="col-3">
+                                                                                        <Avatar className='avatar_img' alt="Remy Sharp" src={item.userId?.image} />
+                                                                                    </div>
+                                                                                    <div className="col-9">
+                                                                                        {item.userId?.name}
+
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div className="row">
+                                                                                    <div className="col-3">
+
+                                                                                    </div>
+                                                                                    <div className="col-9">
+                                                                                        <h6>  {item.content}
+                                                                                            <ModeEditIcon className="edit_comment" 
+                                                                                            onClick={(e) => { showEditComment(e, item._id, element.x._id) }}></ModeEditIcon>
+
+                                                                                            <Modal
+                                                                                                open={editcomment}
+                                                                                                title="Edit Comment"
+                                                                                                onOk={editCommentOk}
+                                                                                                onCancel={editCommentCancel}
+                                                                                                footer={[
+                                                                                                   
+                                                                                                    <Button key="submit" type="primary"  onClick={editCommentOk}>
+                                                                                                        Edit
+                                                                                                    </Button>,
+                                                                                                    
+                                                                                                ]}
+                                                                                            >
+                                                                                                <label>Edit Comment</label>
+                                                                                                <textarea name="content" className="form-control edit_comment" onChange={(e) => {setEditContent(e.target.value)}}></textarea>
+                                                                                            </Modal>
+                                                                                            <DeleteIcon className="delete_comment" onClick={(e) => { delete_comment(e, item._id, element.x._id) }}> </DeleteIcon></h6>
+
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            </Typography>
+                                                                        </CardContent>
+                                                                    </Card>
+
+
+                                                                </>
+                                                            )
+                                                        })
+                                                    }
+                                                    <br />
+                                                    <textarea className="form-control comment_textarea" name="content" value={addcomment} onChange={(e) => handleComment(e)}
+                                                    ></textarea>
+
+                                                </Modal>
+
                                             </IconButton>
 
                                         </CardActions>
@@ -558,71 +876,97 @@ export default function LeaveStatus(props: Props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(25% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <Typography paragraph>
+
+
+                <Typography paragraph >
                     <Box
                         component="sidebar"
                         sx={{ width: { sm: drawerWidth } }}
                         className="sidebar">
-                        <h4 className="mt-4">Events</h4>
-                        <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                            <CardContent>
-                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                    Word of the Day
-                                </Typography>
-
-                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    adjective
-                                    <Divider className='event_divider' />
-                                </Typography>
-
-                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                    Word of the Day
-                                </Typography>
-
-                                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                    adjective
-
-                                </Typography>
-                                <CreditCardIcon /> Add Reminder
-                            </CardContent>
-                        </Card>
+                       
 
 
-                        <h4 className='mt-4'>Today</h4>
-                        <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                            <CardContent>
-                                <div className='row'>
-                                    <div className='col-sm-4'>
-                                        <Avatar className='avatar_img' alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                                    </div>
-                                    <div className='col-sm-8'>
-                                        Word of the Day
-                                        Word of the Day
-                                    </div>
-                                </div>
+                        <h6 className='mt-4'><b>Upcomming Birthday</b></h6>
+                        {
+                            allemployee.map((item, elem) => {
+                                let newDate2 = moment(item.dob).format("MMM DD, YYYY");
+                                return (
+
+                                    <>
+
+                                        <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                            <CardContent>
+
+                                                <div className='row'>
+                                                    <div className='col-sm-4'>
+                                                        <Avatar className='avatar_img' alt="Remy Sharp" src={item.image} />
+                                                    </div>
+                                                    <div className='col-sm-8'>
+                                                        {item.name}
+                                                        <div>
+                                                            {newDate2}</div>
+                                                    </div>
+                                                </div>
 
 
-                            </CardContent>
-                        </Card>
-
-                        <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                            <CardContent>
-                                <div className='row'>
-                                    <div className='col-sm-4'>
-                                        <Avatar className='avatar_img' alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                                    </div>
-                                    <div className='col-sm-8'>
-                                        Word of the Day
-                                        Word of the Day
-                                    </div>
-                                </div>
-
-
-                            </CardContent>
-                        </Card>
+                                            </CardContent>
+                                        </Card>
+                                    </>
+                                )
+                            })
+                        }
 
                     </Box>
                 </Typography>
+
+
+                <Typography paragraph className="upcoming_anniversary pt-3" >
+                    <Box
+                        component="sidebar"
+                        sx={{ width: { sm: drawerWidth } }}
+                        className="sidebar">
+                       
+
+
+                        <h6 className='mt-4'><b>Upcomming Work Anniversary</b></h6>
+                        {
+                            anniversary?.map((i, elem) => {
+                          
+                                return (
+
+                                    <>
+
+                                        <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                            <CardContent>
+
+                                                <div className='row'>
+                                                    <div className='col-sm-4'>
+                                                        <Avatar className='avatar_img' alt="Remy Sharp" src={i.image} />
+                                                    </div>
+                                                    <div className='col-sm-8'>
+                                                        {i.name}
+                                                        <div className="difference pt-1">
+                                                            {moment(i.date_of_joining).format("MMM DD, YYYY")}
+                                                            
+                                                            </div>
+                                                        <div className="difference pt-2">
+                                                            <b>{i.difference} </b> Anniversary
+                                                            </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </CardContent>
+                                        </Card>
+                                    </>
+                                )
+                            })
+                        }
+
+                    </Box>
+                </Typography>
+
+
 
             </Box>
         </Box>

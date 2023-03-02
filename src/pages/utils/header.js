@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from "react";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -21,44 +21,140 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Link } from 'react-router-dom';
-
-const drawerWidth = 320;
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+const drawerWidth = 240;
 
 interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
+ 
   window?: () => Window;
 }
 
-export default function LeaveStatus(props: Props) {
+export default function Header(props: Props) {
+  const navigate = useNavigate();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
+  const [login, setLogin] = React.useState('');
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const [role, setRole] = useState('')
+  const [show, setShow] = useState(false)
+  const [profileval, setProfileVal] = useState('')
+
+  useEffect(()=> {
+
+    let authtokens = localStorage.getItem("authtoken");
+    if(!authtokens){
+        navigate('/login')
+      }
+      else{
+      let display = {
+        headers: {
+            'token': authtokens, 
+        }
+      }
+    
+
+    axios.get(`http://localhost:8000/all`, display )
+    .then((res) => {
+      setRole(res.data.role)
+     
+    })
+    .catch((err) => {
+        console.log(err);
+        
+      });
+    };
+      
+}, [])
+
+
+useEffect(() => {
+
+
+  let authtokens = localStorage.getItem("authtoken");
+  let token = {
+      headers: {
+          token: authtokens,
+      },
+  };
+
+  axios.get(`http://localhost:8000/profile`, token)
+      .then((res) => {
+
+          setProfileVal(res.data)
+          setLogin(true)
+
+      })
+      .catch((err) => {
+          console.log(err);
+      });
+
+}, [])
+
+
+console.log(role, "dshjsbdka")
+
+  const logout = () => {
+    localStorage.removeItem('authtoken');
+    setLogin(false);
+    navigate('/login')
+};
+
 
   const drawer = (
     <div>
       <Toolbar />
       <div className='logo'>
       <img src="logo.png" className='logo_img'></img></div>
-      <Divider />
-      <List>
-        {['Profile', 'Teams', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-   
+      <Divider className='mt-4' />
+  
+        {role == 2 ?
+            <List className='header_list'>
+            {[<Link to="/dashboardpage">Dashboard</Link>,<Link to="/profile" className="header_toggle">Profile</Link>,  <Link to="/leaves">Leaves</Link>, <Link to="/leaverequest">Leave Request</Link>,  <Link to="/applyleave">Apply Leave</Link>, <Link to="/adduser">Add Employee</Link>, <Link to="/invite">Employee List</Link>].map((text, index) => (
+              <ListItem key={text} disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+            : role == 1 ?  
+        
+
+            <List className='header_list'>
+            {[<Link to="/dashboardpage">Dashboard</Link>,<Link to="/profile" className="header_toggle">Profile</Link>,   <Link to="/admin_leave_request">Leave Request</Link>, <Link to="/adduser">Add Employee</Link>, <Link to="/invite">Employee List</Link>].map((text, index) => (
+              <ListItem key={text} disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+
+      :   
+        <List className='header_list'>
+          {[  <Link to="/dashboard">Dashboard</Link>, <Link to="/profile">Profile</Link>,  <Link to="/leaves">Leaves</Link>,  <Link to="/applyleave">Apply Leave</Link>].map((text, index) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      }
+
     </div>
   );
 
@@ -93,15 +189,13 @@ export default function LeaveStatus(props: Props) {
                         <img src="apply_Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp;
                 </div>
                 <div className='col-5'>
-                    <div className='row header_setting' >
+                    <div className='row header_setting'>
                                 <div className='col-4'>
-                                
-
-                                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg"  sx={{ width: 50, height: 50 }} />
+                                    <Avatar alt={profileval.name}   src={profileval.image}  sx={{ width: 50, height: 50 }} />
                                 </div>
                                 <div className='col-8 mt-2'>
                                 
-                                    <p>employee</p>
+                                    <p>{profileval.name}</p>
                                 
                                 </div>
                                 
@@ -114,38 +208,14 @@ export default function LeaveStatus(props: Props) {
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select">
-
-
                                             <MenuItem value={10}>
-                                                <Link to="/setting">Setting</Link></MenuItem>
-
-                                            <MenuItem value={20} >Logout</MenuItem>
-
+                                                <Link className='header_dropdowm' to="/profile">Profile</Link></MenuItem>
+                                            <MenuItem value={20} onClick={logout}>Logout</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Box>
                                 </div>
-            </div>
-             
-                      
-                                   
-                                    {/* <Box sx={{ minWidth: 120 }}>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-label"></InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select">
-
-
-                                    <MenuItem value={10}>
-                                        <Link to="/setting">Setting</Link></MenuItem>
-
-                                    <MenuItem value={20} >Logout</MenuItem>
-
-                                </Select>
-                            </FormControl>
-                        </Box> */}
-                 
+            </div>   
           </Typography>
         </Toolbar>
       </AppBar>
@@ -154,7 +224,6 @@ export default function LeaveStatus(props: Props) {
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           container={container}
           variant="temporary"
@@ -181,39 +250,7 @@ export default function LeaveStatus(props: Props) {
           {drawer}
         </Drawer>
       </Box>
-      {/* <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-      >
-        <Toolbar />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
-      </Box> */}
+    
     </Box>
   );
 }

@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../utils/header";
+import Header from "../utils/header";
 import { UserOutlined } from '@ant-design/icons';
-import { Avatar } from 'antd';
+import Avatar from '@mui/material/Avatar';
 import { Dayjs } from 'dayjs';
 import { Calendar, theme } from 'antd';
 import { CalendarMode } from 'antd/es/calendar/generateCalendar'
-
+import moment from "moment";
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-const drawerWidth = 240;
+
+const drawerWidth = 320;
 const bull = (
     <Box
         component="span"
@@ -27,9 +28,10 @@ const bull = (
 );
 
 function Profile() {
+
+    const navigate = useNavigate();
     
     const [profile, setProfile] = useState('');
-
     const [diff, setDiff] = useState();
     const { token } = theme.useToken();
 
@@ -59,16 +61,23 @@ function Profile() {
             },
         };
 
-        axios.get(`http://localhost:8000/profile`, token)
-            .then((res) => {
-                console.log(res.data)
-                setProfile(res.data)
-              
-              
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        if(!authtokens){
+            navigate('/login')
+        }
+        else{
+            
+            axios.get(`http://localhost:8000/profile`, token)
+                .then((res) => {
+                    console.log(res.data)
+                    setProfile(res.data)
+                  
+                  
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+
 
     }, [])
 
@@ -83,6 +92,12 @@ function Profile() {
             s_count+=casual_leave
         }
         return Math.abs(s_count)
+    }
+
+
+    const settingpage = (e,id) => {
+        e.preventDefault();
+        navigate('/setting')
     }
 
    
@@ -103,8 +118,6 @@ function Profile() {
         return months;
     }
     
-        
-    
     return (
 
         <>
@@ -122,10 +135,12 @@ function Profile() {
                             <div className="col-sm-8">
                                 <div className="row">
                                     <div className="col-4">
-                                        <Avatar size={130} icon={<UserOutlined />} />
+                                        {/* <Avatar size={130}  alt={profile.name} src={profile.image}/> */}
+                                        <Avatar className='avatar_img' alt={profile.name} src={profile.image}
+                                        sx={{ width: 150, height: 150 }} />
                                         <p className="pt-4"><b>{profile.name}</b></p>
                                         <p> {profile.emp_id}</p>
-                                        <button className="btn btn-primary">Edit Profile</button>
+                                        <button className="btn btn-primary" onClick= {(e) => {settingpage(e,profile._id)}}> Edit Profile </button>
                                     </div>
                                 
                                     <div className="col-4 text-start">
@@ -143,7 +158,7 @@ function Profile() {
                                         
                                         <p className="pt-3">    {monthDiff(profile.date_of_joining)}</p>
                                         <label><b>Birthday</b></label>
-                                        <p className="pt-3"> {profile.dob}</p>
+                                        <p className="pt-3"> {moment(profile.dob).format('DD/MM/YYYY')}</p>
                                     </div>
                                 </div>
 
