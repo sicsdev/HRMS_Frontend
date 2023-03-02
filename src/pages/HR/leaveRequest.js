@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,6 +11,7 @@ import Header from "../utils/header";
 import { useNavigate } from "react-router-dom";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import { LoaderContext } from '../../App.js'
 
 
 const ITEM_HEIGHT = 48;
@@ -29,13 +30,13 @@ const MenuProps = {
 
 
 function LeaveRequest() {
+    const { showLoader, hideLoader } = useContext(LoaderContext)
     const navigate = useNavigate();
     const [request, setRequest] = useState([]);
     const [value, setValue] = useState([]);
 
-    useEffect(() => {
 
-
+    const allLeaves = () => {
         let authtokens = localStorage.getItem("authtoken");
         let token = {
             headers: {
@@ -65,9 +66,17 @@ function LeaveRequest() {
                 .catch((err) => {
                     console.log(err);
 
-                });
+                }).finally(() => {
+
+                    hideLoader()
+                })
 
         }
+    }
+    useEffect(() => {
+
+        showLoader()
+        allLeaves()
 
     }, [])
 
@@ -81,8 +90,9 @@ function LeaveRequest() {
 
         )
             .then((res) => {
-                toast.success("Leave Approved")
 
+                toast.success("Leave Approved")
+                allLeaves();
             })
             .catch((err) => {
                 console.log(err);

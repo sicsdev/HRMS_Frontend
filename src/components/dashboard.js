@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -40,6 +40,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 import Badge from '@mui/material/Badge';
+import { Notification } from "../helpers/constant";
+import { LoaderContext } from '../App.js'
 
 
 const drawerWidth = 250;
@@ -62,7 +64,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 
 function Dashboard(props) {
-
+    const { showLoader, hideLoader } = useContext(LoaderContext)
     const navigate = useNavigate();
     const { window } = props;
 
@@ -114,9 +116,9 @@ function Dashboard(props) {
     const [editcomment, setEditComment] = useState(false);
     const [commentid, setCommentId] = useState('')
     const [anniversary, setAnniversary] = useState([])
-
-
-
+    const [role, setRole] = useState(1)
+    const [notifications, setNotifications] = useState([])
+    const [notificationsCount, setNotificationsCount] = useState(0)
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -314,6 +316,7 @@ function Dashboard(props) {
 
 
     useEffect(() => {
+        showLoader()
 
         let authtokens = localStorage.getItem("authtoken");
         let token = {
@@ -330,7 +333,10 @@ function Dashboard(props) {
             })
             .catch((err) => {
                 console.log(err);
-            });
+            }).finally(() => {
+
+                hideLoader()
+            })
 
     }, [])
 
@@ -488,7 +494,65 @@ function Dashboard(props) {
     }
 
 
+    useEffect(() => {
 
+        let authtokens = localStorage.getItem("authtoken");
+        if (!authtokens) {
+            navigate('/')
+        }
+        else {
+            let display = {
+                headers: {
+                    'token': authtokens,
+                }
+            }
+
+            axios.get(`${BASE_URL}/all`, display)
+                .then((res) => {
+                    setRole(res.data.role)
+                    console.log(res.data.role, "abcccccc")
+                })
+                .catch((err) => {
+                    console.log(err);
+
+
+                });
+            axios.get(`${BASE_URL}/get_all_notification`, display)
+                .then((res) => {
+                    // setRole(res.data.role)
+                    console.log(res.data, "All")
+                    setNotifications(res.data)
+                    let tempCount = 0
+                    for (let x of res.data) {
+                        if (!x.is_read) {
+                            tempCount++
+                        }
+                    }
+                    setNotificationsCount(tempCount)
+
+                })
+                .catch((err) => {
+                    console.log(err);
+
+                });
+        };
+
+    }, [])
+    const read_notification = (e, element) => {
+        e.preventDefault();
+        console.log(element, "ledsfds")
+        axios.put(`${BASE_URL}/is_mark_read/${element}`)
+            .then((res) => {
+
+                console.log(res.data, "ddddddddd")
+                navigate('/leaverequest')
+
+            })
+            .catch((err) => {
+                console.log(err);
+
+            });
+    }
     const drawer = (
         <div>
 
@@ -640,349 +704,364 @@ function Dashboard(props) {
     }
 
     return (
-        <Box sx={{ display: 'flex' }} className="dashboard_page">
-            <CssBaseline />
-            <AppBar
-                position="fixed"
-                sx={{
-                    width: { sm: `calc(100% - ${drawerWidth}px)` },
-                    ml: { sm: `${drawerWidth}px` },
 
-                }}
-            >
-                <Toolbar
-                    className='main_header'
+        <>
+
+            {/* {loading ? <Loader /> : */}
+            <Box sx={{ display: 'flex' }} className="dashboard_page">
+                <CssBaseline />
+                <AppBar
+                    position="fixed"
+                    sx={{
+                        width: { sm: `calc(100% - ${drawerWidth}px)` },
+                        ml: { sm: `${drawerWidth}px` },
+
+                    }}
                 >
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2, display: { sm: 'none' } }}
+                    <Toolbar
+                        className='main_header'
                     >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        {/* Responsive drawer */}
-                    </Typography>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            edge="start"
+                            onClick={handleDrawerToggle}
+                            sx={{ mr: 2, display: { sm: 'none' } }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" noWrap component="div">
+                            {/* Responsive drawer */}
+                        </Typography>
 
-                    <div className="applyleavedec">
-                        <Link to="/applyleave">
-                            <img src="apply Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp;
-                        </Link>
-                        <Badge badgeContent={4} color="primary">
-                            <NotificationsIcon color="white" onClick={showModal} />
-                        </Badge>
-                        <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
-                            <p>Some contents...</p>
-                        </Modal>
-                    </div>
-                    <div className="avatar_dropdown">
+                        <div className="applyleavedec">
+                            <Link to="/applyleave">
+                                <img src="apply Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp;
+                            </Link>
+                            <Badge badgeContent={notificationsCount} color="primary">
+                                <NotificationsIcon color="white" onClick={showModal} />
+                            </Badge>
+                            {/* {notifications.length > 0 ? */}
+                            <Modal title="Notifications" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
+                                {notifications?.map((item, index) => {
+                                    return <>
 
-                        <Avatar alt={profileval.name} src={BASE_URL + "/" + profileval.image} />
-                        <div className="employe_info">
-                            <p>{profileval.name}</p>
+                                        <div className={item.is_read ? "notificationCard" : "notificationCard unReadNotification"}>
+                                            {/* {item.type == "pending" ? `${item.userId.name} ${Notification['pending']}` : item.type == "approved" ? `` : ``} */}
+
+                                            <p onClick={(e) => { read_notification(e, item._id) }}>{item.is_read == false ? `${item.userId.name} ${Notification['pending']}` : ""} </p>
+                                        </div>
+                                    </>
+                                })}
+
+
+                            </Modal>
                         </div>
-                        <Box sx={{ minWidth: 120 }}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label"></InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
+                        <div className="avatar_dropdown">
 
+                            <Avatar alt={profileval.name} src={BASE_URL + "/" + profileval.image} />
+                            <div className="employe_info">
+                                <p>{profileval.name}</p>
+                            </div>
+                            <Box sx={{ minWidth: 120 }}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label"></InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+
+                                    >
+                                        <MenuItem className="aline" value={10}>
+                                            <Link to="/profile">Profile</Link></MenuItem>
+
+                                        <MenuItem value={20} onClick={logout}>Logout</MenuItem>
+
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        </div>
+                    </Toolbar>
+
+
+                </AppBar >
+
+                <Box
+                    component="nav"
+                    sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+                    aria-label="mailbox folders"
+                >
+                    {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+                    <Drawer
+                        container={container}
+                        variant="temporary"
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        ModalProps={{
+                            keepMounted: true, // Better open performance on mobile.
+                        }}
+                        sx={{
+                            display: { xs: 'block', sm: 'none' },
+                            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                        }}
+                        className='left_nav'
+                    >
+                        {drawer}
+                    </Drawer>
+                    <Drawer
+                        variant="permanent"
+                        sx={{
+                            display: { xs: 'none', sm: 'block' },
+                            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                        }}
+                        open
+                        className='left_nav'
+
+                    >
+                        {drawer}
+                    </Drawer>
+                </Box>
+
+                <Box
+                    component="main"
+                    sx={{ p: 3, width: { sm: `calc(100% - ${drawerWidth * 2}px)` } }}
+                >
+                    <Toolbar />
+                    <div className='row announcement_main'>
+                        <div className='col-sm-10 announcement'>
+                            <Typography>
+                                Announcements
+                            </Typography>
+                        </div>
+                        <div className='col-sm-2'>
+                            <Typography>
+                                <button className='btn btn-primary newpost_btn' onClick={nameShowModal}>New Post</button>
+
+
+                                <Modal
+                                    open={openname}
+                                    title="Add Post"
+                                    onOk={nameHandleOk}
+                                    onCancel={nameHandleCancel}
+                                    footer={[
+
+                                        <Button key="submit" type="primary" onClick={nameHandleOk}  >
+                                            Submit
+                                        </Button>,
+
+                                    ]}
                                 >
-                                    <MenuItem className="aline" value={10}>
-                                        <Link to="/profile">Profile</Link></MenuItem>
+                                    <label> Add Ttile</label>
+                                    <input type="text" className="form-control" name="title" value={addtitle} onChange={(e) => handleTitlePost(e)}
+                                    />
+                                    <label> Add Description</label>
+                                    <textarea className="form-control" value={addpost} name="description" onChange={(e) => handlePost(e)}
+                                    ></textarea>
+                                    <label> Add Image</label>
+                                    <input type="file" name="image" className="form-control" onChange={(e) =>
+                                        setImageVal(e.target.files[0])} />
+                                </Modal>
 
-                                    <MenuItem value={20} onClick={logout}>Logout</MenuItem>
 
-                                </Select>
-                            </FormControl>
-                        </Box>
+                                <Modal
+                                    open={openedit}
+                                    title="Add Post"
+                                    onOk={editHandleOk}
+                                    onCancel={editHandleCancel}
+
+                                    footer={[
+
+                                        <Button key="submit" type="primary" onClick={editHandleOk} >
+                                            Submit
+                                        </Button>,
+
+                                    ]}
+                                >
+                                    <label> Edit Ttile</label>
+                                    <input type="text" className="form-control" name="title" value={edittitle}
+                                        onChange={(e) => handleTitle(e)}
+                                    />
+                                    <label> Edit Description</label>
+                                    <textarea className="form-control" name="description" value={editdescription}
+                                        onChange={(e) => handleDescription(e)}
+                                    ></textarea>
+                                    <label> Edit Image</label>
+                                    <input type="file" name="image" className="form-control" onChange={(e) =>
+                                        setUpdateImage(e.target.files[0])} />
+                                </Modal>
+                            </Typography>
+                        </div>
                     </div>
-                </Toolbar>
+                    {
 
+                        allpost.map((element, index) => {
+                            return (
 
-            </AppBar >
+                                <Card key={index} sx={{ maxWidth: 1100, marginTop: 10 }} className="post">
+                                    <CardHeader
+                                        avatar={
+                                            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" alt={profileval.name} src={BASE_URL + "/" + profileval.image} >
 
-            <Box
-                component="nav"
-                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-                aria-label="mailbox folders"
-            >
-                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-                <Drawer
-                    container={container}
-                    variant="temporary"
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
-                    }}
-                    sx={{
-                        display: { xs: 'block', sm: 'none' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                    }}
-                    className='left_nav'
-                >
-                    {drawer}
-                </Drawer>
-                <Drawer
-                    variant="permanent"
-                    sx={{
-                        display: { xs: 'none', sm: 'block' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                    }}
-                    open
-                    className='left_nav'
-
-                >
-                    {drawer}
-                </Drawer>
-            </Box>
-            <Box
-                component="main"
-                sx={{ p: 3, width: { sm: `calc(100% - ${drawerWidth * 2}px)` } }}
-            >
-                <Toolbar />
-                <div className='row announcement_main'>
-                    <div className='col-sm-10 announcement'>
-                        <Typography>
-                            Announcements
-                        </Typography>
-                    </div>
-                    <div className='col-sm-2'>
-                        <Typography>
-                            <button className='btn btn-primary newpost_btn' onClick={nameShowModal}>New Post</button>
-
-
-                            <Modal
-                                open={openname}
-                                title="Add Post"
-                                onOk={nameHandleOk}
-                                onCancel={nameHandleCancel}
-                                footer={[
-
-                                    <Button key="submit" type="primary" onClick={nameHandleOk}  >
-                                        Submit
-                                    </Button>,
-
-                                ]}
-                            >
-                                <label> Add Ttile</label>
-                                <input type="text" className="form-control" name="title" value={addtitle} onChange={(e) => handleTitlePost(e)}
-                                />
-                                <label> Add Description</label>
-                                <textarea className="form-control" value={addpost} name="description" onChange={(e) => handlePost(e)}
-                                ></textarea>
-                                <label> Add Image</label>
-                                <input type="file" name="image" className="form-control" onChange={(e) =>
-                                    setImageVal(e.target.files[0])} />
-                            </Modal>
-
-
-                            <Modal
-                                open={openedit}
-                                title="Add Post"
-                                onOk={editHandleOk}
-                                onCancel={editHandleCancel}
-
-                                footer={[
-
-                                    <Button key="submit" type="primary" onClick={editHandleOk} >
-                                        Submit
-                                    </Button>,
-
-                                ]}
-                            >
-                                <label> Edit Ttile</label>
-                                <input type="text" className="form-control" name="title" value={edittitle}
-                                    onChange={(e) => handleTitle(e)}
-                                />
-                                <label> Edit Description</label>
-                                <textarea className="form-control" name="description" value={editdescription}
-                                    onChange={(e) => handleDescription(e)}
-                                ></textarea>
-                                <label> Edit Image</label>
-                                <input type="file" name="image" className="form-control" onChange={(e) =>
-                                    setUpdateImage(e.target.files[0])} />
-                            </Modal>
-                        </Typography>
-                    </div>
-                </div>
-                {
-
-                    allpost.map((element, index) => {
-                        return (
-
-                            <Card key={index} sx={{ maxWidth: 1100, marginTop: 10 }} className="post">
-                                <CardHeader
-                                    avatar={
-                                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                            R
-                                        </Avatar>
-                                    }
-                                    action={
-                                        <Dropdown menu={{ items }} trigger={['click']} onClick={(e) => { record(element.x) }}>
-                                            <a onClick={(e) => e.preventDefault()}>
-
-                                                <MoreVertIcon />
-
-                                            </a>
-                                        </Dropdown>
-
-                                    } className="post_style"
-                                    title={element.x.title}
-                                    subheader={moment(element.x.post_date).format('DD/MM/YYYY')}
-                                />
-
-                                <CardContent>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {element.x.description}
-                                    </Typography>
-                                </CardContent>
-                                <CardContent>
-                                    {element.x.image ?
-
-                                        <Typography variant="body2" color="text.secondary">
-                                            <img src={BASE_URL + "/" + element.x.image} width="100%" height="450" alt="Image" />
-                                        </Typography>
-                                        :
-                                        ''
-                                    }
-                                </CardContent>
-                                <CardActions disableSpacing >
-                                    <IconButton aria-label="add to favorites" >
-                                        {element?.isLike ? (
-
-                                            <FavoriteIcon key={index}
-
-                                                onClick={(e) => { post_id(e, element.x._id) }} style={{
-                                                    backgroundColor: isActive ? 'white' : '',
-                                                    color: isActive ? 'red' : '',
-                                                }} />
-                                        ) :
-                                            (
-
-                                                <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id) }} />
-                                            )
-
+                                            </Avatar>
                                         }
+                                        action={
+                                            <Dropdown menu={{ items }} trigger={['click']} onClick={(e) => { record(element.x) }}>
+                                                <a onClick={(e) => e.preventDefault()}>
+
+                                                    <MoreVertIcon />
+
+                                                </a>
+                                            </Dropdown>
+
+                                        } className="post_style"
+                                        title={element.x.title}
+                                        subheader={moment(element.x.post_date).format('DD/MM/YYYY')}
+                                    />
+
+                                    <CardContent>
+                                        <Typography variant="body2" color="text.secondary">
+                                            {element.x.description}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardContent>
+                                        {element.x.image ?
+
+                                            <Typography variant="body2" color="text.secondary">
+                                                <img src={BASE_URL + "/" + element.x.image} width="100%" height="450" alt="Image" />
+                                            </Typography>
+                                            :
+                                            ''
+                                        }
+                                    </CardContent>
+                                    <CardActions disableSpacing >
+                                        <IconButton aria-label="add to favorites" >
+                                            {element?.isLike ? (
+
+                                                <FavoriteIcon key={index}
+
+                                                    onClick={(e) => { post_id(e, element.x._id) }} style={{
+                                                        backgroundColor: isActive ? 'white' : '',
+                                                        color: isActive ? 'red' : '',
+                                                    }} />
+                                            ) :
+                                                (
+
+                                                    <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id) }} />
+                                                )
+
+                                            }
 
 
-                                    </IconButton>
-                                    <IconButton aria-label="share">
+                                        </IconButton>
+                                        <IconButton aria-label="share">
 
 
 
 
-                                        <MapsUgcIcon onClick={(e) => { commentShowModal(element.x._id, index) }} />
-                                        <Modal className="mt-4"
-                                            open={openComment[index]}
-                                            title="Add Comment"
-                                            onOk={() => commentHandleOk(index)}
-                                            onCancel={() => commentHandleOk(index)}
-                                            footer={[
+                                            <MapsUgcIcon onClick={(e) => { commentShowModal(element.x._id, index) }} />
+                                            <Modal className="mt-4"
+                                                open={openComment[index]}
+                                                title="Add Comment"
+                                                onOk={() => commentHandleOk(index)}
+                                                onCancel={() => commentHandleOk(index)}
+                                                footer={[
 
-                                                <Button key="submit" type="primary" onClick={() => commentHandleOk(index)}  >
-                                                    Add Comment
-                                                </Button>,
+                                                    <Button key="submit" type="primary" onClick={() => commentHandleOk(index)}  >
+                                                        Add Comment
+                                                    </Button>,
 
-                                            ]}
-                                        >
+                                                ]}
+                                            >
 
-                                            {
-                                                element.x.comment?.map((item, i) => {
-                                                    return (
-                                                        <>
+                                                {
+                                                    element.x.comment?.map((item, i) => {
+                                                        return (
+                                                            <>
 
-                                                            <Card sx={{ minWidth: 200, marginTop: 4, padding: 0 }} className="card_events">
-                                                                <CardContent sx={{ paddingBottom: 0 }}>
-                                                                    {/* <Typography sx={{ mb: 10, width: 200, height: 10 }} > */}
-                                                                    <div className="comment-header">
-                                                                        <div className="">
-                                                                            <Avatar className='avatar_img' alt={item.userId?.name} src={item.userId?.image} />
-                                                                        </div>
-                                                                        <div>
-
+                                                                <Card sx={{ minWidth: 200, marginTop: 4, padding: 0 }} className="card_events">
+                                                                    <CardContent sx={{ paddingBottom: 0 }}>
+                                                                        {/* <Typography sx={{ mb: 10, width: 200, height: 10 }} > */}
+                                                                        <div className="comment-header">
                                                                             <div className="">
-                                                                                {item.userId?.name}
+                                                                                <Avatar className='avatar_img' alt={item.userId?.name} src={item.userId?.image} />
+                                                                            </div>
+                                                                            <div>
+
+                                                                                <div className="">
+                                                                                    {item.userId?.name}
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="row">
+                                                                            <div className="col-3">
+
+                                                                            </div>
+                                                                            <div className="col-9 content">
+                                                                                <h6>  {item.content}</h6>
+                                                                                <h7 style={{ "float": "right" }}>
+
+
+
+                                                                                    <Modal
+                                                                                        open={editcomment}
+                                                                                        title="Edit Comment"
+                                                                                        onOk={editCommentOk}
+                                                                                        onCancel={editCommentCancel}
+                                                                                        footer={[
+
+                                                                                            <Button key="submit" type="primary" onClick={editCommentOk}>
+                                                                                                Edit
+                                                                                            </Button>,
+
+                                                                                        ]}
+                                                                                    >
+                                                                                        <label>Edit Comment</label>
+                                                                                        <textarea name="content" className="form-control edit_comment" onChange={(e) => { setEditContent(e.target.value) }}></textarea>
+                                                                                    </Modal>
+                                                                                    <ModeEditIcon className="edit_comment"
+                                                                                        onClick={(e) => { showEditComment(e, item._id, element.x._id) }}></ModeEditIcon>
+                                                                                    <DeleteIcon className="delete_comment" onClick={(e) => { delete_comment(e, item._id, element.x._id) }}> </DeleteIcon>
+                                                                                </h7>
+
                                                                             </div>
 
                                                                         </div>
-                                                                    </div>
-                                                                    <div className="row">
-                                                                        <div className="col-3">
 
-                                                                        </div>
-                                                                        <div className="col-9 content">
-                                                                            <h6>  {item.content}</h6>
-                                                                            <h7 style={{ "float": "right" }}>
+                                                                        {/* </Typography> */}
+
+                                                                    </CardContent>
+                                                                </Card>
 
 
+                                                            </>
+                                                        )
+                                                    })
+                                                }
 
-                                                                                <Modal
-                                                                                    open={editcomment}
-                                                                                    title="Edit Comment"
-                                                                                    onOk={editCommentOk}
-                                                                                    onCancel={editCommentCancel}
-                                                                                    footer={[
+                                                <br />
+                                                <textarea className="form-control" name="content" value={addcomment} onChange={(e) => handleComment(e)}
+                                                ></textarea>
 
-                                                                                        <Button key="submit" type="primary" onClick={editCommentOk}>
-                                                                                            Edit
-                                                                                        </Button>,
+                                            </Modal>
 
-                                                                                    ]}
-                                                                                >
-                                                                                    <label>Edit Comment</label>
-                                                                                    <textarea name="content" className="form-control edit_comment" onChange={(e) => { setEditContent(e.target.value) }}></textarea>
-                                                                                </Modal>
-                                                                                <ModeEditIcon className="edit_comment"
-                                                                                    onClick={(e) => { showEditComment(e, item._id, element.x._id) }}></ModeEditIcon>
-                                                                                <DeleteIcon className="delete_comment" onClick={(e) => { delete_comment(e, item._id, element.x._id) }}> </DeleteIcon>
-                                                                            </h7>
+                                        </IconButton>
 
-                                                                        </div>
+                                    </CardActions>
 
-                                                                    </div>
-
-                                                                    {/* </Typography> */}
-
-                                                                </CardContent>
-                                                            </Card>
-
-
-                                                        </>
-                                                    )
-                                                })
-                                            }
-
-                                            <br />
-                                            <textarea className="form-control" name="content" value={addcomment} onChange={(e) => handleComment(e)}
-                                            ></textarea>
-
-                                        </Modal>
-
-                                    </IconButton>
-
-                                </CardActions>
-
-                            </Card>
-                        )
-                    })
-                }
+                                </Card>
+                            )
+                        })
+                    }
 
 
 
-            </Box>
+                </Box>
 
-            <Box
-                component="sidebar"
-                sx={{ width: { sm: drawerWidth } }}
-                className="sidebar ">
-                {/* <h4 className="mt-4">Events<button className="btn btn-primary btn-sm top"><Link to="/event" className="events ">Add Event</Link></button></h4>
+                <Box
+                    component="sidebar"
+                    sx={{ width: { sm: drawerWidth } }}
+                    className="sidebar ">
+                    {/* <h4 className="mt-4">Events<button className="btn btn-primary btn-sm top"><Link to="/event" className="events ">Add Event</Link></button></h4>
                 {
                     event.map((i) => {
 
@@ -1043,79 +1122,82 @@ function Dashboard(props) {
 
 
 
-                <h6 className='mt-4'><b>Upcomming Birthday's</b></h6>
+                    <h6 className='mt-4'><b>Upcomming Birthday's</b></h6>
 
-                {
-                    allemployee?.map((item, elem) => {
-                        let newDate2 = moment.utc(item.dob).format("MMM DD, YYYY");
-                        return (
+                    {
+                        allemployee?.map((item, elem) => {
+                            let newDate2 = moment.utc(item.dob).format("MMM DD, YYYY");
+                            return (
 
-                            <>
+                                <>
 
-                                <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                                    <CardContent>
+                                    <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                        <CardContent>
 
-                                        <div className='row'>
-                                            <div className='col-sm-4'>
-                                                <Avatar className='avatar_img' alt={item.name} src={BASE_URL + "/" + item.image} />
-
-                                            </div>
-                                            <div className='col-sm-8'>
-                                                {item.name}
-                                                <div>
-                                                    {newDate2}</div>
-                                            </div>
-                                        </div>
-
-
-                                    </CardContent>
-                                </Card>
-                            </>
-                        )
-                    })
-                }
-
-                <h6 className='mt-4'><b>Upcomming Work Anniversary's </b></h6>
-                {
-                    anniversary?.map((i, elem) => {
-
-                        return (
-
-                            <>
-
-                                <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                                    <CardContent>
-
-                                        <div className='row'>
-                                            <div className='col-sm-4'>
-                                                <Avatar className='avatar_img' alt={i.name} src={BASE_URL + "/" + i.image} />
-                                            </div>
-                                            <div className='col-sm-8'>
-                                                {i.name}
-                                                <div className="difference pt-1">
-                                                    {moment(i.date_of_joining).format("MMM DD, YYYY")}
+                                            <div className='row'>
+                                                <div className='col-sm-4'>
+                                                    <Avatar className='avatar_img' alt={item.name} src={BASE_URL + "/" + item.image} />
 
                                                 </div>
-                                                <div className="difference pt-2">
-                                                    <b>{i.difference} </b> Anniversary
+                                                <div className='col-sm-8'>
+                                                    {item.name}
+                                                    <div>
+                                                        {newDate2}</div>
                                                 </div>
                                             </div>
-                                        </div>
 
 
-                                    </CardContent>
-                                </Card>
-                            </>
-                        )
-                    })
-                }
+                                        </CardContent>
+                                    </Card>
+                                </>
+                            )
+                        })
+                    }
 
-            </Box>
+                    <h6 className='mt-4'><b>Upcomming Work Anniversary's </b></h6>
+                    {
+                        anniversary?.map((i, elem) => {
 
-            {/* Sidebar end */}
+                            return (
+
+                                <>
+
+                                    <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                        <CardContent>
+
+                                            <div className='row'>
+                                                <div className='col-sm-4'>
+                                                    <Avatar className='avatar_img' alt={i.name} src={BASE_URL + "/" + i.image} />
+                                                </div>
+                                                <div className='col-sm-8'>
+                                                    {i.name}
+                                                    <div className="difference pt-1">
+                                                        {moment(i.date_of_joining).format("MMM DD, YYYY")}
+
+                                                    </div>
+                                                    <div className="difference pt-2">
+                                                        <b>{i.difference} </b> Anniversary
+                                                    </div>
+                                                </div>
+                                            </div>
 
 
-        </Box >
+                                        </CardContent>
+                                    </Card>
+                                </>
+                            )
+                        })
+                    }
+
+                </Box>
+
+                {/* Sidebar end */}
+
+
+            </Box >
+
+
+        </>
     );
 }
 

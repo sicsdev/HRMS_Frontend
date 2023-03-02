@@ -147,7 +147,21 @@ function Header({ window, component }) {
 
     }, [])
 
+    const read_notification = (e, element) => {
+        e.preventDefault();
+        console.log(element, "ledsfds")
+        axios.put(`${BASE_URL}/is_mark_read/${element}`)
+            .then((res) => {
 
+                console.log(res.data, "ddddddddd")
+                navigate('/leaverequest')
+
+            })
+            .catch((err) => {
+                console.log(err);
+
+            });
+    }
 
     const drawer = (
         <div>
@@ -250,12 +264,14 @@ function Header({ window, component }) {
                         <Badge badgeContent={notificationsCount} color="primary">
                             <NotificationsIcon color="white" onClick={showModal} />
                         </Badge>
-                        <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
+                        <Modal title="Notifications" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
                             {notifications?.map((item, index) => {
                                 return <>
 
                                     <div className={item.is_read ? "notificationCard" : "notificationCard unReadNotification"}>
-                                        {item.type == "pending" ? `${item.userId.name} ${Notification['pending']}` : item.type == "approved" ? `` : ``}</div>
+                                        {/* {item.type == "pending" ? `${item.userId.name} ${Notification['pending']}` : item.type == "approved" ? `` : ``} */}
+                                        <p onClick={(e) => { read_notification(e, item._id) }}>{item.is_read == false ? `${item.userId.name} ${Notification['pending']}` : ""} </p>
+                                    </div>
                                 </>
                             })}
 

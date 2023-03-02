@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Header from "../utils/header";
 import { UserOutlined } from '@ant-design/icons';
 import Avatar from '@mui/material/Avatar';
@@ -15,7 +15,7 @@ import axios from "axios";
 import moment from "moment";
 import { BASE_URL } from "../../baseUrl";
 import { Navigate } from "react-router-dom";
-
+import { LoaderContext } from '../../App.js'
 
 const bull = (
     <Box
@@ -27,7 +27,7 @@ const bull = (
 );
 
 function Profile() {
-
+    const { showLoader, hideLoader } = useContext(LoaderContext)
     const [profile, setProfile] = useState('');
 
     const [diff, setDiff] = useState();
@@ -47,7 +47,7 @@ function Profile() {
 
     useEffect(() => {
 
-
+        showLoader()
         let authtokens = localStorage.getItem("authtoken");
         let token = {
             headers: {
@@ -68,7 +68,10 @@ function Profile() {
                 })
                 .catch((err) => {
                     console.log(err);
-                });
+                }).finally(() => {
+
+                    hideLoader()
+                })
         }
 
 

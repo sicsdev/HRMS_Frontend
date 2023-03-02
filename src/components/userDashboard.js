@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -35,7 +35,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
+import { LoaderContext } from '../App.js'
 
 const drawerWidth = 340;
 
@@ -57,7 +57,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 
 function UserDashboard(props) {
-
+    const { showLoader, hideLoader } = useContext(LoaderContext)
     const navigate = useNavigate();
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -230,7 +230,7 @@ function UserDashboard(props) {
 
 
     useEffect(() => {
-
+        showLoader()
         let authtokens = localStorage.getItem("authtoken");
         let token = {
             headers: {
@@ -252,7 +252,10 @@ function UserDashboard(props) {
                 })
                 .catch((err) => {
                     console.log(err);
-                });
+                }).finally(() => {
+
+                    hideLoader()
+                })
 
         }
 
