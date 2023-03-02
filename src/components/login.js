@@ -4,8 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from "../baseUrl";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LoadingOutlined } from '@ant-design/icons';
+
 
 const Login = () => {
+  const [btnDisabled, setbtnDisabled] = useState(false)
   const navigate = useNavigate();
 
   const [data, setData] = useState({
@@ -26,15 +29,12 @@ const Login = () => {
   }
 
   const add = () => {
+    setbtnDisabled(true)
     const { email, password } = data;
-
     if (!email || !password) {
       toast.error("Email or Password is required")
       return
     }
-
-    // const {email, password} = data
-
     const config = {
       header: {
         "Content-Type": "application/json",
@@ -44,7 +44,6 @@ const Login = () => {
     axios
       .post(`${BASE_URL}/login`, data)
       .then((res) => {
-        setData(res.data)
         toast.success("Login Successfully")
         localStorage.setItem("authtoken", res.data.authtoken);
         if (res.data.user.role == 2 || res.data.user.role == 1) {
@@ -60,8 +59,10 @@ const Login = () => {
         console.log(err);
         toast.error(err?.response?.data?.msg)
 
-      });
-    setData({ email: "", password: "" })
+      })
+      .finally(()=>{
+        setbtnDisabled(false)
+      })
   }
 
   return (
@@ -106,13 +107,14 @@ const Login = () => {
 
 
 
-                  <input
+                  <button
                     type="submit"
                     name="submit"
                     className="form-control formtext mt-4"
                     value="Login" onClick={add}
+                    disabled={btnDisabled}
 
-                  />
+                  >{btnDisabled&& <LoadingOutlined style={{ fontSize: 24 }} spin />} Submit</button>
 
                 </div>
               </div>
