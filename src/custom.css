@@ -3,3 +3,6 @@
     padding: 8px 16px;
     margin-top: 15px;
 }
+.cursur-disabled{
+    cursor: not-allowed;
+}
