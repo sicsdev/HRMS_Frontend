@@ -61,7 +61,7 @@ const Login = () => {
 
 
       })
-      .finally(()=>{
+      .finally(() => {
         setbtnDisabled(false)
       })
 
@@ -116,7 +116,7 @@ const Login = () => {
                     value="Login" onClick={add}
                     disabled={btnDisabled}
 
-                  >{btnDisabled&& <LoadingOutlined style={{ fontSize: 24 }} spin />} Submit</button>
+                  >{btnDisabled && <LoadingOutlined style={{ fontSize: 24 }} spin />} Submit</button>
 
                 </div>
               </div>
