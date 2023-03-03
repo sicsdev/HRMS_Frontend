@@ -49,6 +49,7 @@ function LeaveRequest() {
             navigate('/')
         }
         else {
+             showLoader()
             let authtokens = localStorage.getItem("authtoken");
             let token = {
                 headers: {
@@ -124,72 +125,73 @@ function LeaveRequest() {
         <>
             <Header />
             <ToastContainer></ToastContainer>
-            {request ?
-                <Box
-                    component="main"
-                    sx={{ flexGrow: 1, p: 3, width: { sm: `calc(95 % - ${drawerWidth}px)` } }}
-                >
-                    <Toolbar />
-                    <Typography paragraph>
 
-                        <h5 className="mt-4"><b>Leave Requests</b></h5>
-                        <div className="leave request1">
-                            <h6 className="sick_border"> Sick/Casual Leave Requests</h6>
-                            <div className="col-sm-8 mt-4">
-                                <table class="table ">
-                                    <thead>
-                                        <th>Emp Id</th>
-                                        <th>Name</th>
-                                        <th>Leave Type</th>
+            <div className="static_width layout">
+                <div className="container">
+                    <h5 className="page-heading"><b>Leave Requests</b></h5>
+                    <div className="leave request1">
+                        <h6 className="sick-leave-title-border"> Sick/Casual Leave Requests</h6>
+                        <div className="col-sm-8 mt-4">
+                            <table class="table ">
+                                <thead>
+                                    <th>Emp Id</th>
+                                    <th>Name</th>
+                                    <th>Leave Type</th>
 
-                                        <th>From Date</th>
-                                        <th>To Date</th>
+                                    <th>From Date</th>
+                                    <th>To Date</th>
 
-                                        <th>Reason</th>
-                                    </thead>
-                                    {request.length > 0 ?
-                                        <tbody>
+                                    <th>Reason</th>
+                                </thead>
+                                {request && request.length > 0 ?
+                                    <tbody>
 
-                                            {
-                                                request.map((element) => {
-                                                    return (
-                                                        <>
-                                                            <tr>
-                                                                <td>{element.userId?.emp_id}</td>
-                                                                <td>{element.userId?.name}</td>
-                                                                <td>{element.leave?.name}</td>
-                                                                <td>{element?.from_date}</td>
-                                                                <td>{element?.to_date}</td>
-                                                                <td>{element?.reason}</td>
+                                        {
+                                            request.map((element) => {
+                                                return (
+                                                    <>
+                                                        <tr>
+                                                            <td>{element.userId?.emp_id}</td>
+                                                            <td>{element.userId?.name}</td>
+                                                            <td>{element.leave?.name}</td>
+                                                            <td>{element?.from_date}</td>
+                                                            <td>{element?.to_date}</td>
+                                                            <td>{element?.reason}</td>
 
-                                                                {element.status == "approved" ? <td> <CheckIcon className="right" /></td>
-                                                                    : element.status == "pending" ?
-                                                                        <>
-                                                                            <td><CheckIcon className="not_approve" onClick={(e) => { list(e, element.userId.id, element.leave.name, element._id) }} /></td>
-                                                                            <td> <CloseIcon onClick={(e) => { cancel_request(e, element.userId.id, element._id) }} /></td>
-                                                                        </>
+                                                            {element.status == "approved" ? <td> <button className="approved-btn-disabled" disabled>Approved</button></td>
+                                                                : element.status == "pending" ?
+                                                                    <>
+                                                                        <td>
+                                                                            {/* <CheckIcon className="not_approve" onClick={(e) => { list(e, element.userId.id, element.leave.name, element._id) }} /> */}
+                                                                            <button className="approved-btn" onClick={(e) => { list(e, element.userId.id, element.leave.name, element._id) }}>Approve</button>
+                                                                        </td>
+                                                                        <td>
+                                                                            {/* <CloseIcon onClick={(e) => { cancel_request(e, element.userId.id, element._id) }} /> */}
+                                                                            <button className="deny-btn" onClick={(e) => { cancel_request(e, element.userId.id, element._id) }} >Deny</button>
+                                                                        </td>
+                                                                    </>
 
-                                                                        : <td><CloseIcon className="reject" /></td>
-                                                                }
-                                                            </tr>
-                                                        </>
-                                                    )
-                                                })
-                                            }
+                                                                    : <td><button className="deny-btn-disabled" disabled>Rejected</button></td>
+                                                            }
+                                                        </tr>
+                                                    </>
+                                                )
+                                            })
+                                        }
 
 
-                                        </tbody>
-                                        :
-                                        <h5 className="leave_no_found">No Record Found</h5>
-                                    }
-                                </table>
-                            </div>
+                                    </tbody>
+                                    :
+                                    <h5 className="leave_no_found">No Record Found</h5>
+                                }
+                            </table>
                         </div>
+                    </div>
+                </div>
 
-                    </Typography>
-                </Box>
-                : ''
-            }
+            </div>
+
+
         </>
     )
 }

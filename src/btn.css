@@ -1,0 +1,42 @@
+.approved-btn {
+    color: #fff;
+    background: #49C110;
+    border: none;
+    padding: 4px 25px;
+}
+
+
+
+.deny-btn {
+    color: #fff;
+    background: #DE3C45;
+    border: none;
+    padding: 4px 20px;
+}
+
+.approved-btn-disabled {
+    background: #49C110;
+    border: none;
+    cursor: not-allowed;
+    color: #fff;
+    padding: 4px 20px;
+    opacity: 0.8;
+}
+
+.deny-btn-disabled {
+    background: #DE3C45;
+    border: none;
+    color: #fff;
+    cursor: not-allowed;
+    padding: 4px 24px;
+    opacity: 0.8;
+}
+
+.newpost_btn {
+    background: #2373B2;
+    color: #fff;
+    border: none;
+    padding: 8px 40px;
+    float: right;
+}
+

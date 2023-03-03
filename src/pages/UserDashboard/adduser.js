@@ -119,107 +119,78 @@ const AddUser = () => {
   return (
 
     <>
-
       <Header />
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 3 }}
-      >
-        <Toolbar />
-        <Typography paragraph>
+      <div className="static_width layout">
+        <div className=" layout add-UserLayout">
+          <div className="container">
+            <h2 className="add-user-heading">Add Employee</h2>
 
-          <div className=" layout add-UserLayout">
-            <div className="container">
-              <h2 className="add-user-heading">Add Employee</h2>
-
-              <form onSubmit={handlesubmit}>
-                <div className="row justify-content-between custom-row">
-                  <div className="col-md-4">
-                    <label className="addUserLabel">Employee Name</label>
-                    <input type="text" className="form-control add_userInput" onChange={values} name="name"
-                      value={newuser.name} placeholder="Enter Employee Name" />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="addUserLabel">Email Id</label>
-                    <input className="form-control add_userInput" onChange={values}
-                      value={newuser.email} placeholder="Enter Email Id" type="email" name=
-                      "email" />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="addUserLabel">Password</label>
-                    <input className="form-control add_userInput" onChange={values}
-                      value={newuser.first_login} placeholder="Enter Password" type="string" name="first_login" />
-                  </div>
+            <form onSubmit={handlesubmit}>
+              <div className="row justify-content-between custom-row">
+                <div className="col-md-3">
+                  <label className="addUserLabel">Employee Name</label>
+                  <input type="text" className=" add_userInput" onChange={values} name="name"
+                    value={newuser.name} placeholder="Enter Employee Name" />
                 </div>
-                <div className="row justify-content-between custom-row">
-                  <div className="col-md-4">
-                    <label className="addUserLabel">Date Of Birth</label>
-                    <input className="form-control add_userInput" onChange={values}
-                      value={newuser.dob} type="date" placeholder="Enter Date Of Birth" name="dob" />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="addUserLabel">Phone No</label>
-                    <input className="form-control add_userInput" onChange={values}
-                      value={newuser.phonenumber} placeholder="Enter Phone No" type="phone" name="phonenumber" />
-                  </div>
-                  <div className="col-md-4">
-                    <label className="addUserLabel">Employee ID</label>
-                    <input className=" form-control add_userInput" onChange={values}
-                      value={newuser.emp_id}
-                      placeholder="Enter Employee ID" type="string" name="emp_id" />
-                  </div>
+                <div className="col-md-3">
+                  <label className="addUserLabel">Email Id</label>
+                  <input className=" add_userInput" onChange={values}
+                    value={newuser.email} placeholder="Enter Email Id" type="email" name=
+                    "email" />
                 </div>
-                <div className="row  custom-row">
-                  <div className="col-md-4">
-                    <label className="addUserLabel">Date Of Joining</label>
-                    <input className="form-control add_userInput" onChange={values} value={newuser.date_of_joining} placeholder="Enter Date Of Joining" type="date" name="date_of_joining" />
-                  </div>
-                  <div className="col-md-4">
-                    <label className=" addUserLabel">Designation</label>
-                    <select className="form-control add_userInput" name="designation" onChange={values}
-                      value={newuser.designation}>
-                      <option selected>Select Designation</option>
-                      <option value="Full Stack Developer">Full Stack Developer</option>
-                      <option value="Php Developer">Php Developer</option>
-                      <option value="Designer">Designer</option>
-                      <option value="SEO">SEO</option>
-                      <option value="BDE">BDE</option>
-                      <option value="HR">HR</option>
-
-                    </select>
-                    {/* <input className="add_userInput" onChange={values} value={newuser.designation} placeholder="Enter Designation" type="date" /> */}
-                  </div>
+                <div className="col-md-3">
+                  <label className="addUserLabel">Password</label>
+                  <input className=" add_userInput" onChange={values}
+                    value={newuser.first_login} placeholder="Enter Password" type="string" name="first_login" />
                 </div>
-                <input type="submit" className="add-employee-btn" value="Add Employee" onClick={add} />
-              </form>
-            </div>
+              </div>
+              <div className="row justify-content-between custom-row">
+                <div className="col-md-3">
+                  <label className="addUserLabel">Date Of Birth</label>
+                  <input className=" add_userInput" onChange={values}
+                    value={newuser.dob} type="date" placeholder="Enter Date Of Birth" name="dob" />
+                </div>
+                <div className="col-md-3">
+                  <label className="addUserLabel">Phone No</label>
+                  <input className=" add_userInput" onChange={values}
+                    value={newuser.phonenumber} placeholder="Enter Phone No" type="phone" name="phonenumber" />
+                </div>
+                <div className="col-md-3">
+                  <label className="addUserLabel">Employee ID</label>
+                  <input className=" add_userInput" onChange={values}
+                    value={newuser.emp_id}
+                    placeholder="Enter Employee ID" type="string" name="emp_id" />
+                </div>
+              </div>
+              <div className="row  custom-row last-row">
+                <div className="col-md-3">
+                  <label className="addUserLabel">Date Of Joining</label>
+                  <input className=" add_userInput" onChange={values} value={newuser.date_of_joining} placeholder="Enter Date Of Joining" type="date" name="date_of_joining" />
+                </div>
+                <div className="col-md-3">
+                  <label className=" addUserLabel">Designation</label>
+                  <select className="add_userInput" name="designation" onChange={values}
+                    value={newuser.designation}>
+                    <option selected>Select Designation</option>
+                    <option value="Full Stack Developer">Full Stack Developer</option>
+                    <option value="Php Developer">Php Developer</option>
+                    <option value="Designer">Designer</option>
+                    <option value="SEO">SEO</option>
+                    <option value="BDE">BDE</option>
+                    <option value="HR">HR</option>
 
+                  </select>
+                  {/* <input className="add_userInput" onChange={values} value={newuser.designation} placeholder="Enter Designation" type="date" /> */}
+                </div>
+              </div>
+              <input type="submit" className="add-employee-btn" value="Add Employee" onClick={add} />
+            </form>
           </div>
 
-
-
-
-
-
-
-
-
-
-        </Typography>
-      </Box >
-
-
-
-
-
+        </div>
+      </div>
 
     </>
-
-
-
-
-
-
   );
 
 

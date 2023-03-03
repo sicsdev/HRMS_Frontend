@@ -16,6 +16,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from "../../baseUrl";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 0;
@@ -40,19 +41,20 @@ function ApplyLeave() {
     };
 
     const wrapperStyle = {
-        width: 300,
+        width: 500,
         border: `1px solid ${token.colorBorderSecondary}`,
         borderRadius: token.borderRadiusLG,
     };
 
     const [leavevalue, setLeaveValue] = useState([]);
-    const [pendingLeave, setPendingLeave] = useState('');
+    const [pendingLeave, setPendingLeave] = useState({});
 
     const [submitval, setSubmitVal] = useState({
         leave: "",
         reason: "",
         from_date: "",
-        to_date: ""
+        to_date: "",
+        leave_type: ''
     });
 
 
@@ -63,10 +65,57 @@ function ApplyLeave() {
 
 
     const values = (e) => {
-        console.log(submitval)
 
         setSubmitVal({ ...submitval, [e.target.name]: e.target.value });
 
+    }
+    const handleChangeLeave = (e) => {
+        console.log(e.target.value)
+        if (e.target.value == 'Earned Leave') {
+            let leaveData = pendingLeave?.leave
+            console.log(leaveData)
+            if (!leaveData?.earned_leave || leaveData?.earned_leave < 3) {
+                toast.error("You should have minimum three earned leave")
+                return
+            }
+        }
+        let tmp = { ...submitval }
+        tmp.leave = e.target.value
+        setSubmitVal({ ...tmp })
+    }
+    const handleChangeLeaveType = (e) => {
+        if (!submitval.leave) {
+            toast.error("Please Select Leave First")
+            return
+        }
+        let leave_type = e.target.value
+        console.log(submitval.leave, leave_type)
+        if (submitval.leave == 'Earned Leave' && leave_type == 'Half Day') {
+            toast.error("You cannot avail Earned leave as Half Day")
+            return
+        }
+        let tmp = { ...submitval }
+        tmp.leave_type = e.target.value
+        setSubmitVal({ ...tmp })
+
+    }
+    const handleChangeDateFrom = (e) => {
+        if (!submitval.leave || !submitval.leave) {
+            toast.error("Please Select Above Fields")
+            return
+        }
+        let tmp = { ...submitval }
+        tmp.from_date = e.target.value
+        setSubmitVal({ ...tmp })
+    }
+    const handleChangeDateTo = (e) => {
+        if (!submitval.leave || !submitval.leave || !submitval.from_date) {
+            toast.error("Please Select Above Fields")
+            return
+        }
+        let tmp = { ...submitval }
+        tmp.to_date = e.target.value
+        setSubmitVal({ ...tmp })
     }
 
     useEffect(() => {
@@ -145,16 +194,16 @@ function ApplyLeave() {
     }
     const add = () => {
 
-
-        const { reason, from_date, to_date, leave } = submitval;
-
-        if (!reason || !from_date || !leave || !to_date) {
-
-            toast.error("All fields are required")
+        const { reason, from_date, to_date, leave, leave_type } = submitval;
+        console.log(submitval)
+        if (!reason || !from_date || !leave || !leave_type) {
+            toast.error("All fields are required1")
             return
         }
-
-
+        if (leave_type == 'Full Day' && !to_date) {
+            toast.error("Please Input To Date")
+            return
+        }
         let authtokens = localStorage.getItem("authtoken");
         let token = {
             headers: {
@@ -173,8 +222,9 @@ function ApplyLeave() {
             .catch((err) => {
                 console.log(err);
 
-            });
-        setSubmitVal({ leave: "", reason: "", from_date: "", to_date: "" })
+            }).finally(() => {
+                setSubmitVal({ leave: "", reason: "", from_date: "", to_date: "" })
+            })
     }
 
 
@@ -190,19 +240,19 @@ function ApplyLeave() {
                         <div className="row avail-leaves-card-row">
                             <div className="col-md-4">
                                 <div className=" avail-leaves-card">
-                                    <div className="count">  {pendingLeave.leave?.casual_leave >= 0 ? pendingLeave.leave?.casual_leave : 0}</div>
+                                    <div className="count">  {pendingLeave?.leave?.casual_leave >= 0 ? pendingLeave.leave?.casual_leave : 0}</div>
                                     <div className="heading">Casual Leaves Available</div>
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className=" avail-leaves-card">
-                                    <div className="count"> {pendingLeave.leave?.sick_leave >= 0 ? pendingLeave.leave?.sick_leave : 0}</div>
+                                    <div className="count"> {pendingLeave?.leave?.sick_leave >= 0 ? pendingLeave.leave?.sick_leave : 0}</div>
                                     <div className="heading">Sick Leaves Available</div>
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className=" avail-leaves-card">
-                                    <div className="count"> 3</div>
+                                    <div className="count"> {pendingLeave?.leave?.earned_leave ? pendingLeave.leave?.earned_leave : 0}</div>
                                     <div className="heading">Earned Leaves Available</div>
                                 </div>
                             </div>
@@ -214,35 +264,20 @@ function ApplyLeave() {
                                     <form onSubmit={handleSubmit} >
 
                                         <div className="form-group" align="left">
-                                            <label>Type Of Leave</label>
-                                            <select id="dino-select" className="form-control" name="leave" onChange={values} value={submitval.leave} required>
-                                                <option>Select Leave</option>
-                                                <optgroup label="Half Day">
-
-                                                    {
-                                                        leavevalue.map((item) => {
-
-                                                            if (item.category == 'half day') {
-                                                                return (
-                                                                    <option value={item._id}>{item.name} </option>
-                                                                )
-                                                            }
-                                                        })
-                                                    }
-                                                </optgroup>
-
-                                                <optgroup label="Full Day">
-
-                                                    {
-                                                        leavevalue.map((item) => {
-                                                            if (item.category == 'full day') {
-                                                                return (
-                                                                    <option value={item._id}>{item.name} </option>
-                                                                )
-                                                            }
-                                                        })
-                                                    }
-                                                </optgroup>
+                                            <label>Leave</label>
+                                            <select id="dino-select" className="add_userInput" name="leave" onChange={handleChangeLeave} value={submitval.leave} required>
+                                                <option  >Select Leave</option>
+                                                <option value="Casual Leave">Casual Leave</option>
+                                                <option value="Sick Leave">Sick Leave</option>
+                                                <option value="Earned Leave">Earned Leave</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group" align="left">
+                                            <label>Leave Type</label>
+                                            <select id="dino-select" className="add_userInput" name="leave_type" onChange={handleChangeLeaveType} value={submitval.leave_type} required>
+                                                <option value=''>Select Leave Type</option>
+                                                <option value="Full Day">Full Day</option>
+                                                <option value="Half Day">Half Day</option>
                                             </select>
                                         </div>
 
@@ -250,11 +285,11 @@ function ApplyLeave() {
                                             <label>From Date</label>
                                             <input
                                                 type="date"
-                                                className="form-control formtext date"
-
+                                                className="add_userInput formtext date"
+                                                min={moment(new Date()).format('YYYY-MM-DD')}
                                                 placeholder="From Date"
                                                 name="from_date"
-                                                onChange={values}
+                                                onChange={handleChangeDateFrom}
 
                                                 value={submitval.from_date}
 
@@ -264,12 +299,12 @@ function ApplyLeave() {
                                             <label>To Date</label>
                                             <input
                                                 type="date"
-                                                className="form-control formtext date"
-
+                                                className={submitval.leave_type == 'Half Day' ? "add_userInput formtext date cursur-disabled" : 'add_userInput formtext date '}
+                                                min={submitval.from_date ? moment(submitval.from_date).format('YYYY-MM-DD') : moment(new Date()).format('YYYY-MM-DD')}
                                                 placeholder="To Date"
                                                 name="to_date"
-                                                onChange={values}
-                                                // disabled={submitval.leave == 'full_leave' ? false : true}
+                                                onChange={handleChangeDateTo}
+                                                disabled={submitval.leave_type == 'Half Day' ? true : false}
 
                                                 value={submitval.to_date}
 
@@ -279,7 +314,7 @@ function ApplyLeave() {
 
                                         <div className="form-group " align="left">
                                             <label>Reason</label>
-                                            <textarea className="form-control" name="reason" onChange={values} value={submitval.reason}></textarea>
+                                            <textarea className="add_userInput" name="reason" onChange={values} value={submitval.reason}></textarea>
                                         </div>
 
                                         <div className="submit-btn mt-2" align="right">

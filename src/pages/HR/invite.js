@@ -110,60 +110,48 @@ function Invite() {
 
     return (
         <>
-            {show ?
-                <>
-                    <Header />
-                    <ToastContainer></ToastContainer>
+            <Header />
+            <ToastContainer></ToastContainer>
+            <div className="static_width layout">
+                <div className="container">
+                    <h5 className="mt-4"><b> Employee Invite</b></h5>
+                    <div className="leave">
 
-                    <Box
-                        component="main"
-                        sx={{ flexGrow: 1, p: 3 }}
-                    >
-                        <Toolbar />
-                        <Typography paragraph>
-
-                            <h5 className="mt-4"><b> Employee Invite</b></h5>
-                            <div className="leave">
-
-                                <div className="col-sm-8 mt-4">
-                                    <table class="table ">
-                                        <thead>
-                                            <th>Emp Id</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Action</th>
-                                        </thead>
-                                        {show.length > 0 ?
-                                            <tbody>
-                                                {
-                                                    request.map((element) => {
-                                                        return (
-                                                            <>
-                                                                <tr>
-                                                                    <td>{element.name}</td>
-                                                                    <td>{element.emp_id}</td>
-                                                                    <td>{element.email}</td>
-                                                                    {element.invite_status == "true" ? <td> <CheckIcon /></td>
-                                                                        : <td><button className="btn btn-primary inviteBtn" onClick={(e) => { invite(e, element._id) }}>Invite Link</button></td>
-                                                                    }
-                                                                </tr>
-                                                            </>
-                                                        )
-                                                    })
-                                                }
-                                            </tbody>
-                                            :
-                                            <h5 className="no_invite_found">No Record Found</h5>
+                        <div className="col-sm-8 mt-4">
+                            <table class="table ">
+                                <thead>
+                                    <th>Emp Id</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Action</th>
+                                </thead>
+                                {show.length > 0 ?
+                                    <tbody>
+                                        {
+                                            request.map((element) => {
+                                                return (
+                                                    <>
+                                                        <tr>
+                                                            <td>{element.name}</td>
+                                                            <td>{element.emp_id}</td>
+                                                            <td>{element.email}</td>
+                                                            {element.invite_status == "true" ? <td> <CheckIcon /></td>
+                                                                : <td><button className="btn btn-primary inviteBtn" onClick={(e) => { invite(e, element._id) }}>Invite Link</button></td>
+                                                            }
+                                                        </tr>
+                                                    </>
+                                                )
+                                            })
                                         }
-                                    </table>
-                                </div>
-                            </div>
-
-                        </Typography>
-                    </Box>
-                </>
-                : ""
-            }
+                                    </tbody>
+                                    :
+                                    <h5 className="no_invite_found">No Record Found</h5>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </>
     )
 }
