@@ -100,7 +100,7 @@ function Leaves() {
                                                 <>
 
                                                     <tr>
-                                                        <td>  {element.leave.name}</td>
+                                                        <td>  {element.leave}</td>
                                                         <td>  {element.from_date} - {element.to_date}</td>
 
                                                         <td>  {element.status}</td>
