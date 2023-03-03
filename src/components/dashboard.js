@@ -40,7 +40,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 import Badge from '@mui/material/Badge';
-import { Notification ,diffBetweenTwoDates} from "../helpers/constant";
+import { Notification, diffBetweenTwoDates } from "../helpers/constant";
 import { LoaderContext } from '../App.js'
 
 
@@ -526,7 +526,7 @@ function Dashboard(props) {
 
     }, [])
     const read_notification = (e, element) => {
-        return
+
         e.preventDefault();
         console.log(element, "ledsfds")
         axios.put(`${BASE_URL}/is_mark_read/${element}`)
@@ -694,11 +694,11 @@ function Dashboard(props) {
                                         </div>
                                     </>
                                 })}
-                                {notifications?.length<1?
-                                <>
-                                <div className="noDataFound">No Notification Found</div>
-                                </>
-                                :''}
+                                {notifications?.length < 1 ?
+                                    <>
+                                        <div className="noDataFound">No Notification Found</div>
+                                    </>
+                                    : ''}
 
 
                             </Modal>
