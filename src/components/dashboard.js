@@ -40,7 +40,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 import Badge from '@mui/material/Badge';
-import { Notification } from "../helpers/constant";
+import { Notification ,diffBetweenTwoDates} from "../helpers/constant";
 import { LoaderContext } from '../App.js'
 
 
@@ -69,13 +69,7 @@ function Dashboard(props) {
     const { window } = props;
 
     const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [editevent, setEditEvent] = useState(false);
-    const [eventtitle, setEventTitle] = useState('')
-    const [eventdescription, setEventDescription] = useState('')
-    const [eventdate, setEventDate] = useState('')
-    const [eventstarttime, setEventStartTime] = useState('')
-    const [eventendtime, setEventEndTime] = useState('')
-    const [eventid, setEventId] = useState('')
+
 
 
     const handleDrawerToggle = () => {
@@ -181,16 +175,7 @@ function Dashboard(props) {
 
     }
 
-
-
-
     const nameHandleOk = () => {
-
-
-        const description = addpost;
-        const title = addtitle
-        const image = imageval;
-
         const formData = new FormData();
         formData.append("title", addtitle);
         formData.append("description", addpost);
@@ -249,6 +234,8 @@ function Dashboard(props) {
             .then((res) => {
 
                 setProfileVal(res.data)
+                setRole(res.data.role)
+
                 setLogin(true)
 
             })
@@ -373,40 +360,40 @@ function Dashboard(props) {
     };
 
 
-    useEffect(() => {
-        const config = {
-            header: {
-                "Content-Type": "application/json",
-            },
-        };
-        axios.get(`${BASE_URL}/all_employee`, config)
-            .then((res) => {
-                setAllEmployee(res.data)
+    // useEffect(() => {
+    //     const config = {
+    //         header: {
+    //             "Content-Type": "application/json",
+    //         },
+    //     };
+    //     axios.get(`${BASE_URL}/all_employee`, config)
+    //         .then((res) => {
+    //             setAllEmployee(res.data)
 
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
 
-    }, [])
+    // }, [])
 
-    useEffect(() => {
-        const config = {
-            header: {
-                "Content-Type": "application/json",
-            },
-        };
-        axios.get(`${BASE_URL}/event`, config)
-            .then((res) => {
-                setEvent(res.data)
+    // useEffect(() => {
+    //     const config = {
+    //         header: {
+    //             "Content-Type": "application/json",
+    //         },
+    //     };
+    //     axios.get(`${BASE_URL}/event`, config)
+    //         .then((res) => {
+    //             setEvent(res.data)
 
 
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
 
-    }, [])
+    // }, [])
 
     const post_id = (e, element, isLike) => {
         e.preventDefault();
@@ -539,6 +526,7 @@ function Dashboard(props) {
 
     }, [])
     const read_notification = (e, element) => {
+        return
         e.preventDefault();
         console.log(element, "ledsfds")
         axios.put(`${BASE_URL}/is_mark_read/${element}`)
@@ -609,60 +597,7 @@ function Dashboard(props) {
 
     ];
 
-    const delete_event = (e, id) => {
-        e.preventDefault();
 
-        axios.delete(`${BASE_URL}/delete_event/${id}`)
-            .then((res) => {
-                const filter_data = event.filter((val) => val._id != id)
-                setEvent(filter_data)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-    }
-
-    const editEventShow = (e, element) => {
-        e.preventDefault();
-        setEventTitle(element.event_title)
-        setEventDate(element.event_date)
-        setEventDescription(element.event_description)
-        setEventStartTime(element.start_time)
-        setEventEndTime(element.end_time)
-        setEventId(element._id)
-        setEditEvent(true);
-    };
-
-
-    const editeventOk = () => {
-
-        const event_title = eventtitle;
-        const event_description = eventdescription;
-        const event_date = eventdate;
-        const start_time = eventstarttime;
-        const end_time = eventendtime;
-
-
-
-        axios.put(`${BASE_URL}/edit_event/${eventid}`, { event_title: eventtitle, event_description: eventdescription, event_date: eventdate, start_time: eventstarttime, end_time: eventendtime })
-            .then((res) => {
-
-                setEventTitle(res.data.event_title)
-                setEventDate(res.data.event_date)
-                setEventDescription(res.data.event_description)
-                setEventStartTime(res.data.start_time)
-                setEventEndTime(res.data.end_time)
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        setEditEvent(false);
-    };
-
-    const editEventCancel = () => {
-        setEditEvent(false);
-    };
 
     const showEditComment = (e, id, element) => {
         e.preventDefault();
@@ -738,6 +673,10 @@ function Dashboard(props) {
                             <Link to="/applyleave">
                                 <img src="apply Leave.svg" ></img>  &nbsp;    Apply Leave  &nbsp;
                             </Link>
+
+                        </div>
+                        <div className="notificationIcon">
+
                             <Badge badgeContent={notificationsCount} color="primary">
                                 <NotificationsIcon color="white" onClick={showModal} />
                             </Badge>
@@ -750,13 +689,20 @@ function Dashboard(props) {
                                             {/* {item.type == "pending" ? `${item.userId.name} ${Notification['pending']}` : item.type == "approved" ? `` : ``} */}
 
                                             <p onClick={(e) => { read_notification(e, item._id) }}>{item.is_read == false ? `${item.userId.name} ${Notification['pending']}` : ""} </p>
+                                            {/* <p className="timespan">{diffBetweenTwoDates(item.createdAt,new Date())}</p> */}
                                         </div>
                                     </>
                                 })}
+                                {notifications?.length<1?
+                                <>
+                                <div className="noDataFound">No Notification Found</div>
+                                </>
+                                :''}
 
 
                             </Modal>
                         </div>
+
                         <div className="avatar_dropdown">
 
                             <Avatar alt={profileval.name} src={BASE_URL + "/" + profileval.image} />
@@ -820,21 +766,20 @@ function Dashboard(props) {
                         {drawer}
                     </Drawer>
                 </Box>
-
                 <Box
                     component="main"
                     sx={{ p: 3, width: { sm: `calc(100% - ${drawerWidth * 2}px)` } }}
                 >
                     <Toolbar />
                     <div className='row announcement_main'>
-                        <div className='col-sm-10 announcement'>
-                            <Typography>
+                        <div className='col-7 col-sm-8 announcement'>
+                            <h5 className="page-heading">
                                 Announcements
-                            </Typography>
+                            </h5>
                         </div>
-                        <div className='col-sm-2'>
+                        <div className='col-4'>
                             <Typography>
-                                <button className='btn btn-primary newpost_btn' onClick={nameShowModal}>New Post</button>
+                                <button className='newpost_btn' onClick={nameShowModal}>New Post</button>
 
 
                                 <Modal
@@ -892,7 +837,6 @@ function Dashboard(props) {
                         </div>
                     </div>
                     {
-
                         allpost.map((element, index) => {
                             return (
 
@@ -1052,76 +996,11 @@ function Dashboard(props) {
                             )
                         })
                     }
-
-
-
                 </Box>
-
                 <Box
                     component="sidebar"
-                    sx={{ width: { sm: drawerWidth } }}
+                    // sx={{ width: { sm: drawerWidth } }}
                     className="sidebar ">
-                    {/* <h4 className="mt-4">Events<button className="btn btn-primary btn-sm top"><Link to="/event" className="events ">Add Event</Link></button></h4>
-                {
-                    event.map((i) => {
-
-                        return (
-
-                            <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                                <CardContent>
-
-
-                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                        <h5><b>{i.event_title} </b>
-                                            <ModeEditIcon className="event_edit_icon" onClick={(e) => { editEventShow(e, i) }}></ModeEditIcon>
-                                            <Modal
-                                                open={editevent}
-                                                title="Edit Comment"
-                                                onOk={editeventOk}
-                                                onCancel={editEventCancel}
-                                                footer={[
-
-                                                    <Button key="submit" type="primary" onClick={editeventOk}>
-                                                        Edit
-                                                    </Button>,
-
-                                                ]}
-                                            >
-
-                                                <label>Event Title</label>
-                                                <input type="text" name="event_title" value={eventtitle} onChange={(e) => setEventTitle(e.target.value)} className="form-control" />
-                                                <label>Event Date</label>
-                                                <input type="date" name="event_date" value={eventdate} onChange={(e) => setEventDate(e.target.value)} className="form-control" />
-                                                <label>Event Description</label>
-                                                <textarea className="form-control event_description" onChange={(e) => setEventDescription(e.target.value)} name="event_description" value={eventdescription} ></textarea>
-                                                <label>Start Time</label>
-                                                <input type="text" name="start_time" value={eventstarttime} onChange={(e) => setEventStartTime(e.target.value)} className="form-control" />
-                                                <label>End Time</label>
-                                                <input type="text" name="end_time" value={eventendtime} onChange={(e) => setEventEndTime(e.target.value)} className="form-control" />
-
-                                            </Modal>
-
-
-                                            <DeleteOutlineIcon onClick={(e) => { delete_event(e, i._id) }}></DeleteOutlineIcon></h5>
-                                        <h6>  {moment(i.event_date).format("MMM DD, YYYY")}</h6>
-                                        <Divider className='event_divider' />
-                                    </Typography>
-
-                                    <Typography sx={{ fontSize: 14, }} color="text.secondary" gutterBottom>
-                                        {i.event_description}
-                                    </Typography>
-                                    <Typography className="mt-3">
-                                        < p>{i.start_time} - {i.end_time}</p>
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-
-                        )
-                    })
-                } */}
-
-
-
                     <h6 className='mt-4'><b>Upcomming Birthday's</b></h6>
 
                     {
@@ -1173,7 +1052,6 @@ function Dashboard(props) {
                                                     {i.name}
                                                     <div className="difference pt-1">
                                                         {moment(i.date_of_joining).format("MMM DD, YYYY")}
-
                                                     </div>
                                                     <div className="difference pt-2">
                                                         <b>{i.difference} </b> Anniversary
