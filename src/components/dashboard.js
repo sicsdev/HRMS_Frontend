@@ -741,7 +741,8 @@ function Dashboard(props) {
                             <Badge badgeContent={notificationsCount} color="primary">
                                 <NotificationsIcon color="white" onClick={showModal} />
                             </Badge>
-                            {/* {notifications.length > 0 ? */}
+
+
                             <Modal title="Notifications" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
                                 {notifications?.map((item, index) => {
                                     return <>
@@ -756,6 +757,7 @@ function Dashboard(props) {
 
 
                             </Modal>
+
                         </div>
                         <div className="avatar_dropdown">
 

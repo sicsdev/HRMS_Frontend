@@ -58,8 +58,144 @@ function Leaves() {
 
     return (
         <>
-
             <Header />
+
+            <div className='static_width layout'>
+                <div className='row leave-balance'>
+
+                    <div className='col-md-8'>
+                        <div className='row'>
+                            <div className='col-md-4'>
+                                <h4 className='leave_quota'>Leave Balance</h4>
+                            </div>
+
+
+                        </div>
+                        <div className='row'>
+                            <div className='col-md-4'>
+                                <p></p>
+                            </div>
+                            <div className='col-md-4'>
+                                <p>pending</p>
+                            </div>
+                            <div className='col-md-4'>
+                                <p>availed</p>
+                            </div>
+
+                        </div>
+                        <div className='row'>
+                            <div className='col-md-4'>
+                                <p>Casual Leave</p>
+                            </div>
+                            <div className='col-md-4'>
+                                <p>jhb</p>
+                            </div>
+                            <div className='col-md-4'>
+                                <p>jhb</p>
+                            </div>
+
+                        </div>
+                        <div className='row'>
+                            <div className='col-md-4'>
+                                <p>Sick Leave</p>
+                            </div>
+                            <div className='col-md-4'>
+                                <p>jhb</p>
+                            </div>
+                            <div className='col-md-4'>
+                                <p>jhb</p>
+                            </div>
+
+                        </div>
+                        <div className='row'>
+                            <div className='col-md-4'>
+                                <p>Earned Leave</p>
+                            </div>
+                            <div className='col-md-4'>
+                                <p>jhb</p>
+                            </div>
+                            <div className='col-md-4'>
+                                <p>jhb</p>
+                            </div>
+
+                        </div>
+
+
+
+                        <div className='row'>
+                            <div className='col-md-4'>
+                                <h4 className='leave_quota'>Leave Requests</h4>
+                            </div>
+
+
+                            {
+                                leavevalue.map((element, index) => {
+                                    return (
+                                        <>
+                                            <div className='row'>
+                                                <div className='col-md-4'>
+                                                    <p> {element.leave.name}</p>
+                                                </div>
+                                                <div className='col-md-4'>
+                                                    <p>{element.from_date} - {element.to_date}</p>
+                                                </div>
+                                                <div className='col-md-4'>
+                                                    <p>{element.status}</p>
+                                                </div>
+
+                                            </div>
+
+                                        </>
+
+
+                                    )
+                                })
+
+                            }
+                        </div>
+
+                    </div>
+
+                    <div className='col-md-4'>
+                        <button className='btn dotted-btn-class main-btn-cstm'>Leave Approval</button>
+                        <button className='btn btn-primary main-btn-cstm'>Apply Leave</button>
+                        <div className='row calender-colom'>
+                            <h3>Calendar</h3>
+                            <div style={wrapperStyle} className="mt-4" >
+
+                                <Calendar fullscreen={false} onPanelChange={onPanelChange} />
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+
+                <div className='row mt-8'>
+
+
+                </div>
+
+                <div className='row mt-4'>
+
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+            {/* <Header />
 
             <Toolbar />
             <Typography paragraph>
@@ -118,7 +254,7 @@ function Leaves() {
                 </div>
 
             </Typography>
-
+ */}
 
 
 

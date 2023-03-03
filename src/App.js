@@ -16,7 +16,8 @@ import Event from './pages/HR/Event';
 import Invite from './pages/HR/invite';
 import AddProjectPage from './pages/HR/addproject';
 import AddTeamPage from './pages/HR/addteam';
-import Loader from './loader/loader'
+import Loader from './loader/loader';
+import EmployeeList from './pages/HR/employeeList';
 import { createContext, useState } from "react";
 
 export const LoaderContext = createContext();
@@ -65,7 +66,7 @@ function App() {
                 <Route path="/addproject" element={<AddProjectPage />} />
                 <Route path="/project/:code" element={<AddTeamPage />} />
                 <Route path="/Admin_leave_request" element={<LeaveRequests />} />
-
+                <Route path="/employee_list" element={<EmployeeList />} />
               </Routes>
             </div>
 
