@@ -2,6 +2,15 @@
   text-align: center;
 }
 
+.page-heading {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  color: #000000;
+}
+
 /* .MuiDrawer-paper {
   width: 22.5% !important;
 } */
@@ -123,6 +132,7 @@ body {
   text-align: left;
   margin-top: 110px;
   font-weight: 600;
+  padding-right: 25px;
 }
 
 input.form-control.add_userInput {
@@ -140,9 +150,6 @@ select.form-control.add_userInput {
   width: 275px;
 }
 
-.newpost_btn {
-  width: 140px;
-}
 
 .announcement {
   text-align: left;
@@ -290,8 +297,8 @@ fieldset.MuiOutlinedInput-notchedOutline {
 }
 
 .static_width {
-  /* width: calc(100% - 240px) !important; */
-  max-width: 80% !important;
+  width: calc(100% - 240px) !important;
+  /* max-width: 80% !important; */
   margin-left: auto !important;
 }
 
@@ -307,8 +314,8 @@ fieldset.MuiOutlinedInput-notchedOutline {
 }
 
 .static_width.layout {
-  padding-left: 25px;
-  margin-top: 100px;
+  /* padding-left: 25px; */
+  margin-top: 75px;
 }
 
 
@@ -328,11 +335,11 @@ fieldset.MuiOutlinedInput-notchedOutline {
 }
 
 .leave_request {
-  margin-top: 15%;
+  /* margin-top: 15%; */
 }
 
 .leave.request1 {
-  margin-left: 5%;
+  /* margin-left: 5%; */
 
 }
 
@@ -353,8 +360,8 @@ fieldset.MuiOutlinedInput-notchedOutline {
 }
 
 .calender {
-  margin-left: 15%;
-  margin-top: 10%;
+  /* margin-left: 15%;
+  margin-top: 10%; */
 }
 
 .row.mt-4.rise {
@@ -388,7 +395,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
 }
 
 .apply-leaves-main-layout {
-  padding-right: 8%;
+  /* padding-right: 8%; */
 }
 
 .avail-leaves-card .count {
@@ -403,23 +410,31 @@ fieldset.MuiOutlinedInput-notchedOutline {
   font-weight: 400;
   line-height: 24px;
 }
+
 @media screen and (max-width:548px) {
-.applyleavedec img{
-  display: none;
-}
-.applyleavedec{
-  /* text */
-}
+  .applyleavedec img {
+    display: none;
+  }
+
+  .applyleavedec {
+    /* text */
+  }
 }
 
 @media screen and (max-width:767px) {
   .static_width {
-    margin-left: 0 !important;
+    /* margin-left: 0 !important;
     max-width: 100% !important;
+    width: 100%; */
+    width: auto !important;
+  }
+
+  .static_width.layout {
+    padding-left: 0 !important;
   }
 
   .apply-leaves-main-layout {
-    padding-right: 0;
+    padding-right: 25;
   }
 
   p.MuiTypography-root.MuiTypography-body1.MuiTypography-paragraph {
@@ -577,6 +592,21 @@ ul.MuiList-root.MuiList-padding li a {
   border-radius: 5px;
 }
 
+.notificationCard p {
+
+  margin: 0;
+}
+
+.notificationCard .timespan {
+  text-align: end;
+  font-size: 11px;
+}
+
+.noDataFound {
+  text-align: center;
+  padding: 10px;
+}
+
 .unReadNotification {
   background: #e0e0e0;
   cursor: pointer;
@@ -648,14 +678,17 @@ a.events {
 
 .sidebar_header_user {
   height: 100vh;
-  margin-top: 35px !important;
+  /* margin-top: 35px !important; */
+  overflow-x: hidden;
 }
 
 .add_userInput {
   background: rgba(0, 0, 0, 0.1);
   border: none;
   height: 40px;
-  padding: 15px;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 11px;
   margin-top: 11px;
   font-family: 'Poppins';
   font-style: normal;
@@ -663,7 +696,7 @@ a.events {
 }
 
 .add-UserLayout {
-  padding-left: 45px;
+  /* padding-left: 45px; */
 }
 
 .add-UserLayout .addUserLabel {
@@ -676,8 +709,19 @@ a.events {
 }
 
 .add-UserLayout .custom-row {
+  /* margin-bottom: 30px; */
+
+}
+
+.add-project .custom-row input select,
+.add-UserLayout .custom-row input {
   margin-bottom: 30px;
 
+}
+
+.add-project .last-row,
+.add-UserLayout .last-row {
+  gap: 160px;
 }
 
 .add-UserLayout .add-employee-btn {
@@ -689,6 +733,13 @@ a.events {
   float: left;
 }
 
+.edit-profile-btn {
+  background: #2373B2;
+  color: #fff;
+  border: none;
+  padding: 5px 40px;
+}
+
 .add-user-heading {
   font-family: 'Poppins';
   font-style: normal;
@@ -696,14 +747,14 @@ a.events {
   font-size: 20px;
   line-height: 30px;
   color: #000000;
-  margin-bottom: 10%;
+  margin-bottom: 2%;
   text-align: left;
 
 
 }
 
 .layout.mt-5 {
-  margin-left: 7%;
+  /* margin-left: 7%; */
 }
 
 .comment-header {
@@ -756,6 +807,8 @@ input.add-project-btn {
   margin-top: 45px;
   background: #2373B2;
   color: white;
+  border: none;
+  padding: 5px 24px;
 }
 
 .edit-profile h4 {

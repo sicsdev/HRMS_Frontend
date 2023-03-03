@@ -1,4 +1,6 @@
 import './App.css';
+import './btn.css'
+import './custom.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/login';
 import Dashboard from './components/dashboard';

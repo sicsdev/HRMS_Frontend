@@ -108,29 +108,22 @@ const AddProject = () => {
 
   return (
     <>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 3 }}
-      >
-        <Toolbar />
-        <Typography paragraph className="add_project">
+      <div className="add-project static_width layout">
+        <div className="container">
           <h4 className="pt-3"><b>New Project</b></h4>
           <input type="file" className="pt-4"
             placeholder="Upload Logo"
           ></input>
-
-
-
           <div className="layout mt-5">
             <form onSubmit={handleSubmit}>
-              <div className="row mt-4">
-                <div className="col-md-4">
+              <div className="row justify-content-between custom-row">
+                <div className="col-md-3">
                   <label className="addUserLabel">Project Name</label><br />
-                  <input type="text" name="project_name" value={addproject.project_name} onChange={values} className="form-control add_userInput" placeholder="Enter Project Name" />
+                  <input type="text" name="project_name" value={addproject.project_name} onChange={values} className="add_userInput" placeholder="Enter Project Name" />
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-3">
                   <label className="addUserLabel">Department</label><br />
-                  <select className="form-control add_userInput" value={addproject.department} onChange={values} name="department">
+                  <select className=" add_userInput" value={addproject.department} onChange={values} name="department">
 
                     <option selected>Select Department</option>
                     <option value="Development">Development</option>
@@ -141,9 +134,9 @@ const AddProject = () => {
 
                   </select>
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-3">
                   <label className="addUserLabel">Status</label><br />
-                  <select className="form-control add_userInput" value={addproject.status} onChange={values} name="status">
+                  <select className="add_userInput" value={addproject.status} onChange={values} name="status">
 
                     <option selected>Select Status</option>
                     <option value="Pending">Pending</option>
@@ -154,14 +147,14 @@ const AddProject = () => {
                   </select>
                 </div>
               </div>
-              <div className="row mt-3">
-                <div className="col-md-4 mt-4">
+              <div className="row  custom-row last-row">
+                <div className="col-md-3">
                   <label className="addUserLabel">Client Name</label><br />
-                  <input className="form-control add_userInput" value={addproject.client_name} onChange={values} placeholder="Enter Client Name" type="text" name="client_name" />
+                  <input className=" add_userInput" value={addproject.client_name} onChange={values} placeholder="Enter Client Name" type="text" name="client_name" />
                 </div>
-                <div className="col-md-4 mt-4">
+                <div className="col-md-3">
                   <label className="addUserLabel">Launch Date</label><br />
-                  <input type="date" name="launch_date" className=" form-control add_userInput"
+                  <input type="date" name="launch_date" className=" add_userInput"
                     value={addproject.launch_date} onChange={values} placeholder="Enter Launch Date" />
                 </div>
 
@@ -172,81 +165,9 @@ const AddProject = () => {
               </div>
             </form>
           </div>
+        </div>
+      </div>
 
-
-        </Typography>
-        {/* <Typography paragraph className="add_teams">
-          <form onSubmit={handleSubmit}>
-          <h5>Teams
-            <button className="add_team_button" onClick={showAddTeam}>Add Team</button>
-            <Modal
-              open={openaddteam}
-              title="add team"
-              onOk={showHandleOk}
-              onCancel={showCancel}
-              footer={[
-
-                <Button key="submit" type="primary" onClick={add_team} >
-                  Add Team
-                </Button>,
-
-              ]}
-            >
-              <label className="mb-2">Team Name</label>
-              <input type="text" className="form-control"onChange={setValue}  name="team_name" placeholder="Enter Team Name" />
-              <label className="mt-2 pb-2">Member</label>
-
-              <div className="app_team">
-
-                <div className="dropdown-container ">
-                  <Select
-                    options={employee}
-                    placeholder="Select Member"
-                    value={selectedOptions}
-                    onChange={handleSelect}
-                    isSearchable={true}
-                    isMulti
-                  />
-                </div>
-              </div>
-
-              <label className="mt-2 pb-2">Team Leader</label>
-              <select className="form-control" name="team_leader_id" onChange={(e) => setTeamLeader(e.target.value)} value={teamleader}>
-                <option>Select Team Leader</option>
-                {
-                  employee.map((element, index) => {
-                    return (
-                      <>
-
-                        <option value={element.value}>{element.label}</option>
-                      </>
-                    )
-                  })
-                }
-
-              </select>
-
-            </Modal>
-          </h5>
-          <div className="row mt-5 add-team_border">
-            <div className="col-md-4">
-              <div className="row">
-                <div className="col-md-6">
-                  <h5><b>Development Team</b></h5>
-                  <h6>3 Members</h6>
-                  <h6>Edit Members</h6>
-                </div>
-                <div className="col-md-6">
-                  <Avatar></Avatar>
-                  <Avatar></Avatar>
-                  <Avatar></Avatar>
-                </div>
-              </div>
-            </div>
-          </div>
-          </form>
-        </Typography> */}
-      </Box>
     </>
   )
 }

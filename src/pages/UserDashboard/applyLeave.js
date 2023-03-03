@@ -40,7 +40,7 @@ function ApplyLeave() {
     };
 
     const wrapperStyle = {
-        width: 300,
+        width: 500,
         border: `1px solid ${token.colorBorderSecondary}`,
         borderRadius: token.borderRadiusLG,
     };
@@ -215,7 +215,7 @@ function ApplyLeave() {
 
                                         <div className="form-group" align="left">
                                             <label>Type Of Leave</label>
-                                            <select id="dino-select" className="form-control" name="leave" onChange={values} value={submitval.leave} required>
+                                            <select id="dino-select" className="add_userInput" name="leave" onChange={values} value={submitval.leave} required>
                                                 <option>Select Leave</option>
                                                 <optgroup label="Half Day">
 
@@ -250,7 +250,7 @@ function ApplyLeave() {
                                             <label>From Date</label>
                                             <input
                                                 type="date"
-                                                className="form-control formtext date"
+                                                className="add_userInput formtext date"
 
                                                 placeholder="From Date"
                                                 name="from_date"
@@ -264,7 +264,7 @@ function ApplyLeave() {
                                             <label>To Date</label>
                                             <input
                                                 type="date"
-                                                className="form-control formtext date"
+                                                className="add_userInput formtext date"
 
                                                 placeholder="To Date"
                                                 name="to_date"
@@ -279,7 +279,7 @@ function ApplyLeave() {
 
                                         <div className="form-group " align="left">
                                             <label>Reason</label>
-                                            <textarea className="form-control" name="reason" onChange={values} value={submitval.reason}></textarea>
+                                            <textarea className="add_userInput" name="reason" onChange={values} value={submitval.reason}></textarea>
                                         </div>
 
                                         <div className="submit-btn mt-2" align="right">
