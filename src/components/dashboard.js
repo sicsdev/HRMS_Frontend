@@ -526,7 +526,6 @@ function Dashboard(props) {
 
     }, [])
     const read_notification = (e, element) => {
-
         e.preventDefault();
         console.log(element, "ledsfds")
         axios.put(`${BASE_URL}/is_mark_read/${element}`)
@@ -678,7 +677,7 @@ function Dashboard(props) {
                         <div className="notificationIcon">
 
                             <Badge badgeContent={notificationsCount} color="primary">
-                                <NotificationsIcon color="white" onClick={showModal} />
+                                <NotificationsIcon color="white" style={{ "cursor": "pointer" }} onClick={showModal} />
                             </Badge>
 
 

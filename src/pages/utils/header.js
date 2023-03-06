@@ -33,7 +33,6 @@ import { Notification } from '../../helpers/constant'
 const drawerWidth = 240;
 
 function Header({ window, component }) {
-
     const navigate = useNavigate();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [profile, setProfile] = useState('');
@@ -150,8 +149,7 @@ function Header({ window, component }) {
         console.log(element, "ledsfds")
         axios.put(`${BASE_URL}/is_mark_read/${element}`)
             .then((res) => {
-
-                console.log(res.data, "ddddddddd")
+                console.log(res.data)
                 navigate('/leaverequest')
 
             })
