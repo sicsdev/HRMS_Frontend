@@ -270,6 +270,11 @@ function Header({ window, component }) {
                                     </div>
                                 </>
                             })}
+                            {notifications?.length < 1 ?
+                                <>
+                                    <div className="noDataFound">No Notification Found</div>
+                                </>
+                                : ''}
 
 
                         </Modal>
