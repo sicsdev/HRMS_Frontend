@@ -116,7 +116,7 @@ function ApplyLeave() {
         var a = moment(e.target.value);
         var b = moment(submitval.from_date);
         let diff = a.diff(b, 'days') + 1
-        if (diff > 3) {
+        if (diff != 3) {
             toast.error("You can apply Only Three Earned Leaves")
             return
         }
@@ -227,9 +227,9 @@ function ApplyLeave() {
             .post(`${BASE_URL}/apply_leave`, submitval, token)
             .then((res) => {
                 toast.success("Leave Applied")
-                // setTimeout(() => {
-                //     navigate('/leaves')
-                // }, 3000)
+                setTimeout(() => {
+                    navigate('/leaves')
+                }, 3000)
             })
             .catch((err) => {
                 toast.error(err.response?.data?.msg ?? "Something went wrong")
