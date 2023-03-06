@@ -121,7 +121,7 @@ function Profile() {
                     <div className="container">
 
                         <div className="row ">
-                            <div className="col-sm-8">
+                            <div className="col-md-8">
                                 <div className="row">
                                     <div className="col-md-4">
                                         {/* <Avatar size={130} src={BASE_URL + "/" + profile.image} /> */}
@@ -153,7 +153,7 @@ function Profile() {
                                 </div>
 
                             </div>
-                            <div className="col-sm-4">
+                            <div className="col-md-4">
                                 <div style={wrapperStyle} className="mt-4" >
 
                                     <Calendar fullscreen={false} onPanelChange={onPanelChange} />
@@ -166,7 +166,7 @@ function Profile() {
                             </div>
                             <div className="row ">
                                 <label className="text-start mt-3"><b>My Projects</b></label>
-                                <div className="col-sm-3 mt-4">
+                                <div className="col-md-3 mt-4">
                                     <Card sx={{ minWidth: 50 }}>
                                         <CardContent>
                                             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -191,7 +191,7 @@ function Profile() {
 
 
                                 </div>
-                                <div className="col-sm-5 mt-4">
+                                <div className="col-md-5 mt-4">
                                     <Card sx={{ minWidth: 50 }}>
                                         <CardContent>
                                             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -216,8 +216,8 @@ function Profile() {
 
 
                                 </div>
-                                <div className="col-sm-3">
-                                    <label className="text-start"><b>Leave Quota</b></label>
+                                <div className="col-md-3">
+                                    <label className="text-start mt-3"><b>Leave Quota</b></label>
 
 
                                     <>

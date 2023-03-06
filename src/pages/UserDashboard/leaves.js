@@ -145,7 +145,7 @@ function Leaves() {
 
                     </div>
                     <div className='row mt-4'>
-                        <div className='col-sm-6'>
+                        <div className='col-md-6'>
                             <div className="calender">
                                 <h5 className='text-start'>Calendar</h5>
                                 <div style={wrapperStyle} className="mt-4" >
@@ -160,27 +160,32 @@ function Leaves() {
 
                             </div>
                         </div>
-                        <div className='col-sm-6 mt-4'>
+                        <div className='col-md-6 mt-4'>
                             <div className='leave_request'>
                                 <h5>Leave Requests</h5>
                                 <table class="table mt-4">
 
                                     <tbody>
                                         {
-                                            leavevalue.map((element, index) => {
-                                                return (
-                                                    <>
+                                            leavevalue?.length > 0 ?
+                                                leavevalue.map((element, index) => {
+                                                    return (
+                                                        <>
 
-                                                        <tr>
-                                                            <td>  {element.leave}</td>
-                                                            <td>  {moment(element.from_date).format('DD MMM YYYY')} - {moment(element.to_date).format('DD MMM YYYY')}</td>
+                                                            <tr>
+                                                                <td>  {element.leave}</td>
+                                                                <td>  {moment(element.from_date).format('DD MMM YYYY')} - {moment(element.to_date).format('DD MMM YYYY')}</td>
 
-                                                            <td style={{ fontWeight: 600 }} className={element.status == 'pending' ? 'pending-text' : element.status == 'approved' ? 'approved-text' : 'rejected-text'}>  {element.status}</td>
-                                                        </tr>
+                                                                <td style={{ fontWeight: 600 }} className={element.status == 'pending' ? 'pending-text' : element.status == 'approved' ? 'approved-text' : 'rejected-text'}>  {element.status}</td>
+                                                            </tr>
 
-                                                    </>
-                                                )
-                                            })
+                                                        </>
+                                                    )
+                                                })
+                                                :
+                                                <>
+                                                    <tr><td colspan="8"><h5 className="leave_no_found">No Record Found</h5></td></tr>
+                                                </>
 
                                         }
                                     </tbody>

@@ -60,7 +60,7 @@ const Login = () => {
         toast.error(err?.response?.data?.msg)
 
       })
-      .finally(()=>{
+      .finally(() => {
         setbtnDisabled(false)
       })
   }
@@ -68,14 +68,14 @@ const Login = () => {
   return (
     <>
       <ToastContainer></ToastContainer>
-      <div className="container">
+      <div className="container login-template">
         <div className="row mt-4">
-          <div className="col-sm-6">
-            <img src="logo.png"></img>
+          <div className="col-md-6">
+            <img src="logo.png"  className="logo-image"></img>
             <img src="loginimg.gif" className="gif_file" height="400" />
           </div>
-          <div className="col-sm-6 mt-3">
-            <h5 className="employee_page p-1">EMPLOYEE LOGIN</h5>
+          <div className="col-md-6 mt-3" style={{ "align-self": "center" }}>
+            <h5 className="employee_page ">EMPLOYEE LOGIN</h5>
             <form onSubmit={handlesubmit} className="form_handle">
               <div className="form-login-wrapper">
                 <div className="form-group mt-4" align="left">
@@ -110,11 +110,11 @@ const Login = () => {
                   <button
                     type="submit"
                     name="submit"
-                    className="form-control formtext mt-4"
+                    className="login-form-btn"
                     value="Login" onClick={add}
                     disabled={btnDisabled}
 
-                  >{btnDisabled&& <LoadingOutlined style={{ fontSize: 24 }} spin />} Submit</button>
+                  >{btnDisabled && <LoadingOutlined style={{ fontSize: 24 }} spin />} Submit</button>
 
                 </div>
               </div>

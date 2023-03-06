@@ -32,17 +32,69 @@
     margin-bottom: 15px;
     color: #000000;
 }
-.apply-leaves-main-layout .avail-leaves-card-row  .earn-leave-count{
+
+.apply-leaves-main-layout .avail-leaves-card-row .earn-leave-count {
     color: #E8BA18;
 }
-.apply-leaves-main-layout .avail-leaves-card-row  .sick-leave-count{
+
+.apply-leaves-main-layout .avail-leaves-card-row .sick-leave-count {
     color: #D724DB;
 }
-.apply-leaves-main-layout .avail-leaves-card-row  .casual-leave-count{
+
+.apply-leaves-main-layout .avail-leaves-card-row .casual-leave-count {
     color: #2373B2;
 }
 
 .leave_no_found {
     text-align: center;
     margin-top: 10%;
+}
+
+.login-template input {
+    background: #E6E6E6;
+    border: none;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 11px;
+    margin-top: 11px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+}
+
+.login-template .employee_page {
+    text-align: left;
+    border-left: 3px solid #2373B2;
+    padding: 10px;
+}
+
+.login-template button.login-form-btn {
+    background: #2373B2;
+    border: none;
+    color: #fff;
+    width: 100%;
+    padding: 8px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+}
+.login-template  .gif_file{
+    width: 100%;
+    /* float: left; */
+}
+.login-template  .logo-image{
+    /* width: 100%; */
+    float: left;
+}
+
+
+
+@media screen and (max-width:755px) {
+
+    .add-project .last-row,
+    .add-UserLayout .last-row {
+        gap: 0px;
+    }
 }

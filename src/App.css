@@ -74,6 +74,7 @@ body {
 
 .left_nav .MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft {
   background: #000;
+  overflow: auto;
 }
 
 .nav_divider {
@@ -147,7 +148,7 @@ select.form-control.add_userInput {
   width: 275px;
 } */
 .card_events {
-  width: 275px;
+  /* width: 275px; */
 }
 
 

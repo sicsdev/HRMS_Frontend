@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { LoaderContext } from '../../App.js'
+import { Table } from 'antd'
+import moment from 'moment'
 
 
 const ITEM_HEIGHT = 48;
@@ -34,6 +36,87 @@ function LeaveRequest() {
     const navigate = useNavigate();
     const [request, setRequest] = useState([]);
     const [value, setValue] = useState([]);
+    const [leaveData, setLeaveData] = useState([])
+
+    const columns = [
+        {
+            title: 'Emp ID',
+            dataIndex: ['userId', 'emp_id'],
+            key: 'name',
+
+        },
+        {
+            title: 'Name',
+            dataIndex: ['userId', 'name'],
+            key: 'name',
+        },
+        {
+            title: 'Date From',
+            // dataIndex: 'from_date',
+            render: (_, record) => (
+                moment(record.from_date).format('DD MMM YYYY')
+            ),
+            key: 'from_date',
+        },
+
+        {
+            title: 'Date To',
+            key: 'to_date',
+            render: (_, record) => (
+                moment(record?.to_date).isValid() ?
+                    <>
+                        {moment(record?.to_date).format('DD MMM YYYY')}
+                    </>
+                    :
+                    <>
+                    N/A
+                    </>
+            ),
+        },
+        {
+            title: 'Leave',
+            dataIndex: 'leave',
+            key: 'leave',
+        },
+        {
+            title: 'Days',
+            key: 'leave_type',
+            render: (_, record) => (
+
+                moment(record?.to_date).diff(moment(record?.from_date), 'days') + 1 > 0 ?
+                    <>{moment(record?.to_date).diff(moment(record?.from_date), 'days') + 1 + " Days"}</>
+                    :
+                    <>half Day</>
+            ),
+        },
+        {
+            title: 'Reason',
+            dataIndex: 'reason',
+            key: 'reason',
+        },
+
+        {
+            title: '',
+            key: 'action',
+            render: (_, record) => (
+                // <Space size="middle">
+                record.status == "approved" ? <td> <button className="approved-btn-disabled" disabled>Approved</button></td>
+                    : record.status == "pending" ?
+                        <>
+                            <td>
+                                {/* <CheckIcon className="not_approve" onClick={(e) => { list(e, element.userId.id, element.leave.name, element._id) }} /> */}
+                                <button className="approved-btn" onClick={(e) => { list(e, record.userId.id, record.leave.name, record._id) }}>Approve</button>
+                            </td>
+                            <td>
+                                {/* <CloseIcon onClick={(e) => { cancel_request(e, element.userId.id, element._id) }} /> */}
+                                <button className="deny-btn" onClick={(e) => { cancel_request(e, record.userId.id, record._id) }} >Deny</button>
+                            </td>
+                        </>
+
+                        : <button className="deny-btn-disabled" disabled>Rejected</button>
+            ),
+        },
+    ];
 
 
     const allLeaves = () => {
@@ -49,7 +132,7 @@ function LeaveRequest() {
             navigate('/')
         }
         else {
-             showLoader()
+            showLoader()
             let authtokens = localStorage.getItem("authtoken");
             let token = {
                 headers: {
@@ -63,6 +146,7 @@ function LeaveRequest() {
             axios.get(`${BASE_URL}/get_apply_leaves`, token)
                 .then((res) => {
                     setRequest(res.data)
+                    setLeaveData(res.data)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -83,7 +167,7 @@ function LeaveRequest() {
 
 
     const list = (e, id, item, apply_leave_id) => {
-        e.preventDefault();
+        // e.preventDefault();
 
 
 
@@ -132,62 +216,13 @@ function LeaveRequest() {
                     <h5 className="page-heading"><b>Leave Requests</b></h5>
                     <div className="leave request1">
                         <h6 className="sick-leave-title-border"> Sick/Casual Leave Requests</h6>
-                        <div className="col-sm-8 mt-4">
-                            <table class="table ">
-                                <thead>
-                                    <th>Emp Id</th>
-                                    <th>Name</th>
-                                    <th>Leave Type</th>
+                        {/* <div className="col-sm-8 mt-4"> */}
 
-                                    <th>From Date</th>
-                                    <th>To Date</th>
-
-                                    <th>Reason</th>
-                                </thead>
-                                {request && request.length > 0 ?
-                                    <tbody>
-
-                                        {
-                                            request.map((element) => {
-                                                return (
-                                                    <>
-                                                        <tr>
-                                                            <td>{element.userId?.emp_id}</td>
-                                                            <td>{element.userId?.name}</td>
-                                                            <td>{element.leave?.name}</td>
-                                                            <td>{element?.from_date}</td>
-                                                            <td>{element?.to_date}</td>
-                                                            <td>{element?.reason}</td>
-
-                                                            {element.status == "approved" ? <td> <button className="approved-btn-disabled" disabled>Approved</button></td>
-                                                                : element.status == "pending" ?
-                                                                    <>
-                                                                        <td>
-                                                                            {/* <CheckIcon className="not_approve" onClick={(e) => { list(e, element.userId.id, element.leave.name, element._id) }} /> */}
-                                                                            <button className="approved-btn" onClick={(e) => { list(e, element.userId.id, element.leave.name, element._id) }}>Approve</button>
-                                                                        </td>
-                                                                        <td>
-                                                                            {/* <CloseIcon onClick={(e) => { cancel_request(e, element.userId.id, element._id) }} /> */}
-                                                                            <button className="deny-btn" onClick={(e) => { cancel_request(e, element.userId.id, element._id) }} >Deny</button>
-                                                                        </td>
-                                                                    </>
-
-                                                                    : <td><button className="deny-btn-disabled" disabled>Rejected</button></td>
-                                                            }
-                                                        </tr>
-                                                    </>
-                                                )
-                                            })
-                                        }
-
-
-                                    </tbody>
-                                    :
-                                    <tr><td colspan="8"><h5 className="leave_no_found">No Record Found</h5></td></tr> 
-
-                                }
-                            </table>
-                        </div>
+                        <Table
+                            columns={columns}
+                            dataSource={leaveData}
+                        />
+                        {/* </div> */}
                     </div>
                 </div>
 

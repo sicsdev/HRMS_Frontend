@@ -176,7 +176,7 @@ function Header({ window, component }) {
                         <Link to="/leaverequest">Leave Request</Link>,
                         <Link to="/adduser">Add Employee</Link>,
                         <Link to="/invite">Employee List</Link>,
-                        <Link to="/addproject">Add Project</Link>,
+                        // <Link to="/addproject">Add Project</Link>,
                     ].map((text, index) => (
 
                         <ListItemButton>
