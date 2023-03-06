@@ -337,6 +337,10 @@ fieldset.MuiOutlinedInput-notchedOutline {
 .leave_request {
   /* margin-top: 15%; */
 }
+.leave_request table tr {
+  margin: 10px 0;
+  /* margin-top: 15%; */
+}
 
 .leave.request1 {
   /* margin-left: 5%; */
@@ -685,7 +689,7 @@ a.events {
 .add_userInput {
   background: rgba(0, 0, 0, 0.1);
   border: none;
-  height: 40px;
+  /* height: 40px; */
   width: 100%;
   margin-bottom: 20px;
   padding: 11px;

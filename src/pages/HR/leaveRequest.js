@@ -111,7 +111,8 @@ function LeaveRequest() {
 
         )
             .then((res) => {
-                toast.error("Leave Rejected")
+                toast.success("Leave Rejected")
+                allLeaves()
 
             })
             .catch((err) => {
@@ -182,7 +183,8 @@ function LeaveRequest() {
 
                                     </tbody>
                                     :
-                                    <h5 className="leave_no_found">No Record Found</h5>
+                                    <tr><td colspan="8"><h5 className="leave_no_found">No Record Found</h5></td></tr> 
+
                                 }
                             </table>
                         </div>
