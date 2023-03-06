@@ -1,9 +1,48 @@
 .sick-leave-title-border {
-    border-left: 2px solid #E8BA18;
+    border-left: 4px solid #E8BA18;
     padding: 8px 16px;
     margin-top: 15px;
 }
 
 .cursur-disabled {
     cursor: not-allowed;
+}
+
+.pending-text {
+    text-transform: capitalize;
+    color: #DE3C45;
+}
+
+.approved-text {
+    color: #49C110;
+    text-transform: capitalize;
+}
+
+.rejected-text {
+    color: #DE3C45;
+    text-transform: capitalize;
+}
+
+.page-heading {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 30px;
+    margin-bottom: 15px;
+    color: #000000;
+}
+.apply-leaves-main-layout .avail-leaves-card-row  .earn-leave-count{
+    color: #E8BA18;
+}
+.apply-leaves-main-layout .avail-leaves-card-row  .sick-leave-count{
+    color: #D724DB;
+}
+.apply-leaves-main-layout .avail-leaves-card-row  .casual-leave-count{
+    color: #2373B2;
+}
+
+.leave_no_found {
+    text-align: center;
+    margin-top: 10%;
 }

@@ -113,6 +113,13 @@ function ApplyLeave() {
             toast.error("Please Select Above Fields")
             return
         }
+        var a = moment(e.target.value);
+        var b = moment(submitval.from_date);
+        let diff = a.diff(b, 'days') + 1
+        if (diff != 3) {
+            toast.error("You can apply Only Three Earned Leaves")
+            return
+        }
         let tmp = { ...submitval }
         tmp.to_date = e.target.value
         setSubmitVal({ ...tmp })
@@ -140,9 +147,6 @@ function ApplyLeave() {
             axios.get(`${BASE_URL}/all_leave`, config)
                 .then((res) => {
                     setLeaveValue(res.data)
-
-
-
                 })
                 .catch((err) => {
                     console.log(err);
@@ -180,6 +184,12 @@ function ApplyLeave() {
 
 
     }, [])
+    const returnTwo = (value) => {
+        if (parseInt(value) < 10 && parseInt(value) > 1) {
+            return `0${value}`
+        }
+        return value
+    }
 
     const calculatePaidOff = (sick_leave, casual_leave) => {
 
@@ -197,7 +207,7 @@ function ApplyLeave() {
         const { reason, from_date, to_date, leave, leave_type } = submitval;
         console.log(submitval)
         if (!reason || !from_date || !leave || !leave_type) {
-            toast.error("All fields are required1")
+            toast.error("All fields are required")
             return
         }
         if (leave_type == 'Full Day' && !to_date) {
@@ -217,13 +227,16 @@ function ApplyLeave() {
             .post(`${BASE_URL}/apply_leave`, submitval, token)
             .then((res) => {
                 toast.success("Leave Applied")
-                navigate('/leaves')
+                setTimeout(() => {
+                    navigate('/leaves')
+                }, 3000)
             })
             .catch((err) => {
+                toast.error(err.response?.data?.msg ?? "Something went wrong")
                 console.log(err);
 
             }).finally(() => {
-                setSubmitVal({ leave: "", reason: "", from_date: "", to_date: "" })
+                // setSubmitVal({ leave: "", reason: "", from_date: "", to_date: "" })
             })
     }
 
@@ -237,25 +250,29 @@ function ApplyLeave() {
                 <Toolbar />
                 <div className="static_width layout apply-leaves-main-layout">
                     <div className="container margin-top">
+                        <h3 className="page-heading">Apply Leave</h3>
+
                         <div className="row avail-leaves-card-row">
                             <div className="col-md-4">
                                 <div className=" avail-leaves-card">
-                                    <div className="count">  {pendingLeave?.leave?.casual_leave >= 0 ? pendingLeave.leave?.casual_leave : 0}</div>
-                                    <div className="heading">Casual Leaves Available</div>
+                                    <div className="count earn-leave-count"> {returnTwo(pendingLeave?.leave?.earned_leave ? pendingLeave.leave?.earned_leave : 0)}</div>
+                                    <div className="heading">Earned Leaves Available</div>
                                 </div>
                             </div>
+
                             <div className="col-md-4">
                                 <div className=" avail-leaves-card">
-                                    <div className="count"> {pendingLeave?.leave?.sick_leave >= 0 ? pendingLeave.leave?.sick_leave : 0}</div>
+                                    <div className="count sick-leave-count"> {returnTwo(pendingLeave?.leave?.sick_leave >= 0 ? pendingLeave.leave?.sick_leave : 0)}</div>
                                     <div className="heading">Sick Leaves Available</div>
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className=" avail-leaves-card">
-                                    <div className="count"> {pendingLeave?.leave?.earned_leave ? pendingLeave.leave?.earned_leave : 0}</div>
-                                    <div className="heading">Earned Leaves Available</div>
+                                    <div className="count casual-leave-count">  {returnTwo(pendingLeave?.leave?.casual_leave >= 0 ? pendingLeave.leave?.casual_leave : 0)}</div>
+                                    <div className="heading">Casual Leaves Available</div>
                                 </div>
                             </div>
+
 
                         </div>
                         <div className="row">
@@ -314,14 +331,14 @@ function ApplyLeave() {
 
                                         <div className="form-group " align="left">
                                             <label>Reason</label>
-                                            <textarea className="add_userInput" name="reason" onChange={values} value={submitval.reason}></textarea>
+                                            <textarea placeholder="Specify Reason" rows="4" className="add_userInput" name="reason" onChange={values} value={submitval.reason} />
                                         </div>
 
                                         <div className="submit-btn mt-2" align="right">
                                             <input
                                                 type="submit"
                                                 name="submit"
-                                                className="btn btn-primary"
+                                                className="apply-leave-btn"
                                                 value="Apply Leave"
                                                 onClick={add}
                                             />
