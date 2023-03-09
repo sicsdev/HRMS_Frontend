@@ -116,7 +116,9 @@ function ApplyLeave() {
         var a = moment(e.target.value);
         var b = moment(submitval.from_date);
         let diff = a.diff(b, 'days') + 1
-        if (diff !=3) {
+
+        if (diff != 3) {
+
             toast.error("You can apply Only Three Earned Leaves")
             return
         }
