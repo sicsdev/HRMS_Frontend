@@ -68,7 +68,7 @@ function App() {
                 <Route path="/addproject" element={<AddProjectPage />} />
                 <Route path="/project/:code" element={<AddTeamPage />} />
                 <Route path="/Admin_leave_request" element={<LeaveRequests />} />
-                <Route path="/employee_list" element={<EmployeeList />} />
+                {/* <Route path="/employee_list" element={<EmployeeList />} /> */}
               </Routes>
             </div>
 
