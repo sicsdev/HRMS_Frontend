@@ -36,7 +36,7 @@ function Header({ window, component }) {
     const navigate = useNavigate();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [profile, setProfile] = useState('');
-    const [role, setRole] = useState(1)
+    const [role, setRole] = useState(false)
     const [notifications, setNotifications] = useState([])
     const [notificationsCount, setNotificationsCount] = useState(0)
 
@@ -146,11 +146,26 @@ function Header({ window, component }) {
 
     const read_notification = (e, element) => {
         e.preventDefault();
-        console.log(element, "ledsfds")
-        axios.put(`${BASE_URL}/is_mark_read/${element}`)
+        let authtokens = localStorage.getItem("authtoken");
+        if (!authtokens) {
+            navigate('/')
+        }
+        let display = {
+            headers: {
+                'token': authtokens,
+            }
+        }
+        axios.put(`${BASE_URL}/is_mark_read/${element}`, null, display)
             .then((res) => {
                 console.log(res.data)
-                navigate('/leaverequest')
+                if (res.data.redirect) {
+
+                    navigate('/leaverequest')
+                } else {
+                    navigate('/leaves')
+
+                }
+                handleCancel()
 
             })
             .catch((err) => {
@@ -205,6 +220,7 @@ function Header({ window, component }) {
 
 
                     :
+                    role == 0 ?
 
                     <List className='side_links'>
                         {[<Link to="/dashboard">Dashboard</Link>,
@@ -221,6 +237,8 @@ function Header({ window, component }) {
 
                         ))}
                     </List>
+                    :<>
+                    </>
             }
 
         </div >
@@ -266,7 +284,7 @@ function Header({ window, component }) {
 
                                     <div className={item.is_read ? "notificationCard" : "notificationCard unReadNotification"}>
                                         {/* {item.type == "pending" ? `${item.userId.name} ${Notification['pending']}` : item.type == "approved" ? `` : ``} */}
-                                        <p onClick={(e) => { read_notification(e, item._id) }}>{item.is_read == false ? `${item.userId.name} ${Notification['pending']}` : ""} </p>
+                                        <p onClick={(e) => { read_notification(e, item._id) }}>{`${item.userId.name} ${Notification[item.type]}`} </p>
                                     </div>
                                 </>
                             })}

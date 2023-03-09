@@ -2,8 +2,9 @@ import React, { useEffect, useState, useContext } from 'react';
 import Header from '../utils/header';
 import axios from 'axios';
 import { Dayjs } from 'dayjs';
-import { Calendar, theme, Badge } from 'antd';
-
+import { theme, Badge } from 'antd';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 import { CalendarMode } from 'antd/es/calendar/generateCalendar'
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -20,6 +21,9 @@ function Leaves() {
     const navigate = useNavigate();
     const [leavevalue, setLeaveValue] = useState([]);
 
+    const [sickLeaves, setSickLeaves] = useState([])
+    const [earnedLeaves, setEarnedLeaves] = useState([])
+    const [casualLeaves, setCasualLeaves] = useState([])
     const { token } = theme.useToken();
 
     const onPanelChange = (value, mode) => {
@@ -27,70 +31,44 @@ function Leaves() {
     };
 
     const wrapperStyle = {
-        width: "90%",
-        border: `1px solid ${token.colorBorderSecondary}`,
-        borderRadius: token.borderRadiusLG,
-    };
-    const getListData = (value) => {
-        let listData;
-        switch (value.date()) {
-            case 8:
-                listData = [
-                    {
-                        type: 'warning',
-                        content: 'This is warning event.',
-                    },
-                ];
-                break;
-            case 10:
-                listData = [
-                    {
-                        type: 'warning',
-                        content: 'This is warning event.',
-                    }
-                ];
-                break;
-            case 15:
-                listData = [
-                    {
-                        type: 'warning',
-                        content: 'This is warning event',
-                    },
-                ];
-                break;
-            default:
-        }
-        return listData || [];
-    };
-    const getMonthData = (value) => {
-        if (value.month() === 8) {
-            return 1394;
-        }
+        // width: "90%",
+        // border: `1px solid ${token.colorBorderSecondary}`,
+        // borderRadius: token.borderRadiusLG,
     };
 
-    const monthCellRender = (value) => {
-        const num = getMonthData(value);
-        return num ? (
-            <div className="notes-month">
-                <section>{num}</section>
-                <span>Backlog number</span>
-            </div>
-        ) : null;
-    };
-    const dateCellRender = (value) => {
-        const listData = getListData(value);
-        return (
-            // <ul className="events">
-            <>
-                {listData.map((item) => (
-                    <li key={item.content}>
-                        <Badge count={0} showZero color='#faad14' />
-                    </li>
-                ))}
-            </>
-            // </ul>
-        );
-    };
+    // function onFullRender(date) {
+    //     const day = date.date();
+    //     let style;
+    //     if (day === 1) {
+    //         style = { border: "1px solid #d9d9d9" };
+    //     }
+    //     else {
+    //         style = { border: "1px solid red" };
+    //     }
+    //     return <div style={style}>{day}</div>;
+    // }
+    useEffect(() => {
+        let tmp = [...leavevalue]
+        let sick = []
+        let casual = []
+        let earn = []
+        for (let x of tmp) {
+            if (x.leave == 'Casual Leave') {
+                sick.push(x.from_date)
+            }
+            if (x.leave == 'Sick Leave') {
+                casual.push(x.from_date)
+            }
+            if (x.leave == 'Earned Leave') {
+                earn.push(x.from_date)
+            }
+        }
+        setCasualLeaves([...casual])
+        setEarnedLeaves([...earn])
+        setSickLeaves([...sick])
+        console.log(casual,earn,sick,"flow")
+    }, [leavevalue])
+
 
 
     useEffect(() => {
@@ -133,7 +111,7 @@ function Leaves() {
                 <div className='container'>
                     <div className='row mt-3'>
                         <div className='col-md-10'>
-                            <h4 className='leave_quota'>Leave Quota</h4>
+                            <h4 className='page-heading'>Leave Quota</h4>
 
                         </div>
 
@@ -150,11 +128,46 @@ function Leaves() {
                                 <h5 className='text-start'>Calendar</h5>
                                 <div style={wrapperStyle} className="mt-4" >
 
-                                    <Calendar
+                                    {/* <Calendar
                                         // dateCellRender={dateCellRender}
                                         // monthCellRender={monthCellRender}
                                         fullscreen={false}
-                                        onPanelChange={onPanelChange} />
+                                        onPanelChange={onPanelChange}
+                                        dateFullCellRender={onFullRender}
+                                    /> */}
+                                    <Calendar
+                                        // style={{
+                                        //     "width": "100%",
+                                        //     "border-radius": "19px",
+                                        //     "border": "0.935089px solid #E5E5EF"
+                                        // }}
+                                        tileClassName={({ date, view }) => {
+                                            console.log(moment(date).format("YYYY-MM-DD"),"flow")
+                                            // if (
+                                            //     sickLeaves.find(
+                                            //         (x) => x === moment(date).format("YYYY-MM-DD")
+                                            //     )
+                                            // ) {
+                                            //     console.log("check")
+                                            //     return "sick-leave-highlight";
+                                            // }
+                                            if (
+                                                casualLeaves.find(
+                                                    (x) => x === moment(date).format("YYYY-MM-DD")
+                                                )
+                                            ) {
+                                                console.log("check123")
+                                                return "casual-leave-highlight";
+                                            }
+                                            // if (
+                                            //     earnedLeaves.find(
+                                            //         (x) => x === moment(date).format("YYYY-MM-DD")
+                                            //     )
+                                            // ) {
+                                            //     return "earn-leave-highlight";
+                                            // }
+                                        }}
+                                    />
 
                                 </div>
 
@@ -172,7 +185,7 @@ function Leaves() {
                                                     return (
                                                         <>
 
-                                                            <tr>
+                                                            <tr className='mt-4'>
                                                                 <td>  {element.leave}</td>
                                                                 <td>  {moment(element.from_date).format('DD MMM YYYY')} - {moment(element.to_date).format('DD MMM YYYY')}</td>
 

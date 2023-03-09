@@ -40,7 +40,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 import Badge from '@mui/material/Badge';
-import { Notification ,diffBetweenTwoDates} from "../helpers/constant";
+import { Notification, diffBetweenTwoDates } from "../helpers/constant";
 import { LoaderContext } from '../App.js'
 
 
@@ -545,7 +545,7 @@ function Dashboard(props) {
 
             {/* <Toolbar /> */}
             <List className="sidebar_header_user">
-                <img src="logo.png"></img>
+                <img src="logo.png"  height="auto"></img>
 
 
                 <Divider className='nav_divider' />
@@ -677,7 +677,7 @@ function Dashboard(props) {
                         <div className="notificationIcon">
 
                             <Badge badgeContent={notificationsCount} color="primary">
-                                <NotificationsIcon color="white" style={{"cursor":"pointer"}}  onClick={showModal} />
+                                <NotificationsIcon color="white" style={{ "cursor": "pointer" }} onClick={showModal} />
                             </Badge>
                             {/* {notifications.length > 0 ? */}
                             <Modal title="Notifications" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
@@ -692,11 +692,11 @@ function Dashboard(props) {
                                         </div>
                                     </>
                                 })}
-                                {notifications?.length<1?
-                                <>
-                                <div className="noDataFound">No Notification Found</div>
-                                </>
-                                :''}
+                                {notifications?.length < 1 ?
+                                    <>
+                                        <div className="noDataFound">No Notification Found</div>
+                                    </>
+                                    : ''}
 
 
                             </Modal>
@@ -716,8 +716,9 @@ function Dashboard(props) {
                                         id="demo-simple-select"
 
                                     >
-                                        <MenuItem className="aline" value={10}>
-                                            <Link to="/profile">Profile</Link></MenuItem>
+                                        <Link to="/profile">
+                                            <MenuItem className="aline" value={10}>Profile</MenuItem>
+                                        </Link>
 
                                         <MenuItem value={20} onClick={logout}>Logout</MenuItem>
 

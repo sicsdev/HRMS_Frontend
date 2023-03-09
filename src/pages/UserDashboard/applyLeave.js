@@ -247,9 +247,9 @@ function ApplyLeave() {
                 <Header />
                 <ToastContainer></ToastContainer>
 
-                <Toolbar />
+                {/* <Toolbar /> */}
                 <div className="static_width layout apply-leaves-main-layout">
-                    <div className="container margin-top">
+                    <div className="container ">
                         <h3 className="page-heading">Apply Leave</h3>
 
                         <div className="row avail-leaves-card-row">
