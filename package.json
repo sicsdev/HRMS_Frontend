@@ -20,6 +20,7 @@
     "moment": "^2.29.4",
     "next": "^13.1.1",
     "react": "^18.2.0",
+    "react-calendar": "^4.0.0",
     "react-comments-section": "^2.0.10",
     "react-data-table-component": "^7.5.3",
     "react-dom": "^18.2.0",

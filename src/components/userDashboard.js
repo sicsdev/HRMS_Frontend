@@ -449,276 +449,276 @@ function UserDashboard(props) {
 
 
     return (
-        <Box sx={{ display: 'flex' }} className="dashboard_page">
-            <CssBaseline />
-            <AppBar
-                position="fixed"
-                sx={{
-                    width: { sm: `calc(100% - ${drawerWidth}px)` },
-                    ml: { sm: `${drawerWidth}px` },
+        <>
+                <Box sx={{ display: 'flex' }} className="dashboard_page">
+                    <CssBaseline />
+                    <AppBar
+                        position="fixed"
+                        sx={{
+                            width: { sm: `calc(100% - ${drawerWidth}px)` },
+                            ml: { sm: `${drawerWidth}px` },
 
-                }}
-            >
-                <Toolbar
-                    className='main_header'
-                >
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2, display: { sm: 'none' } }}
+                        }}
                     >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        {/* Responsive drawer */}
-                    </Typography>
-                    <div className="applyleavedec">
-                        <Link to="/applyleave">
-                            <img src="apply Leave.svg" ></img>
-
-                            &nbsp;    Apply Leave  &nbsp;
-                        </Link>
-                    </div>
-                    <div className="avatar_dropdown">
-                        <Avatar alt={profileval.name} src={profileval.image} />
-                        <div className="employe_info">
-                            <p>{profileval.username}</p>
-                            <p>{profileval.name}</p>
-                        </div>
-                        <Box sx={{ minWidth: 120 }}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label"></InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select">
-                                    <MenuItem value={10}>
-                                        <Link to="/profile">Profile</Link></MenuItem>
-                                    <MenuItem value={20} onClick={logout}>Logout</MenuItem>
-
-                                </Select>
-                            </FormControl>
-                        </Box>
-                    </div>
-                </Toolbar>
-
-
-            </AppBar>
-
-            <Box
-                component="nav"
-                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-                aria-label="mailbox folders"
-            >
-                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-                <Drawer
-                    container={container}
-                    variant="temporary"
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
-                    }}
-                    sx={{
-                        display: { xs: 'block', sm: 'none' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                    }}
-                    className='left_nav'
-                >
-                    {drawer}
-                </Drawer>
-                <Drawer
-                    variant="permanent"
-                    sx={{
-                        display: { xs: 'none', sm: 'block' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                    }}
-                    open
-                    className='left_nav'
-
-                >
-                    {drawer}
-                </Drawer>
-            </Box>
-            <Box
-                component="main"
-                sx={{ p: 3, width: { sm: `calc(100% - ${drawerWidth * 2}px)` } }}
-            >
-                <Toolbar />
-                <div className='row announcement_main'>
-                    <div className='col-sm-10 announcement'>
-                        <Typography>
-                            Announcements
-                        </Typography>
-                    </div>
-                    <div className='col-sm-2'>
-                        <Typography>
-
-
-                            <Modal
-                                open={openedit}
-                                title="Add Post"
-                                onOk={editHandleOk}
-                                onCancel={editHandleCancel}
-                                footer={[
-
-                                    <Button key="submit" type="primary" onClick={editHandleOk}  >
-                                        Submit
-                                    </Button>,
-
-                                ]}
+                        <Toolbar
+                            className='main_header'
+                        >
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                edge="start"
+                                onClick={handleDrawerToggle}
+                                sx={{ mr: 2, display: { sm: 'none' } }}
                             >
-                                <label> Edit Ttile</label>
-                                <input type="text" className="form-control" name="title"
-                                />
-                                <label> Edit Description</label>
-                                <textarea className="form-control" name="description"
-                                ></textarea>
-                                <label> Edit Image</label>
-                                <input type="file" name="image" className="form-control" />
-                            </Modal>
-                        </Typography>
-                    </div>
-                </div>
-                {
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography variant="h6" noWrap component="div">
+                                {/* Responsive drawer */}
+                            </Typography>
+                            <div className="applyleavedec">
+                                <Link to="/applyleave">
+                                    <img src="apply Leave.svg" ></img>
 
-                    allpost.map((element, index) => {
-                        return (
+                                    &nbsp;    Apply Leave  &nbsp;
+                                </Link>
+                            </div>
+                            <div className="avatar_dropdown">
+                                <Avatar alt={profileval.name} src={profileval.image} />
+                                <div className="employe_info">
+                                    <p>{profileval.username}</p>
+                                    <p>{profileval.name}</p>
+                                </div>
+                                <Box sx={{ minWidth: 120 }}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label"></InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select">
+                                            <MenuItem value={10}>
+                                                <Link to="/profile">Profile</Link></MenuItem>
+                                            <MenuItem value={20} onClick={logout}>Logout</MenuItem>
 
-                            <Card key={index} sx={{ maxWidth: 1100, marginTop: 10 }} className="post">
-                                <CardHeader
-                                    avatar={
-                                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                                            R
-                                        </Avatar>
-                                    }
-                                    action={
-                                        <Dropdown menu={{ items }} trigger={['click']} onClick={(e) => { record(element.id) }}>
-                                            <a onClick={(e) => e.preventDefault()}>
-
-                                                {/* <MoreVertIcon /> */}
-
-                                            </a>
-                                        </Dropdown>
-
-                                    } className="post_style"
-                                    title={element.x.title}
-                                    subheader={moment(element.x.post_date).format('DD/MM/YYYY')}
-                                />
-
-                                <CardContent>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {element.x.description}
-                                    </Typography>
-                                </CardContent>
-                                <CardContent>
-                                    <Typography variant="body2" color="text.secondary">
-                                        <img src={BASE_URL + "/" + element.x.image} />
-                                    </Typography>
-                                </CardContent>
-                                <CardActions disableSpacing >
-                                    <IconButton aria-label="add to favorites" >
-                                        {element?.isLike ? (
-
-                                            <FavoriteIcon key={index}
-
-                                                onClick={(e) => { post_id(e, element.x._id) }} style={{
-                                                    backgroundColor: isActive ? 'white' : '',
-                                                    color: isActive ? 'red' : '',
-                                                }} />
-                                        ) :
-                                            (
-
-                                                <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id) }} />
-                                            )
-
-                                        }
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            </div>
+                        </Toolbar>
 
 
-                                    </IconButton>
-                                    <IconButton aria-label="share">
+                    </AppBar>
+
+                    <Box
+                        component="nav"
+                        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+                        aria-label="mailbox folders"
+                    >
+                        <Drawer
+                            container={container}
+                            variant="temporary"
+                            open={mobileOpen}
+                            onClose={handleDrawerToggle}
+                            ModalProps={{
+                                keepMounted: true, // Better open performance on mobile.
+                            }}
+                            sx={{
+                                display: { xs: 'block', sm: 'none' },
+                                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                            }}
+                            className='left_nav'
+                        >
+                            {drawer}
+                        </Drawer>
+                        <Drawer
+                            variant="permanent"
+                            sx={{
+                                display: { xs: 'none', sm: 'block' },
+                                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                            }}
+                            open
+                            className='left_nav'
+
+                        >
+                            {drawer}
+                        </Drawer>
+                    </Box>
+                    <Box
+                        component="main"
+                        sx={{ p: 3, width: { sm: `calc(100% - ${drawerWidth * 2}px)` } }}
+                    >
+                        <Toolbar />
+                        <div className='row announcement_main'>
+                            <div className='col-sm-10 announcement'>
+                                <Typography>
+                                    Announcements
+                                </Typography>
+                            </div>
+                            <div className='col-sm-2'>
+                                <Typography>
 
 
+                                    <Modal
+                                        open={openedit}
+                                        title="Add Post"
+                                        onOk={editHandleOk}
+                                        onCancel={editHandleCancel}
+                                        footer={[
 
+                                            <Button key="submit" type="primary" onClick={editHandleOk}  >
+                                                Submit
+                                            </Button>,
 
-                                        <MapsUgcIcon onClick={(e) => { commentShowModal(element.x._id, index) }} />
-                                        <Modal className="mt-4"
-                                            open={openComment[index]}
-                                            title="Add Comment"
-                                            onOk={() => commentHandleOk(index)}
-                                            onCancel={() => commentHandleOk(index)}
-                                            footer={[
+                                        ]}
+                                    >
+                                        <label> Edit Ttile</label>
+                                        <input type="text" className="form-control" name="title"
+                                        />
+                                        <label> Edit Description</label>
+                                        <textarea className="form-control" name="description"
+                                        ></textarea>
+                                        <label> Edit Image</label>
+                                        <input type="file" name="image" className="form-control" />
+                                    </Modal>
+                                </Typography>
+                            </div>
+                        </div>
+                        {
 
-                                                <Button key="submit" type="primary" onClick={() => commentHandleOk(index)}  >
-                                                    Add Comment
-                                                </Button>,
+                            allpost.map((element, index) => {
+                                return (
 
-                                            ]}
-                                        >
-
-                                            {
-                                                element.x.comment?.map((item, i) => {
-                                                    return (
-                                                        <>
-
-                                                            <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                                                                <CardContent>
-
-
-                                                                    <Typography sx={{ mb: 3, width: 200, height: 20 }} >
-                                                                        <div className="row">
-                                                                            <div className="col-4">
-                                                                                <Avatar className='avatar_img' alt="Remy Sharp" src={item.userId.image} />
-                                                                            </div>
-                                                                            <div className="col-8">
-                                                                                {item.userId.name}
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="row">
-                                                                            <div className="col-4">
-
-                                                                            </div>
-                                                                            <div className="col-8">
-                                                                                <h6>  {item.content}</h6>
-                                                                            </div>
-
-                                                                        </div>
-
-                                                                    </Typography>
-                                                                </CardContent>
-                                                            </Card>
-
-
-                                                        </>
-                                                    )
-                                                })
+                                    <Card key={index} sx={{ maxWidth: 1100, marginTop: 10 }} className="post">
+                                        <CardHeader
+                                            avatar={
+                                                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                                                    R
+                                                </Avatar>
                                             }
-                                            <br />
-                                            <textarea className="form-control" name="content" value={addcomment} onChange={(e) => handleComment(e)}
-                                            ></textarea>
+                                            action={
+                                                <Dropdown menu={{ items }} trigger={['click']} onClick={(e) => { record(element.id) }}>
+                                                    <a onClick={(e) => e.preventDefault()}>
 
-                                        </Modal>
+                                                        {/* <MoreVertIcon /> */}
 
-                                    </IconButton>
+                                                    </a>
+                                                </Dropdown>
 
-                                </CardActions>
+                                            } className="post_style"
+                                            title={element.x.title}
+                                            subheader={moment(element.x.post_date).format('DD/MM/YYYY')}
+                                        />
 
-                            </Card>
-                        )
-                    })
-                }
+                                        <CardContent>
+                                            <Typography variant="body2" color="text.secondary">
+                                                {element.x.description}
+                                            </Typography>
+                                        </CardContent>
+                                        <CardContent>
+                                            <Typography variant="body2" color="text.secondary">
+                                                <img src={BASE_URL + "/" + element.x.image} />
+                                            </Typography>
+                                        </CardContent>
+                                        <CardActions disableSpacing >
+                                            <IconButton aria-label="add to favorites" >
+                                                {element?.isLike ? (
+
+                                                    <FavoriteIcon key={index}
+
+                                                        onClick={(e) => { post_id(e, element.x._id) }} style={{
+                                                            backgroundColor: isActive ? 'white' : '',
+                                                            color: isActive ? 'red' : '',
+                                                        }} />
+                                                ) :
+                                                    (
+
+                                                        <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id) }} />
+                                                    )
+
+                                                }
+
+
+                                            </IconButton>
+                                            <IconButton aria-label="share">
 
 
 
-            </Box>
+
+                                                <MapsUgcIcon onClick={(e) => { commentShowModal(element.x._id, index) }} />
+                                                <Modal className="mt-4"
+                                                    open={openComment[index]}
+                                                    title="Add Comment"
+                                                    onOk={() => commentHandleOk(index)}
+                                                    onCancel={() => commentHandleOk(index)}
+                                                    footer={[
+
+                                                        <Button key="submit" type="primary" onClick={() => commentHandleOk(index)}  >
+                                                            Add Comment
+                                                        </Button>,
+
+                                                    ]}
+                                                >
+
+                                                    {
+                                                        element.x.comment?.map((item, i) => {
+                                                            return (
+                                                                <>
+
+                                                                    <Card sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                                                        <CardContent>
 
 
-            <Box
-                component="sidebar"
-                sx={{ width: { sm: drawerWidth } }}
-                className="sidebar">
-                {/* <h4>Events</h4>
+                                                                            <Typography sx={{ mb: 3, width: 200, height: 20 }} >
+                                                                                <div className="row">
+                                                                                    <div className="col-4">
+                                                                                        <Avatar className='avatar_img' alt="Remy Sharp" src={item.userId.image} />
+                                                                                    </div>
+                                                                                    <div className="col-8">
+                                                                                        {item.userId.name}
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div className="row">
+                                                                                    <div className="col-4">
+
+                                                                                    </div>
+                                                                                    <div className="col-8">
+                                                                                        <h6>  {item.content}</h6>
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            </Typography>
+                                                                        </CardContent>
+                                                                    </Card>
+
+
+                                                                </>
+                                                            )
+                                                        })
+                                                    }
+                                                    <br />
+                                                    <textarea className="form-control" name="content" value={addcomment} onChange={(e) => handleComment(e)}
+                                                    ></textarea>
+
+                                                </Modal>
+
+                                            </IconButton>
+
+                                        </CardActions>
+
+                                    </Card>
+                                )
+                            })
+                        }
+
+
+
+                    </Box>
+
+
+                    <Box
+                        component="sidebar"
+                        sx={{ width: { sm: drawerWidth } }}
+                        className="sidebar">
+                        {/* <h4>Events</h4>
                 {
                     event.map((i) => {
 
@@ -747,81 +747,84 @@ function UserDashboard(props) {
                 } */}
 
 
-                <h6 className='mt-4'><b>Upcomming Birthday's</b></h6>
+                        <h6 className='mt-4'><b>Upcomming Birthday's</b></h6>
 
-                {
-                    allemployee?.map((item, elem) => {
-                        let newDate2 = moment.utc(item.dob).format("MMM DD, YYYY");
-                        return (
+                        {
+                            allemployee?.map((item, elem) => {
+                                let newDate2 = moment.utc(item.dob).format("MMM DD, YYYY");
+                                return (
 
-                            <>
+                                    <>
 
-                                <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                                    <CardContent>
+                                        <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                            <CardContent>
 
-                                        <div className='row'>
-                                            <div className='col-sm-4'>
-                                                <Avatar className='avatar_img' alt={item.name} src={BASE_URL + "/" + item.image} />
+                                                <div className='row'>
+                                                    <div className='col-sm-4 col-2'>
+                                                        <Avatar className='avatar_img' alt={item.name} src={BASE_URL + "/" + item.image} />
 
-                                            </div>
-                                            <div className='col-sm-8'>
-                                                {item.name}
-                                                <div>
-                                                    {newDate2}</div>
-                                            </div>
-                                        </div>
-
-
-                                    </CardContent>
-                                </Card>
-                            </>
-                        )
-                    })
-                }
-
-                <h6 className='mt-4'><b>Upcomming Work Anniversary's </b></h6>
-                {
-                    anniversary?.map((i, elem) => {
-
-                        return (
-
-                            <>
-
-                                <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
-                                    <CardContent>
-
-                                        <div className='row'>
-                                            <div className='col-sm-4'>
-                                                <Avatar className='avatar_img' alt={i.name} src={BASE_URL + "/" + i.image} />
-                                            </div>
-                                            <div className='col-sm-8'>
-                                                {i.name}
-                                                <div className="difference pt-1">
-                                                    {moment(i.date_of_joining).format("MMM DD, YYYY")}
-
+                                                    </div>
+                                                    <div className='col-sm-8 col-10'>
+                                                        {item.name}
+                                                        <div>
+                                                            {newDate2}</div>
+                                                    </div>
                                                 </div>
-                                                <div className="difference pt-2">
-                                                    <b>{i.difference} </b> Anniversary
+
+
+                                            </CardContent>
+                                        </Card>
+                                    </>
+                                )
+                            })
+                        }
+
+                        <h6 className='mt-4'><b>Upcomming Work Anniversary's </b></h6>
+                        {
+                            anniversary?.map((i, elem) => {
+
+                                return (
+
+                                    <>
+
+                                        <Card key={elem} sx={{ minWidth: 200, marginTop: 4 }} className="card_events">
+                                            <CardContent>
+
+                                                <div className='row'>
+                                                    <div className='col-sm-4'>
+                                                        <Avatar className='avatar_img' alt={i.name} src={BASE_URL + "/" + i.image} />
+                                                    </div>
+                                                    <div className='col-sm-8'>
+                                                        {i.name}
+                                                        <div className="difference pt-1">
+                                                            {moment(i.date_of_joining).format("MMM DD, YYYY")}
+
+                                                        </div>
+                                                        <div className="difference pt-2">
+                                                            <b>{i.difference} </b> Anniversary
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
 
 
-                                    </CardContent>
-                                </Card>
-                            </>
-                        )
-                    })
-                }
+                                            </CardContent>
+                                        </Card>
+                                    </>
+                                )
+                            })
+                        }
 
 
 
-            </Box>
+                    </Box>
 
-            {/* Sidebar end */}
+                    {/* Sidebar end */}
 
 
-        </Box >
+                </Box >
+
+        </>
+
     );
 }
 

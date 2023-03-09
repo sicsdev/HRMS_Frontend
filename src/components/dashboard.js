@@ -545,7 +545,7 @@ function Dashboard(props) {
 
             {/* <Toolbar /> */}
             <List className="sidebar_header_user">
-                <img src="logo.png"></img>
+                <img src="logo.png"  height="auto"></img>
 
 
                 <Divider className='nav_divider' />
@@ -718,8 +718,9 @@ function Dashboard(props) {
                                         id="demo-simple-select"
 
                                     >
-                                        <MenuItem className="aline" value={10}>
-                                            <Link to="/profile">Profile</Link></MenuItem>
+                                        <Link to="/profile">
+                                            <MenuItem className="aline" value={10}>Profile</MenuItem>
+                                        </Link>
 
                                         <MenuItem value={20} onClick={logout}>Logout</MenuItem>
 

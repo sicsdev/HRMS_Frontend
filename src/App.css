@@ -2,6 +2,11 @@
   text-align: center;
 }
 
+/* img {
+  width: auto;
+  height: auto;
+} */
+
 .page-heading {
   font-family: 'Poppins';
   font-style: normal;
@@ -29,6 +34,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   width: 50%;
+  height: auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -74,6 +80,7 @@ body {
 
 .left_nav .MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation0.MuiDrawer-paper.MuiDrawer-paperAnchorLeft.MuiDrawer-paperAnchorDockedLeft {
   background: #000;
+  overflow: auto;
 }
 
 .nav_divider {
@@ -147,7 +154,7 @@ select.form-control.add_userInput {
   width: 275px;
 } */
 .card_events {
-  width: 275px;
+  /* width: 275px; */
 }
 
 
@@ -315,7 +322,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
 
 .static_width.layout {
   /* padding-left: 25px; */
-  margin-top: 75px;
+  margin-top: 70px;
 }
 
 
@@ -337,6 +344,7 @@ fieldset.MuiOutlinedInput-notchedOutline {
 .leave_request {
   /* margin-top: 15%; */
 }
+
 .leave_request table tr {
   margin: 10px 0;
   /* margin-top: 15%; */
@@ -794,7 +802,7 @@ h5.team_button {
 }
 
 .edit-profile input {
-
+  padding: 10px;
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;

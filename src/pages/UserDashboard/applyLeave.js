@@ -41,7 +41,7 @@ function ApplyLeave() {
     };
 
     const wrapperStyle = {
-        width: 500,
+        width: "100%",
         border: `1px solid ${token.colorBorderSecondary}`,
         borderRadius: token.borderRadiusLG,
     };
@@ -116,7 +116,9 @@ function ApplyLeave() {
         var a = moment(e.target.value);
         var b = moment(submitval.from_date);
         let diff = a.diff(b, 'days') + 1
+
         if (diff != 3) {
+
             toast.error("You can apply Only Three Earned Leaves")
             return
         }
@@ -236,7 +238,7 @@ function ApplyLeave() {
                 console.log(err);
 
             }).finally(() => {
-                // setSubmitVal({ leave: "", reason: "", from_date: "", to_date: "" })
+                setSubmitVal({ leave: "", reason: "", from_date: "", to_date: "" })
             })
     }
 
@@ -247,9 +249,9 @@ function ApplyLeave() {
                 <Header />
                 <ToastContainer></ToastContainer>
 
-                <Toolbar />
+                {/* <Toolbar /> */}
                 <div className="static_width layout apply-leaves-main-layout">
-                    <div className="container margin-top">
+                    <div className="container ">
                         <h3 className="page-heading">Apply Leave</h3>
 
                         <div className="row avail-leaves-card-row">
@@ -276,7 +278,7 @@ function ApplyLeave() {
 
                         </div>
                         <div className="row">
-                            <div className="col-sm-6" >
+                            <div className="col-lg-6" >
                                 <div className="formMargin-10px ">
                                     <form onSubmit={handleSubmit} >
 
@@ -348,7 +350,7 @@ function ApplyLeave() {
                                     </form>
                                 </div>
                             </div>
-                            <div className="col-sm-6 ">
+                            <div className="col-lg-6 ">
                                 <div className="formMargin-10px float-right">
                                     <div style={wrapperStyle} className="mt-4" >
 

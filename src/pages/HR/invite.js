@@ -145,7 +145,8 @@ function Invite() {
                                         }
                                     </tbody>
                                     :
-                                    <h5 className="no_invite_found">No Record Found</h5>
+                                    <tr><td colspan="8"><h5 className="leave_no_found">No Record Found</h5></td></tr> 
+
                                 }
                             </table>
                         </div>
