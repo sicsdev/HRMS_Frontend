@@ -70,6 +70,13 @@ function ApplyLeave() {
 
     }
     const handleChangeLeave = (e) => {
+        setSubmitVal({
+            leave: "",
+            reason: "",
+            from_date: "",
+            to_date: "",
+            leave_type: ''
+        })
         console.log(e.target.value)
         if (e.target.value == 'Earned Leave') {
             let leaveData = pendingLeave?.leave
@@ -79,9 +86,16 @@ function ApplyLeave() {
                 return
             }
         }
-        let tmp = { ...submitval }
+        let tmp = {
+            leave: "",
+            reason: "",
+            from_date: "",
+            to_date: "",
+            leave_type: ''
+        }
         tmp.leave = e.target.value
         setSubmitVal({ ...tmp })
+
     }
     const handleChangeLeaveType = (e) => {
         if (!submitval.leave) {
@@ -116,7 +130,7 @@ function ApplyLeave() {
         var a = moment(e.target.value);
         var b = moment(submitval.from_date);
         let diff = a.diff(b, 'days') + 1
-        if (diff !=3) {
+        if (submitval.leave == 'Earned Leave' && diff != 3) {
             toast.error("You can apply Only Three Earned Leaves")
             return
         }
