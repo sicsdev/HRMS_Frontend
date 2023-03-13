@@ -27,7 +27,7 @@ const Setting = () => {
   const [fillemail, setEmail] = useState('')
   const [fillpassword, setPassword] = useState('')
   const [fillphone, setPhone] = useState('')
-  const [filldob, setDob] = useState('')
+  const [filldob, setDob] = useState(new Date())
   const [imageval, setImageVal] = useState('')
   const [image, setImage] = useState('')
   const [changePassword, setChangePassword] = useState(false);
@@ -262,6 +262,7 @@ const Setting = () => {
   return (
     <>
       <Header />
+      <ToastContainer></ToastContainer>
       <div className="static_width layout ">
         <div className="container">
           {/* <Box
@@ -331,7 +332,7 @@ const Setting = () => {
               </div>
               <div className="col-md-4">
                 <label className="addUserLabel">Date Of Birth</label>
-                <input type="date" name="dob" value={filldob} onChange={(e) => handleDob(e)} className="add_userInput" placeholder="Enter Date of Birth" />
+                <input type="date" name="dob" value={new Date(filldob)?.toISOString()?.split('T')[0]} onChange={(e) => handleDob(e)} className="add_userInput" placeholder="Enter Date of Birth" />
 
 
               </div>

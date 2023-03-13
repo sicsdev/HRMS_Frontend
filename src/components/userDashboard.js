@@ -17,6 +17,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import { Notification } from '../helpers/constant'
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -116,6 +117,41 @@ function UserDashboard(props) {
 
             });
     }
+    useEffect(() => {
+
+        let authtokens = localStorage.getItem("authtoken");
+        if (!authtokens) {
+            navigate('/')
+        }
+        else {
+            let display = {
+                headers: {
+                    'token': authtokens,
+                }
+            }
+
+
+            axios.get(`${BASE_URL}/get_all_notification`, display)
+                .then((res) => {
+                    // setRole(res.data.role)
+                    console.log(res.data, "All")
+                    setNotifications(res.data)
+                    let tempCount = 0
+                    for (let x of res.data) {
+                        if (!x.is_read) {
+                            tempCount++
+                        }
+                    }
+                    setNotificationsCount(tempCount)
+
+                })
+                .catch((err) => {
+                    console.log(err);
+
+                });
+        };
+
+    }, [])
     const bull = (
         <Box
             component="span"
@@ -318,27 +354,6 @@ function UserDashboard(props) {
         navigate('/')
     };
 
-
-
-
-    useEffect(() => {
-        const config = {
-            header: {
-                "Content-Type": "application/json",
-            },
-        };
-
-
-        axios.get(`${BASE_URL}/event`, config)
-            .then((res) => {
-                setEvent(res.data)
-
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
-    }, [])
 
     const post_id = (e, element, isLike) => {
         e.preventDefault();
