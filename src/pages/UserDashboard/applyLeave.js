@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useContext} from "react";
 import Header from "../utils/header";
 import axios from "axios";
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -16,6 +16,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BASE_URL } from "../../baseUrl";
 import { useNavigate } from "react-router-dom";
+import { LoaderContext } from '../../App.js'
+
 import moment from "moment";
 
 const ITEM_HEIGHT = 48;
@@ -33,11 +35,11 @@ const MenuProps = {
 
 
 function ApplyLeave() {
-
+    const { showLoader, hideLoader } = useContext(LoaderContext)
 
     const navigate = useNavigate();
     const { token } = theme.useToken();
-    const onPanelChange = (value: Dayjs, mode: CalendarMode) => {
+    const onPanelChange = (value, mode) => {
     };
 
     const wrapperStyle = {
@@ -153,6 +155,7 @@ function ApplyLeave() {
             navigate('/')
         }
         else {
+            showLoader()
             const config = {
                 header: {
                     "Content-Type": "application/json",
@@ -164,7 +167,10 @@ function ApplyLeave() {
                 })
                 .catch((err) => {
                     console.log(err);
-                });
+                })
+                .finally(()=>{
+                    hideLoader()
+                })
         }
 
     }, [])
@@ -187,12 +193,12 @@ function ApplyLeave() {
             axios.get(`${BASE_URL}/profile`, token)
                 .then((res) => {
                     setPendingLeave(res.data)
-
-
                 })
                 .catch((err) => {
                     console.log(err);
-                });
+                })
+                .finally(()=>{
+                })
         }
 
 
