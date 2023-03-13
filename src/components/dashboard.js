@@ -586,7 +586,7 @@ function Dashboard(props) {
                         <p>Email </p><p className="fade_info">{profileval.email}</p>
                         <p>Phone No </p><p className="fade_info">{profileval.phonenumber}</p>
                         <p>Tenure </p><p className="fade_info">{monthDiff(profileval.date_of_joining)}</p>
-                        <p>Birthday </p><p className="fade_info">{moment(profileval.dob).format('MMM d, YYYY')}</p>
+                        <p>Birthday </p><p className="fade_info">{moment(profileval.dob).format('DD-MMM-YYYY')}</p>
 
 
                     </div>
