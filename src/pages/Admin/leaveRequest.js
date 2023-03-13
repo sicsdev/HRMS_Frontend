@@ -13,7 +13,6 @@ import { BASE_URL } from "../../baseUrl";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 0;
 
-const drawerWidth = 320;
 const MenuProps = {
     PaperProps: {
         style: {

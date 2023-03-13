@@ -277,7 +277,7 @@ function ApplyLeave() {
                         <div className="row avail-leaves-card-row">
                             <div className="col-md-4">
                                 <div className=" avail-leaves-card">
-                                    <div className="count earn-leave-count"> {returnTwo(pendingLeave?.leave?.earned_leave ? pendingLeave.leave?.earned_leave : 0)}</div>
+                                    <div className="count earn-leave-count"> {returnTwo(pendingLeave?.leave?.earned_leave >0? pendingLeave.leave?.earned_leave : 0)}</div>
                                     <div className="heading">Earned Leaves Available</div>
                                 </div>
                             </div>

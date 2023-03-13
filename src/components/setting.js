@@ -15,7 +15,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import { BASE_URL } from "../baseUrl";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const drawerWidth = 320;
 
 const Setting = () => {
 

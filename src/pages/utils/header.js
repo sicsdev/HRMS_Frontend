@@ -186,8 +186,8 @@ function Header({ window, component }) {
 
     const drawer = (
         <div>
-            <Toolbar />
-            <img src="./logo.png" className='center'></img>
+            {/* <Toolbar /> */}
+            <img src="./logo.png" style={{padding:10}} ></img>
 
             <Divider className='nav_divider text-center' />
             {role == 2 ?
@@ -203,7 +203,7 @@ function Header({ window, component }) {
                         <Link to="/invite">Employee List</Link>,
                         // <Link to="/addproject">Add Project</Link>,
 
-                        <Link to="/employee_list">Employee Records</Link>,
+                        // <Link to="/employee_list">Employee Records</Link>,
 
 
                     ].map((text, index) => (
@@ -220,7 +220,9 @@ function Header({ window, component }) {
                 : role == 1 ?
 
                     <List className='side_links'>
-                        {[<Link to="/dashboardpage">Dashboard</Link>, <Link to="/profile" className="header_toggle">Profile</Link>, <Link to="/admin_leave_request">Leave Request</Link>, <Link to="/adduser">Add Employee</Link>, <Link to="/invite">Employee List</Link>, <Link to="/employee_list">Employee Records</Link>,].map((text, index) => (
+                        {[<Link to="/dashboardpage">Dashboard</Link>, <Link to="/profile" className="header_toggle">Profile</Link>, <Link to="/admin_leave_request">Leave Request</Link>, <Link to="/adduser">Add Employee</Link>, <Link to="/invite">Employee List</Link>, 
+                        // <Link to="/employee_list">Employee Records</Link>
+                    ].map((text, index) => (
 
                             <ListItemButton>
                                 <ListItemIcon>

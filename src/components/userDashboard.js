@@ -40,7 +40,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { LoaderContext } from '../App.js'
 
-const drawerWidth = 340;
+const drawerWidth = 300;
 
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -366,12 +366,9 @@ function UserDashboard(props) {
                 "Content-Type": "application/json",
             },
         };
-
-
-
+        showLoader()
         axios.post(`${BASE_URL}/like/${element}`, {}, token)
             .then((res) => {
-
                 setLikeVal(res.data)
                 const filterrecord = allpost.map((val) => {
 
@@ -380,11 +377,15 @@ function UserDashboard(props) {
                     }
                     return val
                 })
+                debugger
                 setAllPost(filterrecord)
             })
             .catch((err) => {
                 console.log(err);
-            });
+            })
+            .finally(()=>{
+                hideLoader()
+            })
 
     }
 
@@ -449,9 +450,9 @@ function UserDashboard(props) {
     const drawer = (
         <div>
 
-            <Toolbar />
+            {/* <Toolbar /> */}
             <List>
-                <img src="logo.png"></img>
+                <img src="logo.png" style={{padding:10}}></img>
                 <Divider className='nav_divider' />
                 <div className='avatar'>
                     <Avatar className='avatar_img' alt={profileval.name} src={profileval.image} />
@@ -500,7 +501,7 @@ function UserDashboard(props) {
     return (
         <>
             <Box sx={{ display: 'flex' }} className="dashboard_page">
-                <CssBaseline />
+                {/* <CssBaseline /> */}
                 <AppBar
                     position="fixed"
                     sx={{
@@ -693,14 +694,14 @@ function UserDashboard(props) {
 
                                                 <FavoriteIcon key={index}
 
-                                                    onClick={(e) => { post_id(e, element.x._id) }} style={{
+                                                    onClick={(e) => { post_id(e, element.x._id,element?.isLike ) }} style={{
                                                         backgroundColor: isActive ? 'white' : '',
                                                         color: isActive ? 'red' : '',
                                                     }} />
                                             ) :
                                                 (
 
-                                                    <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id) }} />
+                                                    <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id,element?.isLike ) }} />
                                                 )
 
                                             }
