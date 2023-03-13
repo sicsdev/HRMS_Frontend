@@ -48,3 +48,10 @@
     float: left;
 
 }
+.update-setting-btn{
+    background: #2373B2;
+    border: none;
+    color: #fff;
+    padding: 9px 66px;
+    float: left;
+}

@@ -262,16 +262,17 @@ const Setting = () => {
   return (
     <>
       <Header />
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 3 }}
-      >
-        <Toolbar />
-        <Typography paragraph>
+      <div className="static_width layout ">
+        <div className="container">
+          {/* <Box
+            component="main"
+            sx={{ flexGrow: 1, p: 3 }}
+          > */}
+          {/* <Toolbar /> */}
 
-          <form onSubmit={handlesubmit} className="edit-profile">
-            <h4 className="mt-3"> Profile > Edit Profile</h4>
-            <div className="row mt-4 edit_page">
+          <h2 class="add-user-heading">Profile > Edit Profile</h2>
+          <form onSubmit={handlesubmit} className="">
+            <div className="row mt-4 justify-content-between  edit_page">
               <div className="col-md-2">
                 <Stack direction="row" spacing={2}>
                   <Badge
@@ -306,41 +307,41 @@ const Setting = () => {
                 </Modal>
               </div>
               <div className="col-md-4">
-                <label className="mb-3 setting">Name</label>
-                <input type="text" name="name" onChange={(e) => handleName(e)} value={fillname} className="form-control edit_page_color" placeholder="Enter Name" />
+                <label className="addUserLabel">Name</label>
+                <input type="text" name="name" onChange={(e) => handleName(e)} value={fillname} className="add_userInput" placeholder="Enter Name" />
 
 
               </div>
               <div className="col-md-4">
-                <label className="mb-3 setting">Phone Number</label>
-                <input type="text" name="phonenumber" onChange={(e) => handlePhone(e)} value={fillphone} className="form-control edit_page_color " placeholder="Enter Phone Number" />
+                <label className="addUserLabel">Phone Number</label>
+                <input type="text" name="phonenumber" onChange={(e) => handlePhone(e)} value={fillphone} className="add_userInput" placeholder="Enter Phone Number" />
 
 
               </div>
             </div>
-            <div className="row edit_page">
+            <div className="row justify-content-between  edit_page">
               <div className="col-2">
 
               </div>
               <div className="col-md-4">
-                <label className="mb-3 setting">Email Id</label>
-                <input type="email" name="email" onChange={(e) => handleEmail(e)} value={fillemail} className="form-control edit_page_color" placeholder="Enter Email Id" />
+                <label className="addUserLabel">Email Id</label>
+                <input type="email" name="email" onChange={(e) => handleEmail(e)} value={fillemail} className="add_userInput" placeholder="Enter Email Id" />
 
 
               </div>
               <div className="col-md-4">
-                <label className="mb-3 setting">Date Of Birth</label>
-                <input type="date" name="dob" value={filldob} onChange={(e) => handleDob(e)} className="form-control edit_page_color" placeholder="Enter Date of Birth" />
+                <label className="addUserLabel">Date Of Birth</label>
+                <input type="date" name="dob" value={filldob} onChange={(e) => handleDob(e)} className="add_userInput" placeholder="Enter Date of Birth" />
 
 
               </div>
             </div>
-            <div className="row mt-3 edit_page">
+            <div className="row mt-3 justify-content-between  edit_page">
               <div className="col-md-2">
 
               </div>
               <div className="col-md-4 password-type mt-4">
-                <label className="mb-3 setting ">Password</label>
+                <label className="addUserLabel">Password</label>
                 <Button key="submit" className="form-control" onClick={changePasswordShow}>
                   Change Password
                 </Button>
@@ -367,22 +368,27 @@ const Setting = () => {
               </div>
 
               <div className="col-4">
+
               </div>
             </div>
-            <div className="row edit_page">
+            <div className="row justify-content-between   edit_page">
               <div className="col-md-2">
 
               </div>
               <div className="col-md-4">
                 <div className="submit_btn_val mt-4">
-                  <input type="submit" value="update" className="submit-value" onClick={update_records} />
+                  <input type="submit" value="update" className="update-setting-btn" onClick={update_records} />
                 </div>
+
+              </div>
+              <div className="col-4">
 
               </div>
             </div>
           </form>
-        </Typography>
-      </Box>
+          {/* </Box> */}
+        </div>
+      </div>
     </>
   )
 }
