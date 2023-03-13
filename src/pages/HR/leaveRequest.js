@@ -19,7 +19,6 @@ import moment from 'moment'
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 0;
 
-const drawerWidth = 240;
 const MenuProps = {
     PaperProps: {
         style: {

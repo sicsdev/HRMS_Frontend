@@ -559,7 +559,7 @@ function Dashboard(props) {
 
             {/* <Toolbar /> */}
             <List className="sidebar_header_user">
-                <img src="logo.png" height="auto"></img>
+                <img src="logo.png" style={{padding:10}} ></img>
 
 
                 <Divider className='nav_divider' />

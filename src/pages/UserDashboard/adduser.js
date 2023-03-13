@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const drawerWidth = 340;
 const AddUser = () => {
 
   const navigate = useNavigate();
