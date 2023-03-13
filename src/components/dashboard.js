@@ -986,9 +986,9 @@ function Dashboard(props) {
                                                                                         <label>Edit Comment</label>
                                                                                         <textarea name="content" className="form-control edit_comment" onChange={(e) => { setEditContent(e.target.value) }}></textarea>
                                                                                     </Modal>
-                                                                                    <ModeEditIcon className="edit_comment"
+                                                                                    {/* <ModeEditIcon className="edit_comment"
                                                                                         onClick={(e) => { showEditComment(e, item._id, element.x._id) }}></ModeEditIcon>
-                                                                                    <DeleteIcon className="delete_comment" onClick={(e) => { delete_comment(e, item._id, element.x._id) }}> </DeleteIcon>
+                                                                                    <DeleteIcon className="delete_comment" onClick={(e) => { delete_comment(e, item._id, element.x._id) }}> </DeleteIcon> */}
                                                                                 </h7>
 
                                                                             </div>
