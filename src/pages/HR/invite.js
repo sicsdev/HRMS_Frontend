@@ -117,7 +117,7 @@ function Invite() {
                     <h5 className="mt-4"><b> Employee Invite</b></h5>
                     <div className="leave">
 
-                        <div className="col-sm-8 mt-4">
+                        <div className="col-sm-10 mt-4">
                             <table class="table ">
                                 <thead>
                                     <th>Emp Id</th>
@@ -125,7 +125,7 @@ function Invite() {
                                     <th>Email</th>
                                     <th>Action</th>
                                 </thead>
-                                {show.length > 0 ?
+                                {request.length > 0 ?
                                     <tbody>
                                         {
                                             request.map((element) => {
