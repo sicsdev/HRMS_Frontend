@@ -241,6 +241,7 @@ function ApplyLeave() {
                 "Content-Type": "application/json",
             },
         };
+        showLoader()
 
 
         axios
@@ -257,6 +258,7 @@ function ApplyLeave() {
 
             }).finally(() => {
                 setSubmitVal({ leave: "", reason: "", from_date: "", to_date: "" })
+                hideLoader()
             })
     }
 

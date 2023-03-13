@@ -528,11 +528,25 @@ function Dashboard(props) {
     const read_notification = (e, element) => {
         e.preventDefault();
         console.log(element, "ledsfds")
-        axios.put(`${BASE_URL}/is_mark_read/${element}`)
+        let authtokens = localStorage.getItem("authtoken");
+        if (!authtokens) {
+            navigate('/')
+        }
+        let display = {
+            headers: {
+                'token': authtokens,
+            }
+        }
+        axios.put(`${BASE_URL}/is_mark_read/${element}`, null, display)
             .then((res) => {
 
                 console.log(res.data, "ddddddddd")
+
                 navigate('/leaverequest')
+                let tmp = [...notifications]
+                var index = tmp.findIndex(p => p._id == element);
+                tmp.splice(index, 1)
+                setNotifications([...tmp])
 
             })
             .catch((err) => {
@@ -545,7 +559,7 @@ function Dashboard(props) {
 
             {/* <Toolbar /> */}
             <List className="sidebar_header_user">
-                <img src="logo.png"  height="auto"></img>
+                <img src="logo.png" height="auto"></img>
 
 
                 <Divider className='nav_divider' />
@@ -676,7 +690,7 @@ function Dashboard(props) {
                         </div>
                         <div className="notificationIcon">
 
-                            <Badge badgeContent={notificationsCount} color="primary">
+                            <Badge badgeContent={notifications.length} color="primary">
                                 <NotificationsIcon color="white" style={{ "cursor": "pointer" }} onClick={showModal} />
                             </Badge>
 
@@ -688,7 +702,7 @@ function Dashboard(props) {
                                         <div className={item.is_read ? "notificationCard" : "notificationCard unReadNotification"}>
                                             {/* {item.type == "pending" ? `${item.userId.name} ${Notification['pending']}` : item.type == "approved" ? `` : ``} */}
 
-                                            <p onClick={(e) => { read_notification(e, item._id) }}>{item.is_read == false ? `${item.userId.name} ${Notification['pending']}` : ""} </p>
+                                            <p onClick={(e) => { read_notification(e, item._id) }}>{`${item.userId.name} ${Notification[item.type]}`} </p>
                                             {/* <p className="timespan">{diffBetweenTwoDates(item.createdAt,new Date())}</p> */}
                                         </div>
                                     </>

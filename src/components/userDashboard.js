@@ -103,6 +103,11 @@ function UserDashboard(props) {
                     navigate('/leaves')
 
                 }
+                navigate('/leaverequest')
+                let tmp = [...notifications]
+                var index = tmp.findIndex(p => p._id == element);
+                tmp.splice(index, 1)
+                setNotifications([...tmp])
                 handleCancel()
 
             })
@@ -314,7 +319,7 @@ function UserDashboard(props) {
     };
 
 
- 
+
 
     useEffect(() => {
         const config = {
@@ -510,7 +515,7 @@ function UserDashboard(props) {
 
                                 &nbsp;    Apply Leave  &nbsp;
                             </Link>
-                            <Badge badgeContent={notificationsCount} color="primary">
+                            <Badge badgeContent={notifications.length} color="primary">
                                 <NotificationsIcon color="white" onClick={showModal} />
                             </Badge>
                             <Modal title="Notifications" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
