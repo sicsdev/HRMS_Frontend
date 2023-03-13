@@ -413,6 +413,7 @@ function Dashboard(props) {
                 "Content-Type": "application/json",
             },
         };
+        showLoader()
 
         axios.post(`${BASE_URL}/like/${element}`, {}, token)
             .then((res) => {
@@ -429,7 +430,9 @@ function Dashboard(props) {
             })
             .catch((err) => {
                 console.log(err);
-            });
+            }).finally(()=>{
+                hideLoader()
+            })
 
 
     }
@@ -559,7 +562,7 @@ function Dashboard(props) {
             .catch((err) => {
                 console.log(err);
 
-            });
+            })
     }
     const drawer = (
         <div>
@@ -906,14 +909,14 @@ function Dashboard(props) {
 
                                                 <FavoriteIcon key={index}
 
-                                                    onClick={(e) => { post_id(e, element.x._id) }} style={{
+                                                    onClick={(e) => { post_id(e, element.x._id,element?.isLike) }} style={{
                                                         backgroundColor: isActive ? 'white' : '',
                                                         color: isActive ? 'red' : '',
                                                     }} />
                                             ) :
                                                 (
 
-                                                    <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id) }} />
+                                                    <FavoriteIcon key={index} onClick={(e) => { post_id(e, element.x._id,element?.isLike) }} />
                                                 )
 
                                             }

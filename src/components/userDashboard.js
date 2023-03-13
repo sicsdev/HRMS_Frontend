@@ -377,7 +377,6 @@ function UserDashboard(props) {
                     }
                     return val
                 })
-                debugger
                 setAllPost(filterrecord)
             })
             .catch((err) => {
