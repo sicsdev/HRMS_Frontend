@@ -7,6 +7,8 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -85,6 +87,7 @@ function Dashboard(props) {
     );
     const container = window !== undefined ? () => window().document.body : undefined;
     const [expanded, setExpanded] = React.useState(false);
+    const [reloadApi, setReloadApi] = useState(false)
     const [profileval, setProfileVal] = React.useState('');
     const [login, setLogin] = React.useState('');
     const [isActive, setIsActive] = useState([]);
@@ -176,6 +179,10 @@ function Dashboard(props) {
     }
 
     const nameHandleOk = () => {
+        if (!addtitle || !addpost) {
+            toast.error('Please Input Title And Post')
+            return
+        }
         const formData = new FormData();
         formData.append("title", addtitle);
         formData.append("description", addpost);
@@ -202,11 +209,13 @@ function Dashboard(props) {
                     }
                 )
                 setAllPost([...tmp])
-
+                setAddTitle('')
+                setAddPost('')
+                setImageVal('')
             })
             .catch((err) => {
                 console.log(err);
-            });
+            })
         setAddPost('');
         setAddTitle('')
         setImageVal('');
@@ -269,11 +278,9 @@ function Dashboard(props) {
 
         axios.put(`${BASE_URL}/edit_post/${updateId}`, formData)
             .then((res) => {
-                window.location.reload();
-
                 setEditTitle(res.data.title)
                 setEditDescription(res.data.description)
-
+                setReloadApi(!reloadApi)
             })
             .catch((err) => {
                 console.log(err);
@@ -325,7 +332,7 @@ function Dashboard(props) {
                 hideLoader()
             })
 
-    }, [])
+    }, [reloadApi])
 
 
     useEffect(() => {
@@ -559,7 +566,7 @@ function Dashboard(props) {
 
             {/* <Toolbar /> */}
             <List className="sidebar_header_user">
-                <img src="logo.png" style={{padding:10}} ></img>
+                <img src="logo.png" style={{ padding: 10 }} ></img>
 
 
                 <Divider className='nav_divider' />
@@ -579,7 +586,7 @@ function Dashboard(props) {
                         <p>Email </p><p className="fade_info">{profileval.email}</p>
                         <p>Phone No </p><p className="fade_info">{profileval.phonenumber}</p>
                         <p>Tenure </p><p className="fade_info">{monthDiff(profileval.date_of_joining)}</p>
-                        <p>Birthday </p><p className="fade_info">{moment(profileval.dob).format('MMM d, YYYY')}</p>
+                        <p>Birthday </p><p className="fade_info">{moment(profileval.dob).format('DD-MMM-YYYY')}</p>
 
 
                     </div>
@@ -654,6 +661,7 @@ function Dashboard(props) {
     return (
 
         <>
+            <ToastContainer></ToastContainer>
 
             {/* {loading ? <Loader /> : */}
             <Box sx={{ display: 'flex' }} className="dashboard_page">
@@ -978,9 +986,9 @@ function Dashboard(props) {
                                                                                         <label>Edit Comment</label>
                                                                                         <textarea name="content" className="form-control edit_comment" onChange={(e) => { setEditContent(e.target.value) }}></textarea>
                                                                                     </Modal>
-                                                                                    <ModeEditIcon className="edit_comment"
+                                                                                    {/* <ModeEditIcon className="edit_comment"
                                                                                         onClick={(e) => { showEditComment(e, item._id, element.x._id) }}></ModeEditIcon>
-                                                                                    <DeleteIcon className="delete_comment" onClick={(e) => { delete_comment(e, item._id, element.x._id) }}> </DeleteIcon>
+                                                                                    <DeleteIcon className="delete_comment" onClick={(e) => { delete_comment(e, item._id, element.x._id) }}> </DeleteIcon> */}
                                                                                 </h7>
 
                                                                             </div>

@@ -148,7 +148,7 @@ function Profile() {
                                         <label><b>Tenure</b></label>
                                         <p className="pt-3">    {monthDiff(profile.date_of_joining)}</p>
                                         <label><b>Birthday</b></label>
-                                        <p className="pt-3"> {moment(profile.dob).format('MMM d, YYYY')}</p>
+                                        <p className="pt-3"> {moment(profile.dob).format('DD-MMM-YYYY')}</p>
                                     </div>
                                 </div>
 

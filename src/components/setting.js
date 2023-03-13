@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Avatar from '@mui/material/Avatar';
 import { Button, Modal } from 'antd';
 import axios from "axios";
@@ -15,8 +15,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import { BASE_URL } from "../baseUrl";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LoaderContext } from "../App";
 
 const Setting = () => {
+  const { showLoader, hideLoader } = useContext(LoaderContext)
 
 
   const navigate = useNavigate();
@@ -188,6 +190,7 @@ const Setting = () => {
 
 
   const update_records = async (req, res) => {
+    showLoader()
 
     let authtokens = localStorage.getItem('authtoken');
 
@@ -217,7 +220,9 @@ const Setting = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+      }).finally(() => {
+        hideLoader()
+      })
 
   }
 
