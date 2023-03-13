@@ -161,8 +161,18 @@ function Header({ window, component }) {
                 if (res.data.redirect) {
 
                     navigate('/leaverequest')
+                    let tmp = [...notifications]
+                    var index = tmp.findIndex(p => p._id == element);
+                    tmp.splice(index, 1)
+                    setNotifications([...tmp])
+
                 } else {
                     navigate('/leaves')
+                    let tmp = [...notifications]
+                    var index = tmp.findIndex(p => p._id == element);
+                    tmp.splice(index, 1)
+                    setNotifications([...tmp])
+
 
                 }
                 handleCancel()
@@ -226,23 +236,23 @@ function Header({ window, component }) {
                     :
                     role == 0 ?
 
-                    <List className='side_links'>
-                        {[<Link to="/dashboard">Dashboard</Link>,
-                        <Link to="/profile">Profile</Link>,
-                        <Link to="/leaves">Leaves</Link>,
-                        <Link to="/applyleave">Apply Leave</Link>].map((text, index) => (
+                        <List className='side_links'>
+                            {[<Link to="/dashboard">Dashboard</Link>,
+                            <Link to="/profile">Profile</Link>,
+                            <Link to="/leaves">Leaves</Link>,
+                            <Link to="/applyleave">Apply Leave</Link>].map((text, index) => (
 
-                            <ListItemButton>
-                                <ListItemIcon>
+                                <ListItemButton>
+                                    <ListItemIcon>
 
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
+                                    </ListItemIcon>
+                                    <ListItemText primary={text} />
+                                </ListItemButton>
 
-                        ))}
-                    </List>
-                    :<>
-                    </>
+                            ))}
+                        </List>
+                        : <>
+                        </>
             }
 
         </div >
@@ -279,7 +289,7 @@ function Header({ window, component }) {
                             <img src="apply Leave.svg" ></img>
                             &nbsp;    Apply Leave  &nbsp;
                         </Link>
-                        <Badge badgeContent={notificationsCount} color="primary">
+                        <Badge badgeContent={notifications.length} color="primary">
                             <NotificationsIcon color="white" onClick={showModal} />
                         </Badge>
                         <Modal title="Notifications" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
